@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Modal, TextInput, FlatList } from 'react-native';
+import { View, Text, Button, Modal, TextInput, FlatList, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
@@ -8,96 +8,159 @@ const Home = () => {
   const [deviceWatts, setDeviceWatts] = useState('');
   const [deviceQuantity, setDeviceQuantity] = useState('');
   const [devices, setDevices] = useState([]);
+  const [deviceHours, setDeviceHours] = useState('');
 
-  const [currency, setCurrency] = useState("");
-  const [price, setPrice] = useState("");
+  const [currency, setCurrency] = useState('');
+  const [price, setPrice] = useState('');
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const savedCurrency = await AsyncStorage.getItem("currency");
-        const savedPrice = await AsyncStorage.getItem("price");
+        const savedCurrency = await AsyncStorage.getItem('currency');
+        const savedPrice = await AsyncStorage.getItem('price');
+        const savedDevices = await AsyncStorage.getItem('devices');
 
-      if (savedCurrency) {
-        setCurrency(savedCurrency);
-      }
-      if (savedPrice) {
-        setPrice(savedPrice);
-      }
+        if (savedCurrency) {
+          setCurrency(savedCurrency);
+        }
+        if (savedPrice) {
+          setPrice(savedPrice);
+        }
+        if (savedDevices) {
+          setDevices(JSON.parse(savedDevices));
+        }
       } catch (error) {
         console.log(error);
       }
-    }
+    };
 
-  loadData();
-
+    loadData();
   }, []);
 
-  const addDevice = () => {
-    if (deviceName && deviceWatts && deviceQuantity) {
+
+  const addDevice = async () => {
+    if (deviceName && deviceWatts && deviceQuantity && deviceHours) {
       const newDevice = {
         name: deviceName,
         watts: deviceWatts,
         quantity: deviceQuantity,
+        hours: deviceHours,
       };
-
+  
       setDevices([...devices, newDevice]);
       setModalVisible(false);
       setDeviceName('');
       setDeviceWatts('');
       setDeviceQuantity('');
+      setDeviceHours('');
+  
+      await AsyncStorage.setItem('devices', JSON.stringify([...devices, newDevice]));
+      console.log(await AsyncStorage.getItem('devices'))
     }
   };
 
+  const removeDevice = async (index) => {
+    const updatedDevices = devices.filter((_, i) => i !== index);
+    setDevices(updatedDevices);
+
+    await AsyncStorage.setItem('devices', JSON.stringify(devices));
+  };
+
   const getTotalWatts = () => {
-    return devices.reduce((total, device) => total + (device.watts * device.quantity), 0);
+    return devices.reduce((total, device) => total + device.watts * device.quantity * device.hours, 0);
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={styles.container}>
       <Button title="Добавить электроустройство" onPress={() => setModalVisible(true)} />
-      <Text>Список устройств:</Text>
+      <Text style={styles.text}>Список устройств:</Text>
       <Modal visible={modalVisible}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={styles.modalContainer}>
           <TextInput
+            style={styles.input}
             placeholder="Имя электроустройства"
             value={deviceName}
-            onChangeText={text => setDeviceName(text)}
+            onChangeText={(text) => setDeviceName(text)}
           />
           <TextInput
+            style={styles.input}
             placeholder="Ватты"
             value={deviceWatts}
-            onChangeText={text => setDeviceWatts(text)}
+            onChangeText={(text) => setDeviceWatts(text)}
             keyboardType="numeric"
           />
           <TextInput
+            style={styles.input}
             placeholder="Количество"
             value={deviceQuantity}
-            onChangeText={text => setDeviceQuantity(text)}
+            onChangeText={(text) => setDeviceQuantity(text)}
             keyboardType="numeric"
           />
-
-          <Button title="Добавить" onPress={addDevice} />
-          <Button title="Отмена" onPress={() => setModalVisible(false)} />
+          <TextInput
+            style={styles.input}
+            placeholder="Время работы в день (часы)"
+            value={deviceHours}
+            onChangeText={(text) => setDeviceHours(text)}
+            keyboardType="numeric"
+          />
+          <Button style={styles.btn} title="Добавить" onPress={addDevice} />
+          <Button style={styles.btn} title="Отмена" onPress={() => setModalVisible(false)} />
         </View>
       </Modal>
 
       <FlatList
         data={devices}
-        renderItem={({ item }) => (
-          <View style={{ flexDirection: 'row' }}>
-            <Text>{item.name}, {item.watts}ватт, {item.quantity}шт</Text>
+        renderItem={({ item, index }) => (
+          <View style={styles.listItem}>
+            <Text>{item.name}</Text>
+            <Text>
+              {item.watts} ватт, {item.quantity} шт, {item.hours} {item.hours === 1 ? 'час' : 'часа'}
+            </Text>
+            <Button title="Удалить" onPress={() => removeDevice(index)} />
           </View>
         )}
         keyExtractor={(item, index) => index.toString()}
       />
 
-      <Text>Общее количество ватт: {getTotalWatts()}</Text>
-      <Text>Общее количество Кватт: {getTotalWatts() / 1000}</Text>
-      <Text>Цена электричества за день: {getTotalWatts() / 1000 * 24 * price} </Text>
-      <Text>Цена электричества за месяц: {(getTotalWatts() / 1000 * 24 * price) * 30}</Text>
+      <Text style={styles.text}>Дневное потребление: {getTotalWatts() / 1000} Квт*ч</Text>
+      <Text style={styles.text}>
+        Цена электричества за день: {(getTotalWatts() / 1000) * price} {currency}
+      </Text>
+      <Text style={styles.text}>
+        Цена электричества за месяц: {((getTotalWatts() / 1000) * price) * 30} {currency}
+      </Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    flex: 1,
+  },
+  modalContainer: {
+    padding: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    marginBottom: 10,
+  },
+  listItem: {
+    backgroundColor: 'grey',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  btn: {
+    marginBottom: 10,
+  },
+  text: {
+    fontSize: 16,
+  },
+});
 
 export default Home;
