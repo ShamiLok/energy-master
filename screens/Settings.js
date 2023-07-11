@@ -1,72 +1,109 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Modal, ActivityIndicator, FlatList, RefreshControl } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ButtonComponent from '../components/Button';
 
 export default function Settings() {
   const [currency, setCurrency] = useState("");
   const [price, setPrice] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-useEffect(() => {
+  useEffect(() => {
+    loadData();
+  }, []);
+
   const loadData = async () => {
     try {
+      setLoading(true);
       const savedCurrency = await AsyncStorage.getItem("currency");
       const savedPrice = await AsyncStorage.getItem("price");
-
-    if (savedCurrency) {
       setCurrency(savedCurrency);
-    }
-    if (savedPrice) {
       setPrice(savedPrice);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
+
   }
-}
 
-loadData();
-
-}, []);
-
-const handleCurrencyChange = (value) => {
+  const handleCurrencyChange = async (value) => {
     setCurrency(value);
-    AsyncStorage.setItem("currency", value);
+    await AsyncStorage.setItem("currency", value);
   };
 
-const handlePriceChange = (text) => {
+  const handlePriceChange = async (text) => {
     setPrice(text);
-    AsyncStorage.setItem("price", text);
+    await AsyncStorage.setItem("price", text);
   };
 
-return (
+  const handleDefault = async () =>{
+    setShowModal(true);
+  }
+
+  const handleResetConfirmation = async () => {
+    await AsyncStorage.clear();
+    setShowModal(false);
+    loadData();
+  }
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    loadData();
+    setRefreshing(false);
+  }
+
+  return (
     <View style={styles.container}>
-      <View style={styles.formItem}>
-        <Text style={styles.label}>Select currency:</Text>
-        <View style={styles.picker}>
-          <Picker
-            
-            selectedValue={currency}
-            onValueChange={handleCurrencyChange}>
-            <Picker.Item label="EUR" value="EUR" />
-            <Picker.Item label="USD" value="USD" />
-            <Picker.Item label="RUB" value="RUB" />
-          </Picker>
-        </View>
-        
-      </View>
-      <View style={styles.formItem}>
-        <Text style={styles.label}>Enter the price per kWh:</Text>
-        <TextInput
-          style={styles.input}
-          value={price}
-          onChangeText={handlePriceChange}
-          keyboardType="numeric"
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <FlatList
+          data={[]}
+          keyExtractor={(item, index) => index.toString()}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+          ListHeaderComponent={(
+            <>
+              <View style={styles.formItem}>
+                <Text style={styles.label}>Select currency:</Text>
+                <View style={styles.picker}>
+                  <Picker
+                    selectedValue={currency}
+                    onValueChange={handleCurrencyChange}>
+                    <Picker.Item label="EUR" value="EUR" />
+                    <Picker.Item label="USD" value="USD" />
+                    <Picker.Item label="RUB" value="RUB" />
+                  </Picker>
+                </View>
+              </View>
+              <View style={styles.formItem}>
+                <Text style={styles.label}>Enter the price per kWh:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={price}
+                  onChangeText={handlePriceChange}
+                  keyboardType="numeric"
+                />
+              </View>
+              <ButtonComponent title="Сбросить настройки" onPress={handleDefault}/>
+              <Modal visible={showModal} >
+                <View>
+                  <Text>Вы уверены, что хотите сбросить настройки?</Text>
+                  <ButtonComponent title="Да" onPress={handleResetConfirmation}/>
+                  <ButtonComponent title="Нет" onPress={() => setShowModal(false)}/>
+                </View>
+              </Modal>
+            </>
+          )}
         />
-      </View>
-      <View style={styles.result}>
-        <Text style={styles.text}>Currency: {currency}</Text>
-        <Text style={styles.text}>Price per kWh: {price}</Text>
-      </View>
+      )}
     </View>
   );
 }
@@ -91,8 +128,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 10,
-    // paddingVertical: 5,
-    // paddingHorizontal: 10,
   },
   input: {
     flex: 1,
@@ -101,11 +136,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 15,
-  },
-  result: {
-    marginTop: 20,
-  },
-  text: {
-    fontSize: 16,
   },
 });

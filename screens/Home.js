@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Modal, TextInput, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Modal, TextInput, FlatList, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ButtonComponent from '../components/Button';
+
 
 const Home = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -72,7 +74,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <Button title="Добавить электроустройство" onPress={() => setModalVisible(true)} />
+      <ButtonComponent title="Добавить электроустройство" onPress={() => setModalVisible(true)} />
       <Text style={styles.text}>Список устройств:</Text>
       <Modal visible={modalVisible}>
         <View style={styles.modalContainer}>
@@ -103,8 +105,8 @@ const Home = () => {
             onChangeText={(text) => setDeviceHours(text)}
             keyboardType="numeric"
           />
-          <Button style={styles.btn} title="Добавить" onPress={addDevice} />
-          <Button style={styles.btn} title="Отмена" onPress={() => setModalVisible(false)} />
+          <ButtonComponent style={styles.btn} title="Добавить" onPress={addDevice} />
+          <ButtonComponent style={styles.btn} title="Отмена" onPress={() => setModalVisible(false)} />
         </View>
       </Modal>
 
@@ -116,7 +118,7 @@ const Home = () => {
             <Text>
               {item.watts} ватт, {item.quantity} шт, {item.hours} {item.hours === 1 ? 'час' : 'часа'}
             </Text>
-            <Button title="Удалить" onPress={() => removeDevice(index)} />
+            <ButtonComponent title="Удалить" onPress={() => removeDevice(index)} />
           </View>
         )}
         keyExtractor={(item, index) => index.toString()}
