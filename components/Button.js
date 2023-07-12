@@ -7,8 +7,9 @@ const ButtonComponent = ({ title, onPress }) => {
       title={title}
       onPress={onPress}
       buttonStyle={{
-        backgroundColor: 'lightgrey', // светлый фон кнопки
+        backgroundColor: '#E5E5E5', // светлый фон кнопки
         borderRadius: 10, // округление углов кнопки
+        borderColor: '#D5D5D5'
       }}
       titleStyle={{
         color: 'black', // темный цвет надписи
