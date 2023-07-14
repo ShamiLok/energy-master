@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "react-native-gesture-handler";
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   SimpleLineIcons,
   MaterialCommunityIcons,
@@ -24,8 +25,28 @@ export default function App() {
 
   const [isDark, setIsDark] = useState(false)
   
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      const savedTheme = await AsyncStorage.getItem("theme");
+      if(handleIsDark){
+        setIsDark(JSON.parse(savedTheme));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleIsDark = async (value) => {
+    setIsDark(value);
+    await AsyncStorage.setItem("theme", JSON.stringify(value));
+  };
+
   return (
-    <ThemeContext.Provider value={{isDark, setIsDark}}>
+    <ThemeContext.Provider value={{isDark, handleIsDark}}>
       <NavigationContainer>
         <Drawer.Navigator
           drawerContent={

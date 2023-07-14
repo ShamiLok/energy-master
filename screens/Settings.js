@@ -15,7 +15,7 @@ export default function Settings() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const {isDark, setIsDark} = useContext(ThemeContext)
+  const {isDark, handleIsDark} = useContext(ThemeContext)
 
   useEffect(() => {
     loadData();
@@ -70,7 +70,7 @@ export default function Settings() {
   }
 
   const handleChangeColorTheme = isTrue => {
-    setIsDark(!isDark)
+    handleIsDark(!isDark)
   };
 
   return (

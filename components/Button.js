@@ -12,7 +12,7 @@ const ButtonComponent = ({ title, onPress }) => {
       title={title}
       onPress={onPress}
       buttonStyle={{
-        backgroundColor: isDark ? DARK_COLORS.buttonBackgroundColor : LIGHT_COLORS.buttonBackgroundColor, // светлый фон кнопки
+        backgroundColor: isDark ? DARK_COLORS.buttonBackgroundColor : LIGHT_COLORS.buttonBackgroundColor,
         borderRadius: 10, // округление углов кнопки
         borderColor: '#D5D5D5'
       }}

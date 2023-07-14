@@ -105,9 +105,8 @@ const Home = () => {
         </Loading>
         
       ) : (
-        <Container isDark={isDark}>
-
-          <ScrollView 
+        <>
+          <Container isDark={isDark} 
             contentContainerStyle={{ flexGrow: 1 }}
             refreshControl={<RefreshControl 
               refreshing={refreshing} 
@@ -118,6 +117,34 @@ const Home = () => {
           > 
             <ButtonComponent title="Добавить электроустройство" onPress={() => setModalVisible(true)} />
             <SectionText isDark={isDark}>Список устройств:</SectionText>
+
+            <View>
+              {devices.length == 0 ? (
+                <ListItem>
+                  <SectionText isDark={isDark}>
+                    Устройства еще не были добавлены
+                  </SectionText>
+                </ListItem>
+              ) : (
+                <>
+                  {devices.map((item, index) => (
+                    <ListItem isDark={isDark} key={index}>
+                      <View>
+                        <SectionText isDark={isDark}>
+                          {item.name}
+                        </SectionText>
+                        <SectionText isDark={isDark}>
+                          {item.watts} ватт, {item.quantity} шт, {item.hours} {item.hours === 1 ? 'час' : 'часа'}
+                        </SectionText>
+                      </View>
+                      
+                      <MaterialCommunityIcons name="window-close" size={24} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} onPress={() => removeDevice(index)}/>
+                    </ListItem>
+                  ))}
+                </>
+              )}
+            </View>
+
             <Modal visible={modalVisible}>
               <ModalContainer>
                 <Input
@@ -147,44 +174,66 @@ const Home = () => {
                 <ButtonComponent title="Отмена" onPress={() => setModalVisible(false)} />
               </ModalContainer>
             </Modal>
-
-            <View>
-              {devices.map((item, index) => (
-                <ListItem isDark={isDark} key={index}>
-                  <View>
-                    <SectionText isDark={isDark}>
-                      {item.name}
-                    </SectionText>
-                    <SectionText isDark={isDark}>
-                      {item.watts} ватт, {item.quantity} шт, {item.hours} {item.hours === 1 ? 'час' : 'часа'}
-                    </SectionText>
-                  </View>
-                  
-                  <MaterialCommunityIcons name="window-close" size={24} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} onPress={() => removeDevice(index)}/>
-                </ListItem>
-              ))}
-            </View>
-          </ScrollView>
+          </Container>
 
           <Result isDark={isDark}>
-              <SectionText isDark={isDark}>
-                Дневное потребление: {truncateNumber(getTotalWatts() / 1000)} Квт*ч
-              </SectionText>
-              <SectionText isDark={isDark}>
-                Цена электричества за день: {truncateNumber((getTotalWatts() / 1000) * price)} {currency}
-              </SectionText>
-              <SectionText isDark={isDark}>
-                Потребление за месяц: {truncateNumber((getTotalWatts() / 1000) * 30)} Квт*ч
-              </SectionText>
-              <SectionText isDark={isDark}>
-                Цена электричества за месяц: {truncateNumber(((getTotalWatts() / 1000) * price) * 30)} {currency}
-              </SectionText>
-
-              <SectionText isDark={isDark}>
-                {isDark ? 'Dark' : 'Light'} Mode
-              </SectionText>
-            </Result>
-        </Container>
+            {!price || !currency ? (
+              <ResultHeader isDark={isDark}>
+                <SectionText isDark={isDark}>
+                  Выберете валюту и цену за квт
+                </SectionText>
+              </ResultHeader>
+            ) : (
+              <> 
+                <ResultItem>
+                  <ResultHeader isDark={isDark}>
+                    <SectionText isDark={isDark}>
+                      В день
+                    </SectionText>
+                  </ResultHeader>
+                  <ResultInfo isDark={isDark}>
+                    <SectionText isDark={isDark}>
+                      {truncateNumber(getTotalWatts() / 1000)} Квт*ч
+                    </SectionText>
+                    <SectionText isDark={isDark}>
+                      {truncateNumber((getTotalWatts() / 1000) * price)} {currency}
+                    </SectionText>
+                  </ResultInfo>
+                </ResultItem>
+                <ResultItem>
+                  <ResultHeader isDark={isDark}>
+                    <SectionText isDark={isDark}>
+                      В месяц
+                    </SectionText>
+                  </ResultHeader>
+                  <ResultInfo isDark={isDark}>
+                    <SectionText isDark={isDark}>
+                      {truncateNumber((getTotalWatts() / 1000) * 30)} Квт*ч
+                    </SectionText>
+                    <SectionText isDark={isDark}>
+                      {truncateNumber(((getTotalWatts() / 1000) * price) * 30)} {currency}
+                    </SectionText>
+                  </ResultInfo>
+                </ResultItem>
+                <ResultItem>
+                  <ResultHeader isDark={isDark}>
+                    <SectionText isDark={isDark}>
+                      В год
+                    </SectionText>
+                  </ResultHeader>
+                  <ResultInfo isDark={isDark}>
+                    <SectionText isDark={isDark}>
+                      {truncateNumber((getTotalWatts() / 1000) * 30 * 12)} Квт*ч
+                    </SectionText>
+                    <SectionText isDark={isDark}>
+                      {truncateNumber(((getTotalWatts() / 1000) * price) * 30 * 12 )} {currency}
+                    </SectionText>
+                  </ResultInfo>
+                </ResultItem>
+              </> 
+            )}
+          </Result>
+        </>
       )}
     </>
   );
@@ -192,7 +241,7 @@ const Home = () => {
 
 
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   padding: 20px;
   flex: 1;
   flex-direction: column;
@@ -205,8 +254,7 @@ const ModalContainer = styled.View`
 `;
 
 const Input = styled.TextInput`
-  border: 1px solid ${(props) =>
-    props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
+  border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
   border-radius: 10px;
   padding: 10px 15px;
   margin-bottom: 10px;
@@ -216,19 +264,33 @@ const ListItem = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-    flex: 1;
-    background-color: ${(props) =>
-      props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    border-radius: 10px;
+  flex: 1;
+  background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
+  padding: 10px 15px;
+  margin-top: 10px;
+  border-radius: 10px;
 `;
 
 const Result = styled.View`
-  border-radius: 10px;
-  padding: 10px;
-  background-color: ${(props) =>
-    props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
+  border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
+  /* overflow: hidden; */
+  background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
+`;
+
+const ResultItem = styled.View`
+  padding: 0;
+`;
+
+const ResultHeader = styled.View`
+  padding: 5px 0;
+  align-items: center;
+  background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
+`;
+const ResultInfo = styled.View`
+  padding: 7px 0;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: ${(props) => props.isDark ? DARK_COLORS.buttonBackgroundColor : LIGHT_COLORS.buttonBackgroundColor};
 `;
 
 const SectionText = styled.Text`
