@@ -10,6 +10,7 @@ import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
 
 export default function Settings() {
+  const [language, setLanguage] = useState('');
   const [currency, setCurrency] = useState('');
   const [price, setPrice] = useState('');
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,8 @@ export default function Settings() {
   const textInputRef = useRef(null);
 
   const { isDark, handleIsDark } = useContext(ThemeContext);
-  const pickerRef = useRef(false);
+  const pickerLanguageRef = useRef(false);
+  const pickerCurrencyRef = useRef(false);
 
 
   useEffect(() => {
@@ -40,6 +42,11 @@ export default function Settings() {
   const handleCurrencyChange = async (value) => {
     setCurrency(value);
     await AsyncStorage.setItem('currency', value);
+  };
+
+  const handleLanguageChange = async (value) => {
+    setLanguage(value);
+    // await AsyncStorage.setItem('currency', value);
   };
 
   const handlePriceChange = async (text) => {
@@ -81,11 +88,16 @@ export default function Settings() {
     }
   };
 
-  const handlePickerFocus = () => {
+  const handlePickerLanguageFocus = () => {
     if (textInputRef.current) {
-      pickerRef.current.focus();
+      pickerLanguageRef.current.focus();
     }
-    
+  }
+
+  const handlePickerCurrencyFocus = () => {
+    if (textInputRef.current) {
+      pickerCurrencyRef.current.focus();
+    }
   }
 
   return (
@@ -99,16 +111,35 @@ export default function Settings() {
         >
           <FormItem 
             isDark={isDark} 
-            onPress={handlePickerFocus}
+            onPress={handlePickerLanguageFocus}
           >
-            <Label isDark={isDark}>Select currency:</Label>
+            <Label isDark={isDark}>Language:</Label>
+            <PickerContainer isDark={isDark}>
+              <Picker
+                style={{ color: isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor, paddingHorizontal: 80}}
+                selectedValue={language}
+                onValueChange={handleLanguageChange}
+                dropdownIconColor={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor}
+                ref={pickerLanguageRef}
+              >
+                <Picker.Item label="English" value="English" />
+                <Picker.Item label="Russian" value="Russian" />
+                <Picker.Item label="German " value="German " />
+              </Picker>
+            </PickerContainer>
+          </FormItem>
+          <FormItem 
+            isDark={isDark} 
+            onPress={handlePickerCurrencyFocus}
+          >
+            <Label isDark={isDark}>Currency:</Label>
             <PickerContainer isDark={isDark}>
               <Picker
                 style={{ color: isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor, paddingHorizontal: 60}}
                 selectedValue={currency}
                 onValueChange={handleCurrencyChange}
                 dropdownIconColor={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor}
-                ref={pickerRef}
+                ref={pickerCurrencyRef}
               >
                 <Picker.Item label="EUR" value="EUR" />
                 <Picker.Item label="USD" value="USD" />
@@ -160,6 +191,7 @@ const FormItem = styled.TouchableOpacity`
   background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
   padding: 10px 15px;
   border-radius: 10px;
+  height: 60px;
 `;
 const Label = styled.Text`
   font-size: 18px;
