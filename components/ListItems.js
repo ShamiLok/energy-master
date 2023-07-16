@@ -22,7 +22,7 @@ const ListItems = ({ devices, isDark, setDevices }) => {
   return (
     <View>
       {devices.length === 0 ? (
-        <ListItem>
+        <ListItem isDark={isDark}>
           <SectionText isDark={isDark}>Устройства еще не были добавлены</SectionText>
         </ListItem>
       ) : (

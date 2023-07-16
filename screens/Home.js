@@ -101,7 +101,7 @@ const Home = () => {
         <>
           <Container
             isDark={isDark}
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={{ flexGrow: 1, padding: 20 }}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
@@ -111,15 +111,13 @@ const Home = () => {
               />
             }
           >
-            <ButtonComponent title="Добавить электроустройство" onPress={() => setModalVisible(true)} />
+            <ButtonComponent title="Добавить электроустройство" onPress={() => setModalVisible(true)} style={{marginBottom: 15}}/>
             <SectionText isDark={isDark}>Список устройств:</SectionText>
 
             <ListItems
               devices={devices}
               isDark={isDark}
               setDevices={setDevices}
-              // removeDevice={removeDevice}
-              // updateQuantity={updateQuantity}
             />
 
             <Modal visible={modalVisible}>
@@ -203,7 +201,6 @@ const Home = () => {
 };
 
 const Container = styled.ScrollView`
-  padding: 20px;
   flex: 1;
   flex-direction: column;
   background-color: ${(props) => props.isDark ? DARK_COLORS.backgroundColor : LIGHT_COLORS.backgroundColor};
@@ -222,7 +219,6 @@ const Input = styled.TextInput`
 
 const Result = styled.View`
   border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
-  /* overflow: hidden; */
   background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
 `;
 

@@ -4,7 +4,7 @@ import { Button } from 'react-native-elements';
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
 
-const ButtonComponent = ({ title, onPress }) => {
+const ButtonComponent = ({ title, onPress, style }) => {
     const {isDark} = useContext(ThemeContext)
 
   return (
@@ -14,7 +14,8 @@ const ButtonComponent = ({ title, onPress }) => {
       buttonStyle={{
         backgroundColor: isDark ? DARK_COLORS.buttonBackgroundColor : LIGHT_COLORS.buttonBackgroundColor,
         borderRadius: 10, // округление углов кнопки
-        borderColor: '#D5D5D5'
+        borderColor: '#D5D5D5',
+        ...style,
       }}
       titleStyle={{
         color: isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor,
