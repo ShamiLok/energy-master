@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Modal, ActivityIndicator, RefreshControl } from 'react-native';
+import { ActivityIndicator, RefreshControl } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonComponent from '../components/Button';
 
@@ -11,7 +11,7 @@ import styled from 'styled-components/native';
 import ListItems from '../components/ListItems';
 
 const Home = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [addDeviceVisible, setAddDeviceVisible] = useState(false);
   const [devices, setDevices] = useState([]);
 
   const [deviceName, setDeviceName] = useState('');
@@ -111,8 +111,45 @@ const Home = () => {
               />
             }
           >
-            <ButtonComponent title="Добавить электроустройство" onPress={() => setModalVisible(true)} style={{marginBottom: 15}}/>
-            <SectionText isDark={isDark}>Список устройств:</SectionText>
+            <ButtonComponent title="Добавить электроустройство" onPress={() => setAddDeviceVisible(!addDeviceVisible)} />
+            {addDeviceVisible &&(
+              <ModalContainer>
+                <Input
+                  isDark={isDark}
+                  placeholder="Имя электроустройства"
+                  placeholderTextColor={isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor}
+                  value={deviceName}
+                  onChangeText={(text) => setDeviceName(text)}
+                />
+                <Input
+                  isDark={isDark}
+                  placeholder="Ватты"
+                  placeholderTextColor={isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor}
+                  value={deviceWatts}
+                  onChangeText={(text) => setDeviceWatts(text)}
+                  keyboardType="numeric"
+                />
+                <Input
+                  isDark={isDark}
+                  placeholder="Количество"
+                  placeholderTextColor={isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor}
+                  value={deviceQuantity}
+                  onChangeText={(text) => setDeviceQuantity(text)}
+                  keyboardType="numeric"
+                />
+                <Input
+                  isDark={isDark}
+                  placeholder="Время работы в день (часы)"
+                  placeholderTextColor={isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor}
+                  value={deviceHours}
+                  onChangeText={(text) => setDeviceHours(text)}
+                  keyboardType="numeric"
+                />
+                <ButtonComponent title="Добавить" onPress={addDevice} />
+              </ModalContainer>
+            )}
+            
+            <SectionText isDark={isDark} style={{marginTop: 15}}>Список устройств:</SectionText>
 
             <ListItems
               devices={devices}
@@ -120,35 +157,6 @@ const Home = () => {
               setDevices={setDevices}
             />
 
-            <Modal visible={modalVisible}>
-              <ModalContainer>
-                <Input
-                  placeholder="Имя электроустройства"
-                  value={deviceName}
-                  onChangeText={(text) => setDeviceName(text)}
-                />
-                <Input
-                  placeholder="Ватты"
-                  value={deviceWatts}
-                  onChangeText={(text) => setDeviceWatts(text)}
-                  keyboardType="numeric"
-                />
-                <Input
-                  placeholder="Количество"
-                  value={deviceQuantity}
-                  onChangeText={(text) => setDeviceQuantity(text)}
-                  keyboardType="numeric"
-                />
-                <Input
-                  placeholder="Время работы в день (часы)"
-                  value={deviceHours}
-                  onChangeText={(text) => setDeviceHours(text)}
-                  keyboardType="numeric"
-                />
-                <ButtonComponent title="Добавить" onPress={addDevice} />
-                <ButtonComponent title="Отмена" onPress={() => setModalVisible(false)} />
-              </ModalContainer>
-            </Modal>
           </Container>
 
           <Result isDark={isDark}>
@@ -207,7 +215,7 @@ const Container = styled.ScrollView`
 `;
 
 const ModalContainer = styled.View`
-  padding: 20px;
+  padding-top: 20px;
 `;
 
 const Input = styled.TextInput`
@@ -215,6 +223,7 @@ const Input = styled.TextInput`
   border-radius: 10px;
   padding: 10px 15px;
   margin-bottom: 10px;
+  color: #fff;
 `;
 
 const Result = styled.View`
