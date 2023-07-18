@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "react-native-gesture-handler";
+import { ToastAndroid } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   SimpleLineIcons,
@@ -40,7 +40,16 @@ export default function App() {
   const handleIsDark = async (value) => {
     setIsDark(value);
     await AsyncStorage.setItem("theme", JSON.stringify(value));
+    showToast(`Установлена ${isDark ? 'светлая' : 'темная'} тема`)
   };
+
+  const showToast = (message) => {
+    ToastAndroid.showWithGravity(
+      message,
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+    );
+  }
 
   return (
     <ThemeContext.Provider value={{isDark, handleIsDark}}>

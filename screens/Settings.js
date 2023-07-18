@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { ActivityIndicator, RefreshControl, Alert, Switch, ScrollView } from 'react-native';
+import { ActivityIndicator, RefreshControl, Alert, Switch, ScrollView, ToastAndroid } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
@@ -44,11 +44,12 @@ export default function Settings() {
   const handleCurrencyChange = async (value) => {
     setCurrency(value);
     await AsyncStorage.setItem('currency', value);
+    showToast(`Выбрана валюта ${value}`)
   };
 
   const handleLanguageChange = async (value) => {
     setLanguage(value);
-    // await AsyncStorage.setItem('currency', value);
+    showToast(`Установлен ${value} язык`)
   };
 
   const handlePriceChange = async (text) => {
@@ -72,6 +73,7 @@ export default function Settings() {
   const handleResetConfirmation = async () => {
     await AsyncStorage.clear();
     loadData();
+    showToast('Настройки были сброшены')
   };
 
   const onRefresh = () => {
@@ -80,7 +82,7 @@ export default function Settings() {
     setRefreshing(false);
   };
 
-  const handleChangeColorTheme = (isTrue) => {
+  const handleChangeColorTheme = () => {
     handleIsDark(!isDark);
   };
 
@@ -100,6 +102,14 @@ export default function Settings() {
     if (textInputRef.current) {
       pickerCurrencyRef.current.focus();
     }
+  }
+
+  const showToast = (message) => {
+    ToastAndroid.showWithGravity(
+      message,
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+    );
   }
 
   return (

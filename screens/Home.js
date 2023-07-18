@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { ActivityIndicator, RefreshControl } from 'react-native';
+import { ActivityIndicator, RefreshControl, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
@@ -73,6 +73,7 @@ const Home = () => {
       setDeviceHours('');
 
       await AsyncStorage.setItem('devices', JSON.stringify([...devices, newDevice]));
+      showToast('устройство было добавлено')
     }
   };
 
@@ -89,6 +90,14 @@ const Home = () => {
   function truncateNumber(number) {
     var parts = number.toString().split('.');
     return !parts[1] || parts[1].length <= 2 ? number : parseFloat(parts[0] + '.' + parts[1].slice(0, 2));
+  }
+
+  const showToast = (message) => {
+    ToastAndroid.showWithGravity(
+      message,
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+    );
   }
 
   return (
@@ -111,6 +120,56 @@ const Home = () => {
               />
             }
           >
+            <SectionText isDark={isDark} style={{fontSize: 20}}>Потребление электричества:</SectionText>
+            <Result isDark={isDark}>
+              {!price || !currency ? (
+                <ResultHeader isDark={isDark}>
+                  <SectionText isDark={isDark}>Выберете валюту и цену за квт</SectionText>
+                </ResultHeader>
+              ) : (
+                <>
+                  <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
+                    <ResultHeader isDark={isDark}>
+                      <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В день</SectionText>
+                    </ResultHeader>
+                    <ResultInfo isDark={isDark}>
+                      <SectionText isDark={isDark} style={{fontSize: 14}}>
+                        {truncateNumber(getTotalWatts() / 1000)} Квт*ч
+                      </SectionText>
+                      <SectionText isDark={isDark} style={{fontSize: 14}}>
+                        {truncateNumber((getTotalWatts() / 1000) * price)} {currency}
+                      </SectionText>
+                    </ResultInfo>
+                  </ResultItem>
+                  <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
+                    <ResultHeader isDark={isDark}>
+                      <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В месяц</SectionText>
+                    </ResultHeader>
+                    <ResultInfo isDark={isDark}>
+                      <SectionText isDark={isDark} style={{fontSize: 14}}>
+                        {truncateNumber((getTotalWatts() / 1000) * 30)} Квт*ч
+                      </SectionText>
+                      <SectionText isDark={isDark} style={{fontSize: 14}}>
+                        {truncateNumber(((getTotalWatts() / 1000) * price) * 30)} {currency}
+                      </SectionText>
+                    </ResultInfo>
+                  </ResultItem>
+                  <ResultItem>
+                    <ResultHeader isDark={isDark}>
+                      <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В год</SectionText>
+                    </ResultHeader>
+                    <ResultInfo isDark={isDark}>
+                      <SectionText isDark={isDark} style={{fontSize: 14}}>
+                        {truncateNumber((getTotalWatts() / 1000) * 30 * 12)} Квт*ч
+                      </SectionText>
+                      <SectionText isDark={isDark} style={{fontSize: 14}}>
+                        {truncateNumber(((getTotalWatts() / 1000) * price) * 30 * 12)} {currency}
+                      </SectionText>
+                    </ResultInfo>
+                  </ResultItem>
+                </>
+              )}
+            </Result>
             <ButtonComponent title="Добавить электроустройство" onPress={() => setAddDeviceVisible(!addDeviceVisible)} />
             {addDeviceVisible &&(
               <ModalContainer>
@@ -149,7 +208,7 @@ const Home = () => {
               </ModalContainer>
             )}
             
-            <SectionText isDark={isDark} style={{marginTop: 15, marginBottom: 10}}>Список устройств:</SectionText>
+            <SectionText isDark={isDark} style={{marginTop: 20, marginBottom: 10, fontSize: 20}}>Список устройств:</SectionText>
 
             <ListItems
               devices={devices}
@@ -158,50 +217,6 @@ const Home = () => {
             />
 
           </Container>
-
-          <Result isDark={isDark}>
-            {!price || !currency ? (
-              <ResultHeader isDark={isDark}>
-                <SectionText isDark={isDark}>Выберете валюту и цену за квт</SectionText>
-              </ResultHeader>
-            ) : (
-              <>
-                <ResultItem>
-                  <ResultHeader isDark={isDark}>
-                    <SectionText isDark={isDark}>В день</SectionText>
-                  </ResultHeader>
-                  <ResultInfo isDark={isDark}>
-                    <SectionText isDark={isDark}>{truncateNumber(getTotalWatts() / 1000)} Квт*ч</SectionText>
-                    <SectionText isDark={isDark}>
-                      {truncateNumber((getTotalWatts() / 1000) * price)} {currency}
-                    </SectionText>
-                  </ResultInfo>
-                </ResultItem>
-                <ResultItem>
-                  <ResultHeader isDark={isDark}>
-                    <SectionText isDark={isDark}>В месяц</SectionText>
-                  </ResultHeader>
-                  <ResultInfo isDark={isDark}>
-                    <SectionText isDark={isDark}>{truncateNumber((getTotalWatts() / 1000) * 30)} Квт*ч</SectionText>
-                    <SectionText isDark={isDark}>
-                      {truncateNumber(((getTotalWatts() / 1000) * price) * 30)} {currency}
-                    </SectionText>
-                  </ResultInfo>
-                </ResultItem>
-                <ResultItem>
-                  <ResultHeader isDark={isDark}>
-                    <SectionText isDark={isDark}>В год</SectionText>
-                  </ResultHeader>
-                  <ResultInfo isDark={isDark}>
-                    <SectionText isDark={isDark}>{truncateNumber((getTotalWatts() / 1000) * 30 * 12)} Квт*ч</SectionText>
-                    <SectionText isDark={isDark}>
-                      {truncateNumber(((getTotalWatts() / 1000) * price) * 30 * 12)} {currency}
-                    </SectionText>
-                  </ResultInfo>
-                </ResultItem>
-              </>
-            )}
-          </Result>
         </>
       )}
     </>
@@ -228,11 +243,14 @@ const Input = styled.TextInput`
 
 const Result = styled.View`
   border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
+  border-radius: 10px;
+  overflow: hidden;
   background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
+  margin: 15px 0;
 `;
 
 const ResultItem = styled.View`
-  padding: 0;
+
 `;
 
 const ResultHeader = styled.View`
@@ -244,7 +262,6 @@ const ResultInfo = styled.View`
   padding: 7px 0;
   flex-direction: row;
   justify-content: space-around;
-  background-color: ${(props) => props.isDark ? DARK_COLORS.buttonBackgroundColor : LIGHT_COLORS.buttonBackgroundColor};
 `;
 
 const Loading = styled.View`

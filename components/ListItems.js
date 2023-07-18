@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput } from 'react-native';
+import { View, TextInput, ToastAndroid } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
@@ -12,6 +12,7 @@ const ListItems = ({ devices, isDark, setDevices }) => {
     const updatedDevices = devices.filter((_, i) => i !== index);
     setDevices(updatedDevices);
     await AsyncStorage.setItem('devices', JSON.stringify(updatedDevices));
+    showToast('устроqство было удалено')
   };
 
   const updateQuantity = async (index, newQuantity) => {
@@ -20,6 +21,14 @@ const ListItems = ({ devices, isDark, setDevices }) => {
     setDevices(updatedDevices);
     await AsyncStorage.setItem('devices', JSON.stringify(updatedDevices));
   };
+
+  const showToast = (message) => {
+    ToastAndroid.showWithGravity(
+      message,
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+    );
+  }
 
   return (
     <View>
