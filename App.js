@@ -78,7 +78,7 @@ export default function App() {
               drawerLabel: "Home",
               title: "Home",
               drawerIcon: () => (
-                <SimpleLineIcons name="home" size={20} color="#808080" />
+                <SimpleLineIcons name="home" size={20} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
               )
             }}
             component={Home}
@@ -90,7 +90,7 @@ export default function App() {
               drawerLabel: "Settings",
               title: "Settings",
               drawerIcon: () => (
-                <SimpleLineIcons name="settings" size={20} color="#808080" />
+                <SimpleLineIcons name="settings" size={20} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
               )
             }}
             component={Settings}
@@ -102,7 +102,7 @@ export default function App() {
               drawerLabel: "About",
               title: "About",
               drawerIcon: () => (
-                <Ionicons name="information-circle-outline" size={24} color="#808080" />
+                <Ionicons name="information-circle-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
               )
             }}
             component={About}

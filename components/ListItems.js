@@ -5,6 +5,8 @@ import styled from 'styled-components/native';
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import ItemSection from './ItemSection';
+
 const ListItems = ({ devices, isDark, setDevices }) => {
   const removeDevice = async (index) => {
     const updatedDevices = devices.filter((_, i) => i !== index);
@@ -22,13 +24,13 @@ const ListItems = ({ devices, isDark, setDevices }) => {
   return (
     <View>
       {devices.length === 0 ? (
-        <ListItem isDark={isDark}>
+        <ItemSection isDark={isDark}>
           <SectionText isDark={isDark}>Устройства еще не были добавлены</SectionText>
-        </ListItem>
+        </ItemSection>
       ) : (
         <>
           {devices.map((item, index) => (
-            <ListItem isDark={isDark} key={index}>
+            <ItemSection isDark={isDark} key={index}>
               <View>
                 <SectionText isDark={isDark}>{item.name}</SectionText>
                 <SectionText isDark={isDark}>
@@ -51,24 +53,13 @@ const ListItems = ({ devices, isDark, setDevices }) => {
                 color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor}
                 onPress={() => removeDevice(index)}
               />
-            </ListItem>
+            </ItemSection>
           ))}
         </>
       )}
     </View>
   );
 };
-
-const ListItem = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1;
-  background-color: ${(props) => (props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor)};
-  padding: 10px 15px;
-  margin-top: 10px;
-  border-radius: 10px;
-`;
 
 const ListItemQuantity = styled.View`
   flex-direction: column;

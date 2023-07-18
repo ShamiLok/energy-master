@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ActivityIndicator, RefreshControl } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ButtonComponent from '../components/Button';
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
 
 import styled from 'styled-components/native';
 
+import ButtonComponent from '../components/Button';
+import SectionText from '../components/SectionText';
 import ListItems from '../components/ListItems';
 
 const Home = () => {
@@ -66,7 +67,6 @@ const Home = () => {
 
       setDevices([...devices, newDevice]);
 
-      setModalVisible(false);
       setDeviceName('');
       setDeviceWatts('');
       setDeviceQuantity('');
@@ -117,14 +117,14 @@ const Home = () => {
                 <Input
                   isDark={isDark}
                   placeholder="Имя электроустройства"
-                  placeholderTextColor={isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor}
+                  placeholderTextColor="#808080"
                   value={deviceName}
                   onChangeText={(text) => setDeviceName(text)}
                 />
                 <Input
                   isDark={isDark}
                   placeholder="Ватты"
-                  placeholderTextColor={isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor}
+                  placeholderTextColor="#808080"
                   value={deviceWatts}
                   onChangeText={(text) => setDeviceWatts(text)}
                   keyboardType="numeric"
@@ -132,7 +132,7 @@ const Home = () => {
                 <Input
                   isDark={isDark}
                   placeholder="Количество"
-                  placeholderTextColor={isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor}
+                  placeholderTextColor="#808080"
                   value={deviceQuantity}
                   onChangeText={(text) => setDeviceQuantity(text)}
                   keyboardType="numeric"
@@ -140,7 +140,7 @@ const Home = () => {
                 <Input
                   isDark={isDark}
                   placeholder="Время работы в день (часы)"
-                  placeholderTextColor={isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor}
+                  placeholderTextColor="#808080"
                   value={deviceHours}
                   onChangeText={(text) => setDeviceHours(text)}
                   keyboardType="numeric"
@@ -149,7 +149,7 @@ const Home = () => {
               </ModalContainer>
             )}
             
-            <SectionText isDark={isDark} style={{marginTop: 15}}>Список устройств:</SectionText>
+            <SectionText isDark={isDark} style={{marginTop: 15, marginBottom: 10}}>Список устройств:</SectionText>
 
             <ListItems
               devices={devices}
@@ -223,7 +223,7 @@ const Input = styled.TextInput`
   border-radius: 10px;
   padding: 10px 15px;
   margin-bottom: 10px;
-  color: #fff;
+  color: ${(props) => props.isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor};
 `;
 
 const Result = styled.View`
@@ -245,11 +245,6 @@ const ResultInfo = styled.View`
   flex-direction: row;
   justify-content: space-around;
   background-color: ${(props) => props.isDark ? DARK_COLORS.buttonBackgroundColor : LIGHT_COLORS.buttonBackgroundColor};
-`;
-
-const SectionText = styled.Text`
-  font-size: 16px;
-  color: ${(props) => props.isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor};
 `;
 
 const Loading = styled.View`

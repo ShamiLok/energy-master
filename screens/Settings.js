@@ -4,6 +4,8 @@ import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
 
+import ItemSection from '../components/ItemSection'
+import SectionText from '../components/SectionText';
 import ButtonComponent from '../components/Button';
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
@@ -109,11 +111,12 @@ export default function Settings() {
           contentContainerStyle={{ padding: 20 }}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
-          <FormItem 
+          <ItemSection 
             isDark={isDark} 
             onPress={handlePickerLanguageFocus}
+            style={{height: 60}}
           >
-            <Label isDark={isDark}>Language:</Label>
+            <SectionText isDark={isDark}>Language:</SectionText>
             <PickerContainer isDark={isDark}>
               <Picker
                 style={{ color: isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor, paddingHorizontal: 80}}
@@ -127,12 +130,13 @@ export default function Settings() {
                 <Picker.Item label="German " value="German " />
               </Picker>
             </PickerContainer>
-          </FormItem>
-          <FormItem 
+          </ItemSection>
+          <ItemSection 
             isDark={isDark} 
             onPress={handlePickerCurrencyFocus}
+            style={{height: 60}}
           >
-            <Label isDark={isDark}>Currency:</Label>
+            <SectionText isDark={isDark}>Currency:</SectionText>
             <PickerContainer isDark={isDark}>
               <Picker
                 style={{ color: isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor, paddingHorizontal: 60}}
@@ -146,12 +150,13 @@ export default function Settings() {
                 <Picker.Item label="RUB" value="RUB" />
               </Picker>
             </PickerContainer>
-          </FormItem>
-          <FormItem 
+          </ItemSection>
+          <ItemSection 
             isDark={isDark}
             onPress={handleTextInputFocus}
+            style={{height: 60}}
           >
-            <Label isDark={isDark}>Enter the price per kWh:</Label>
+            <SectionText isDark={isDark}>Enter the price per kWh:</SectionText>
             <Input
               isDark={isDark}
               value={price}
@@ -159,17 +164,18 @@ export default function Settings() {
               keyboardType="numeric"
               ref={textInputRef}
             />
-          </FormItem>
-          <FormItem
+          </ItemSection>
+          <ItemSection
             isDark={isDark}
             onPress={handleChangeColorTheme}
+            style={{height: 60}}
           >
-            <Label isDark={isDark}>Темная тема</Label>
+            <SectionText isDark={isDark}>Темная тема</SectionText>
             <Switch
               value={isDark}
               onValueChange={handleChangeColorTheme}
             />
-          </FormItem>
+          </ItemSection>
           
           <ButtonComponent title="Сбросить настройки" onPress={handleDefault} />
           
@@ -182,22 +188,6 @@ export default function Settings() {
 const Container = styled.View`
   flex: 1;
   background-color: ${(props) => (props.isDark ? DARK_COLORS.backgroundColor : LIGHT_COLORS.backgroundColor)};
-`;
-const FormItem = styled.TouchableOpacity`
-  justify-content: space-between;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 10px;
-  background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
-  padding: 10px 15px;
-  border-radius: 10px;
-  height: 60px;
-`;
-const Label = styled.Text`
-  font-size: 18px;
-  font-weight: bold;
-  margin-right: 10px;
-  color: ${(props) => (props.isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor)};
 `;
 const PickerContainer = styled.View`
   /* border: 1px solid ${(props) => (props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor)}; */

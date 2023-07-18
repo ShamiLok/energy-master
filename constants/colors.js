@@ -6,9 +6,10 @@ export const DARK_COLORS = {
     borderColor: "#4F4F4F",
     boolColor: 'white',
     refreshColor: '#141414',
+    screenIconColor: "#fff", 
   };
-  
-  export const LIGHT_COLORS = {
+
+export const LIGHT_COLORS = {
     backgroundColor: "#FFFFFF",
     textColor: "#000000",
     blockColor: "#F5F5F5",
@@ -16,4 +17,5 @@ export const DARK_COLORS = {
     borderColor: "#D5D5D5",
     boolColor: 'black',
     refreshColor: '#f0fff0',
+    screenIconColor: "#030303",
   };
