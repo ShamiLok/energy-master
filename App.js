@@ -78,7 +78,8 @@ export default function App() {
             },
             drawerLabelStyle: {
               color: isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor
-            }
+            },
+            drawerActiveBackgroundColor: isDark ? DARK_COLORS.activeBackgroundColor : LIGHT_COLORS.activeBackgroundColor
           }}
         >
           <Drawer.Screen

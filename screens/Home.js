@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { ActivityIndicator, RefreshControl, ToastAndroid } from 'react-native';
+import { ActivityIndicator, RefreshControl, ToastAndroid, Animated} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import * as Animatable from 'react-native-animatable'; // Import the Animatable library
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
@@ -25,6 +26,7 @@ const Home = () => {
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [isResultHide, setIsResultHide] = useState(false);
 
   const { isDark } = useContext(ThemeContext);
 
@@ -111,6 +113,7 @@ const Home = () => {
           <Container
             isDark={isDark}
             contentContainerStyle={{ flexGrow: 1, padding: 20 }}
+            overScrollMode="never"
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
@@ -121,55 +124,63 @@ const Home = () => {
             }
           >
             <SectionText isDark={isDark} style={{fontSize: 20}}>Потребление электричества:</SectionText>
-            <Result isDark={isDark}>
-              {!price || !currency ? (
-                <ResultHeader isDark={isDark}>
-                  <SectionText isDark={isDark}>Выберете валюту и цену за квт</SectionText>
-                </ResultHeader>
-              ) : (
-                <>
-                  <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
-                    <ResultHeader isDark={isDark}>
-                      <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В день</SectionText>
-                    </ResultHeader>
-                    <ResultInfo isDark={isDark}>
-                      <SectionText isDark={isDark} style={{fontSize: 14}}>
-                        {truncateNumber(getTotalWatts() / 1000)} Квт*ч
-                      </SectionText>
-                      <SectionText isDark={isDark} style={{fontSize: 14}}>
-                        {truncateNumber((getTotalWatts() / 1000) * price)} {currency}
-                      </SectionText>
-                    </ResultInfo>
-                  </ResultItem>
-                  <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
-                    <ResultHeader isDark={isDark}>
-                      <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В месяц</SectionText>
-                    </ResultHeader>
-                    <ResultInfo isDark={isDark}>
-                      <SectionText isDark={isDark} style={{fontSize: 14}}>
-                        {truncateNumber((getTotalWatts() / 1000) * 30)} Квт*ч
-                      </SectionText>
-                      <SectionText isDark={isDark} style={{fontSize: 14}}>
-                        {truncateNumber(((getTotalWatts() / 1000) * price) * 30)} {currency}
-                      </SectionText>
-                    </ResultInfo>
-                  </ResultItem>
-                  <ResultItem>
-                    <ResultHeader isDark={isDark}>
-                      <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В год</SectionText>
-                    </ResultHeader>
-                    <ResultInfo isDark={isDark}>
-                      <SectionText isDark={isDark} style={{fontSize: 14}}>
-                        {truncateNumber((getTotalWatts() / 1000) * 30 * 12)} Квт*ч
-                      </SectionText>
-                      <SectionText isDark={isDark} style={{fontSize: 14}}>
-                        {truncateNumber(((getTotalWatts() / 1000) * price) * 30 * 12)} {currency}
-                      </SectionText>
-                    </ResultInfo>
-                  </ResultItem>
-                </>
-              )}
-            </Result>
+            {/* <Animatable.View // Wrap the Result block with Animatable.View
+              animation="slideInDown"
+              duration={500}
+            > */}
+              <Result isDark={isDark}>
+                {!price || !currency ? (
+                  <ResultHeader isDark={isDark}>
+                    <SectionText isDark={isDark}>Выберете валюту и цену за квт</SectionText>
+                  </ResultHeader>
+                ) : (
+                  <>
+                    <ResultContainer isResultHide={isResultHide}>
+                      <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
+                        <ResultHeader isDark={isDark}>
+                          <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В день</SectionText>
+                        </ResultHeader>
+                        <ResultInfo isDark={isDark}>
+                          <SectionText isDark={isDark} style={{fontSize: 14}}>
+                            {truncateNumber(getTotalWatts() / 1000)} Квт*ч
+                          </SectionText>
+                          <SectionText isDark={isDark} style={{fontSize: 14}}>
+                            {truncateNumber((getTotalWatts() / 1000) * price)} {currency}
+                          </SectionText>
+                        </ResultInfo>
+                      </ResultItem>
+                      <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
+                        <ResultHeader isDark={isDark}>
+                          <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В месяц</SectionText>
+                        </ResultHeader>
+                        <ResultInfo isDark={isDark}>
+                          <SectionText isDark={isDark} style={{fontSize: 14}}>
+                            {truncateNumber((getTotalWatts() / 1000) * 30)} Квт*ч
+                          </SectionText>
+                          <SectionText isDark={isDark} style={{fontSize: 14}}>
+                            {truncateNumber(((getTotalWatts() / 1000) * price) * 30)} {currency}
+                          </SectionText>
+                        </ResultInfo>
+                      </ResultItem>
+                      <ResultItem>
+                        <ResultHeader isDark={isDark}>
+                          <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В год</SectionText>
+                        </ResultHeader>
+                        <ResultInfo isDark={isDark}>
+                          <SectionText isDark={isDark} style={{fontSize: 14}}>
+                            {truncateNumber((getTotalWatts() / 1000) * 30 * 12)} Квт*ч
+                          </SectionText>
+                          <SectionText isDark={isDark} style={{fontSize: 14}}>
+                            {truncateNumber(((getTotalWatts() / 1000) * price) * 30 * 12)} {currency}
+                          </SectionText>
+                        </ResultInfo>
+                      </ResultItem>
+                    </ResultContainer>
+                    <ButtonComponent title={isResultHide ? 'показать полностью' : 'скрыть'} onPress={() => setIsResultHide(!isResultHide)}/>
+                  </>
+                )}
+              </Result>
+            {/* </Animatable.View> */}
             <ButtonComponent title="Добавить электроустройство" onPress={() => setAddDeviceVisible(!addDeviceVisible)} />
             {addDeviceVisible &&(
               <ModalContainer>
@@ -247,6 +258,11 @@ const Result = styled.View`
   overflow: hidden;
   background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
   margin: 15px 0;
+`;
+
+const ResultContainer = styled.View`
+  ${(props) => props.isResultHide && 'height: 100px;'};
+  overflow: hidden;
 `;
 
 const ResultItem = styled.View`
