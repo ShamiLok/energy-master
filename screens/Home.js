@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ActivityIndicator, RefreshControl, ToastAndroid, Animated} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Entypo } from '@expo/vector-icons'; 
 // import * as Animatable from 'react-native-animatable'; // Import the Animatable library
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
@@ -76,6 +77,8 @@ const Home = () => {
 
       await AsyncStorage.setItem('devices', JSON.stringify([...devices, newDevice]));
       showToast('устройство было добавлено')
+    } else {
+      showToast('заполните все поля')
     }
   };
 
@@ -131,7 +134,7 @@ const Home = () => {
               <Result isDark={isDark}>
                 {!price || !currency ? (
                   <ResultHeader isDark={isDark}>
-                    <SectionText isDark={isDark}>Выберете валюту и цену за квт</SectionText>
+                    <SectionText isDark={isDark}>Выберете цену за квт в настройках</SectionText>
                   </ResultHeader>
                 ) : (
                   <>
@@ -176,48 +179,56 @@ const Home = () => {
                         </ResultInfo>
                       </ResultItem>
                     </ResultContainer>
-                    <ButtonComponent title={isResultHide ? 'показать полностью' : 'скрыть'} onPress={() => setIsResultHide(!isResultHide)}/>
+                    <ResultHide onPress={() => setIsResultHide(!isResultHide)}>
+                      {isResultHide ? 
+                        <Entypo name="chevron-thin-down" size={24} color="black" />
+                        :
+                        <Entypo name="chevron-thin-up" size={24} color="black" />
+                      }
+                    </ResultHide>
                   </>
                 )}
               </Result>
             {/* </Animatable.View> */}
-            <ButtonComponent title="Добавить электроустройство" onPress={() => setAddDeviceVisible(!addDeviceVisible)} />
-            {addDeviceVisible &&(
-              <ModalContainer>
-                <Input
-                  isDark={isDark}
-                  placeholder="Имя электроустройства"
-                  placeholderTextColor="#808080"
-                  value={deviceName}
-                  onChangeText={(text) => setDeviceName(text)}
-                />
-                <Input
-                  isDark={isDark}
-                  placeholder="Ватты"
-                  placeholderTextColor="#808080"
-                  value={deviceWatts}
-                  onChangeText={(text) => setDeviceWatts(text)}
-                  keyboardType="numeric"
-                />
-                <Input
-                  isDark={isDark}
-                  placeholder="Количество"
-                  placeholderTextColor="#808080"
-                  value={deviceQuantity}
-                  onChangeText={(text) => setDeviceQuantity(text)}
-                  keyboardType="numeric"
-                />
-                <Input
-                  isDark={isDark}
-                  placeholder="Время работы в день (часы)"
-                  placeholderTextColor="#808080"
-                  value={deviceHours}
-                  onChangeText={(text) => setDeviceHours(text)}
-                  keyboardType="numeric"
-                />
-                <ButtonComponent title="Добавить" onPress={addDevice} />
-              </ModalContainer>
-            )}
+            <AddDevice isDark={isDark}>
+              <ButtonComponent title="Добавить электроустройство" onPress={() => setAddDeviceVisible(!addDeviceVisible)} style={{borderWidth: 0}}/>
+              {addDeviceVisible &&(
+                <ModalContainer>
+                  <Input
+                    isDark={isDark}
+                    placeholder="Имя электроустройства"
+                    placeholderTextColor="#808080"
+                    value={deviceName}
+                    onChangeText={(text) => setDeviceName(text)}
+                  />
+                  <Input
+                    isDark={isDark}
+                    placeholder="Ватты"
+                    placeholderTextColor="#808080"
+                    value={deviceWatts}
+                    onChangeText={(text) => setDeviceWatts(text)}
+                    keyboardType="numeric"
+                  />
+                  <Input
+                    isDark={isDark}
+                    placeholder="Количество"
+                    placeholderTextColor="#808080"
+                    value={deviceQuantity}
+                    onChangeText={(text) => setDeviceQuantity(text)}
+                    keyboardType="numeric"
+                  />
+                  <Input
+                    isDark={isDark}
+                    placeholder="Время работы в день (часы)"
+                    placeholderTextColor="#808080"
+                    value={deviceHours}
+                    onChangeText={(text) => setDeviceHours(text)}
+                    keyboardType="numeric"
+                  />
+                  <ButtonComponent title="Добавить" onPress={addDevice} style={{borderWidth: 0, backgroundColor: '#f4511e', marginHorizontal: 10, marginBottom: 10}}/>
+                </ModalContainer>
+              )}
+            </AddDevice>
             
             <SectionText isDark={isDark} style={{marginTop: 20, marginBottom: 10, fontSize: 20}}>Список устройств:</SectionText>
 
@@ -248,11 +259,20 @@ const Input = styled.TextInput`
   border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
   border-radius: 10px;
   padding: 10px 15px;
+  margin: 0 10px;
   margin-bottom: 10px;
   color: ${(props) => props.isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor};
+  background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
+`;
+
+const AddDevice = styled.View`
+  background-color: ${(props) => props.isDark ? DARK_COLORS.buttonBackgroundColor : LIGHT_COLORS.buttonBackgroundColor};
+  border-radius: 10px;
 `;
 
 const Result = styled.View`
+  position: relative;
+  padding: 0 10px;
   border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
   border-radius: 10px;
   overflow: hidden;
@@ -261,7 +281,7 @@ const Result = styled.View`
 `;
 
 const ResultContainer = styled.View`
-  ${(props) => props.isResultHide && 'height: 100px;'};
+  ${(props) => props.isResultHide && 'height: 130px;'};
   overflow: hidden;
 `;
 
@@ -274,10 +294,20 @@ const ResultHeader = styled.View`
   align-items: center;
   background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
 `;
+
 const ResultInfo = styled.View`
   padding: 7px 0;
   flex-direction: row;
   justify-content: space-around;
+`;
+
+const ResultHide = styled.TouchableOpacity`
+  position: absolute;
+  bottom: 0;
+  align-items: center;
+  width: 106%;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.2);
 `;
 
 const Loading = styled.View`
@@ -285,4 +315,5 @@ const Loading = styled.View`
   justify-content: center;
   align-items: center;
 `;
+
 export default Home;

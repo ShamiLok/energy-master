@@ -39,7 +39,7 @@ const ListItems = ({ devices, isDark, setDevices }) => {
       ) : (
         <>
           {devices.map((item, index) => (
-            <ItemSection isDark={isDark} key={index}>
+            <ItemSection isDark={isDark} key={index} style={{position: 'relative'}}>
               <View>
                 <SectionText isDark={isDark}>{item.name}</SectionText>
                 <SectionText isDark={isDark}>
@@ -72,6 +72,8 @@ const ListItems = ({ devices, isDark, setDevices }) => {
 
 const ListItemQuantity = styled.View`
   flex-direction: column;
+  position: absolute;
+  right: 80px;
 `;
 
 const SectionText = styled.Text`

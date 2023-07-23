@@ -3,10 +3,10 @@ import { ActivityIndicator, RefreshControl, Alert, Switch, ScrollView, ToastAndr
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
-
 import ItemSection from '../components/ItemSection'
 import SectionText from '../components/SectionText';
 import ButtonComponent from '../components/Button';
+import { getLocales } from 'expo-localization';
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
@@ -23,6 +23,7 @@ export default function Settings() {
   const pickerLanguageRef = useRef(false);
   const pickerCurrencyRef = useRef(false);
 
+  const [{ currencyCode, languageCode }] = getLocales();
 
   useEffect(() => {
     loadData();
@@ -32,8 +33,20 @@ export default function Settings() {
     try {
       setLoading(true);
       const savedCurrency = await AsyncStorage.getItem('currency');
+      const savedLangugae = await AsyncStorage.getItem('language');
       const savedPrice = await AsyncStorage.getItem('price');
-      setCurrency(savedCurrency);
+      if (!savedCurrency) {
+        setCurrency(currencyCode);
+        await AsyncStorage.setItem('currency', currencyCode);
+      } else {
+        setCurrency(savedCurrency);
+      }
+      if (!savedLangugae) {
+        setLanguage(languageCode);
+        await AsyncStorage.setItem('langugage', languageCode);
+      } else {
+        setLanguage(savedLangugae);
+      }
       setPrice(savedPrice);
       setLoading(false);
     } catch (error) {
@@ -49,6 +62,7 @@ export default function Settings() {
 
   const handleLanguageChange = async (value) => {
     setLanguage(value);
+    await AsyncStorage.setItem('language', value);
     showToast(`Установлен ${value} язык`)
   };
 
@@ -127,19 +141,17 @@ export default function Settings() {
             style={{height: 60}}
           >
             <SectionText isDark={isDark}>Language:</SectionText>
-            <PickerContainer isDark={isDark}>
-              <Picker
-                style={{ color: isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor, paddingHorizontal: 80}}
-                selectedValue={language}
-                onValueChange={handleLanguageChange}
-                dropdownIconColor={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor}
-                ref={pickerLanguageRef}
-              >
-                <Picker.Item label="English" value="English" />
-                <Picker.Item label="Russian" value="Russian" />
-                <Picker.Item label="German " value="German " />
-              </Picker>
-            </PickerContainer>
+            <Picker
+              style={{ color: isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor, paddingHorizontal: 80}}
+              selectedValue={language}
+              onValueChange={handleLanguageChange}
+              dropdownIconColor={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor}
+              ref={pickerLanguageRef}
+            >
+              <Picker.Item label="English" value="en" />
+              <Picker.Item label="Russian" value="ru" />
+              <Picker.Item label="German" value="de" />
+            </Picker>
           </ItemSection>
           <ItemSection 
             isDark={isDark} 
@@ -147,19 +159,17 @@ export default function Settings() {
             style={{height: 60}}
           >
             <SectionText isDark={isDark}>Currency:</SectionText>
-            <PickerContainer isDark={isDark}>
-              <Picker
-                style={{ color: isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor, paddingHorizontal: 60}}
-                selectedValue={currency}
-                onValueChange={handleCurrencyChange}
-                dropdownIconColor={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor}
-                ref={pickerCurrencyRef}
-              >
-                <Picker.Item label="EUR" value="EUR" />
-                <Picker.Item label="USD" value="USD" />
-                <Picker.Item label="RUB" value="RUB" />
-              </Picker>
-            </PickerContainer>
+            <Picker
+              style={{ color: isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor, paddingHorizontal: 60}}
+              selectedValue={currency}
+              onValueChange={handleCurrencyChange}
+              dropdownIconColor={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor}
+              ref={pickerCurrencyRef}
+            >
+              <Picker.Item label="EUR" value="EUR" />
+              <Picker.Item label="USD" value="USD" />
+              <Picker.Item label="RUB" value="RUB" />
+            </Picker>
           </ItemSection>
           <ItemSection 
             isDark={isDark}
@@ -198,10 +208,6 @@ export default function Settings() {
 const Container = styled.View`
   flex: 1;
   background-color: ${(props) => (props.isDark ? DARK_COLORS.backgroundColor : LIGHT_COLORS.backgroundColor)};
-`;
-const PickerContainer = styled.View`
-  /* border: 1px solid ${(props) => (props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor)}; */
-  /* border-radius: 10px; */
 `;
 const Input = styled.TextInput`
   font-size: 16px;
