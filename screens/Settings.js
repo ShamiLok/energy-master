@@ -1,25 +1,27 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { ActivityIndicator, RefreshControl, Alert, Switch, ScrollView, ToastAndroid } from 'react-native';
+import { Alert, Switch, ToastAndroid } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
-import ItemSection from '../components/ItemSection'
-import SectionText from '../components/SectionText';
-import ButtonComponent from '../components/Button';
 import SwitchSelector from "react-native-switch-selector";
 import { getLocales } from 'expo-localization';
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
 
-export default function Settings() {
+import ItemSection from '../components/ItemSection'
+import SectionText from '../components/SectionText';
+import ButtonComponent from '../components/Button';
+import ContainerComponent from '../components/ContainerComponent';
+import SectionLoading from '../components/LoadingComponent'
+
+function Settings() {
   const { isDark, handleIsDark } = useContext(ThemeContext);
 
   const [language, setLanguage] = useState('');
   const [currency, setCurrency] = useState('');
   const [price, setPrice] = useState('');
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
 
   const [plan, setPlan] = useState('');
   const [dayPrice, setDayPrice] = useState('');
@@ -112,12 +114,6 @@ export default function Settings() {
     showToast('Настройки были сброшены')
   };
 
-  const onRefresh = () => {
-    setRefreshing(true);
-    loadData();
-    setRefreshing(false);
-  };
-
   const handleChangeColorTheme = () => {
     handleIsDark(!isDark);
   };
@@ -135,14 +131,11 @@ export default function Settings() {
   }
 
   return (
-    <Container isDark={isDark}>
+    <>
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <SectionLoading isDark={isDark} />
       ) : (
-        <ScrollView
-          contentContainerStyle={{ padding: 20 }}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        >
+        <ContainerComponent isDark={isDark} loadData={loadData}>
           <ItemSection 
             isDark={isDark} 
             onPress={() => handleFocus(pickerLanguageRef)}
@@ -207,8 +200,9 @@ export default function Settings() {
                 isDark={isDark}
                 value={price}
                 onChangeText={(text) => handlePriceChange(text, 'fixed')}
-                keyboardType="numeric"
                 ref={fixedTextInputRef}
+                keyboardType="numeric"
+                maxLength={15}
               />
             </ItemSection>
           ) : (
@@ -224,8 +218,9 @@ export default function Settings() {
                   isDark={isDark}
                   value={dayPrice}
                   onChangeText={(text) => handlePriceChange(text, 'dual-day')}
-                  keyboardType="numeric"
                   ref={dayTextInputRef}
+                  keyboardType="numeric"
+                  maxLength={15}
                 />
               </ItemSection>
               <ItemSection
@@ -238,8 +233,9 @@ export default function Settings() {
                   isDark={isDark}
                   value={nightPrice}
                   onChangeText={(text) => handlePriceChange(text, 'dual-night')}
-                  keyboardType="numeric"
                   ref={nightTextInputRef}
+                  keyboardType="numeric"
+                  maxLength={15}
                 />
               </ItemSection>
             </>
@@ -259,18 +255,16 @@ export default function Settings() {
           
           <ButtonComponent title="Сбросить настройки" onPress={handleDefault} />
           
-        </ScrollView>
+        </ContainerComponent>
       )}
-    </Container>
+    </>
   );
 }
 
-const Container = styled.View`
-  flex: 1;
-  background-color: ${(props) => (props.isDark ? DARK_COLORS.backgroundColor : LIGHT_COLORS.backgroundColor)};
-`;
 const Input = styled.TextInput`
   font-size: 16px;
   padding: 5px 10px;
   color: ${(props) => (props.isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor)};
 `;
+
+export default Settings;

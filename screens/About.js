@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { View, Text } from 'react-native';
 import styled from 'styled-components/native';
 
 import ButtonComponent from '../components/Button';
@@ -10,7 +9,7 @@ import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
 
 const About = () => {
-const { isDark} = useContext(ThemeContext);
+  const { isDark} = useContext(ThemeContext);
 
   const appVersion = 'in develop';
 
@@ -27,7 +26,11 @@ const { isDark} = useContext(ThemeContext);
   };
 
   return (
-    <Container isDark={isDark}>
+    <Container
+      isDark={isDark}
+      contentContainerStyle={{ padding: 20 }}
+      overScrollMode="never"
+    >
       <SectionText isDark={isDark} style={{fontSize: 24}}>Energy Master</SectionText>
         <SectionText style={{marginBottom: 10}} isDark={isDark}>Version: {appVersion}</SectionText>
         <ItemSection isDark={isDark}>
@@ -50,10 +53,10 @@ const { isDark} = useContext(ThemeContext);
   );
 };
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex: 1;
-  padding: 20px;
-  background-color: ${(props) => (props.isDark ? DARK_COLORS.backgroundColor : LIGHT_COLORS.backgroundColor)};
+  flex-direction: column;
+  background-color: ${(props) => props.isDark ? DARK_COLORS.backgroundColor : LIGHT_COLORS.backgroundColor};
 `;
 
 const Copyright = styled.View`
