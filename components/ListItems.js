@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ItemSection from './ItemSection';
 
-const ListItems = ({ devices, isDark, setDevices }) => {
+const ListItems = ({ devices, plan, isDark, setDevices }) => {
   const removeDevice = async (index) => {
     const updatedDevices = devices.filter((_, i) => i !== index);
     setDevices(updatedDevices);
@@ -42,9 +42,21 @@ const ListItems = ({ devices, isDark, setDevices }) => {
             <ItemSection isDark={isDark} key={index} style={{position: 'relative'}}>
               <View>
                 <SectionText isDark={isDark}>{item.name}</SectionText>
-                <SectionText isDark={isDark}>
-                  {item.watts} ватт, {item.hours} {item.hours === 1 ? 'час' : 'часа'}
-                </SectionText>
+                {plan === 'fixed' ? (
+                  <SectionText isDark={isDark}>
+                    {item.watts} ватт, {item.hours} {item.hours === 1 ? 'час' : 'часа'}
+                  </SectionText>
+                ) : (
+                <>
+                  <SectionText isDark={isDark}>
+                    {item.watts} ватт
+                  </SectionText>
+                  <SectionText isDark={isDark}>
+                    {item.dayHours} {item.dayHours === 1 ? 'час' : 'часа'} днем, {item.nightHours} {item.nightHours === 1 ? 'час' : 'часа'} ночью
+                  </SectionText>
+                </>
+                )}
+                
               </View>
               <ListItemQuantity>
                 <TextInput

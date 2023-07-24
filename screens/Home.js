@@ -21,8 +21,13 @@ const Home = () => {
   const [deviceWatts, setDeviceWatts] = useState('');
   const [deviceQuantity, setDeviceQuantity] = useState('');
   const [deviceHours, setDeviceHours] = useState('');
+  const [dayDeviceHours, setDayDeviceHours] = useState('');
+  const [nightDeviceHours, setNightDeviceHours] = useState('');
 
   const [currency, setCurrency] = useState('');
+  const [plan, setPlan] = useState('');
+  // const [dayPrice, setDayPrice] = useState('');
+  // const [nightPrice, setNightPrice] = useState('');
   const [price, setPrice] = useState('');
 
   const [loading, setLoading] = useState(true);
@@ -40,11 +45,22 @@ const Home = () => {
       setLoading(true);
 
       const savedCurrency = await AsyncStorage.getItem('currency');
+      const savedPlan = await AsyncStorage.getItem('plan');
+      const savedDayPrice = await AsyncStorage.getItem('dayPrice');
+      const savedNightPrice = await AsyncStorage.getItem('nightPrice');
       const savedPrice = await AsyncStorage.getItem('price');
       const savedDevices = await AsyncStorage.getItem('devices');
 
+      setPlan(savedPlan);
+      if(savedPlan === 'fixed') {
+        setPrice(savedPrice);
+      } else {
+        setPrice((Number(savedDayPrice) + Number(savedNightPrice))/2 );
+      }
+      // setDayPrice(savedDayPrice)
+      // setNightPrice(savedNightPrice)
       setCurrency(savedCurrency);
-      setPrice(savedPrice);
+      // setPrice(savedPrice);
 
       if (savedDevices) {
         setDevices(JSON.parse(savedDevices));
@@ -60,12 +76,14 @@ const Home = () => {
   };
 
   const addDevice = async () => {
-    if (deviceName && deviceWatts && deviceQuantity && deviceHours) {
+    if (deviceName && deviceWatts && deviceQuantity && (deviceHours || (dayDeviceHours && nightDeviceHours))) {
       const newDevice = {
         name: deviceName,
         watts: deviceWatts,
         quantity: deviceQuantity,
         hours: deviceHours,
+        dayHours: dayDeviceHours,
+        nightHours: nightDeviceHours
       };
 
       setDevices([...devices, newDevice]);
@@ -83,7 +101,12 @@ const Home = () => {
   };
 
   const getTotalWatts = () => {
-    return devices.reduce((total, device) => total + device.watts * device.quantity * device.hours, 0);
+    if(plan === 'fixed'){
+      return devices.reduce((total, device) => total + device.watts * device.quantity * device.hours, 0);
+    } else {
+      return devices.reduce((total, device) => total + device.watts * device.quantity * ((device.dayHours/device.nightHours)*10), 0);
+    }
+    
   };
 
   const handleRefresh = async () => {
@@ -92,9 +115,9 @@ const Home = () => {
     setRefreshing(false);
   };
 
-  function truncateNumber(number) {
+  function roundNumber(number) {
     var parts = number.toString().split('.');
-    return !parts[1] || parts[1].length <= 2 ? number : parseFloat(parts[0] + '.' + parts[1].slice(0, 2));
+    return !parts[1] || parts[1].length <= 2 ? number : number.toFixed(2);
   }
 
   const showToast = (message) => {
@@ -145,10 +168,10 @@ const Home = () => {
                         </ResultHeader>
                         <ResultInfo isDark={isDark}>
                           <SectionText isDark={isDark} style={{fontSize: 14}}>
-                            {truncateNumber(getTotalWatts() / 1000)} Квт*ч
+                            {roundNumber(getTotalWatts() / 1000)} Квт*ч
                           </SectionText>
                           <SectionText isDark={isDark} style={{fontSize: 14}}>
-                            {truncateNumber((getTotalWatts() / 1000) * price)} {currency}
+                            {roundNumber((getTotalWatts() / 1000) * price)} {currency}
                           </SectionText>
                         </ResultInfo>
                       </ResultItem>
@@ -158,10 +181,10 @@ const Home = () => {
                         </ResultHeader>
                         <ResultInfo isDark={isDark}>
                           <SectionText isDark={isDark} style={{fontSize: 14}}>
-                            {truncateNumber((getTotalWatts() / 1000) * 30)} Квт*ч
+                            {roundNumber((getTotalWatts() / 1000) * 30)} Квт*ч
                           </SectionText>
                           <SectionText isDark={isDark} style={{fontSize: 14}}>
-                            {truncateNumber(((getTotalWatts() / 1000) * price) * 30)} {currency}
+                            {roundNumber(((getTotalWatts() / 1000) * price) * 30)} {currency}
                           </SectionText>
                         </ResultInfo>
                       </ResultItem>
@@ -171,19 +194,19 @@ const Home = () => {
                         </ResultHeader>
                         <ResultInfo isDark={isDark}>
                           <SectionText isDark={isDark} style={{fontSize: 14}}>
-                            {truncateNumber((getTotalWatts() / 1000) * 30 * 12)} Квт*ч
+                            {roundNumber((getTotalWatts() / 1000) * 365)} Квт*ч
                           </SectionText>
                           <SectionText isDark={isDark} style={{fontSize: 14}}>
-                            {truncateNumber(((getTotalWatts() / 1000) * price) * 30 * 12)} {currency}
+                            {roundNumber(((getTotalWatts() / 1000) * price) * 365)} {currency}
                           </SectionText>
                         </ResultInfo>
                       </ResultItem>
                     </ResultContainer>
                     <ResultHide onPress={() => setIsResultHide(!isResultHide)}>
                       {isResultHide ? 
-                        <Entypo name="chevron-thin-down" size={24} color="black" />
+                        <Entypo name="chevron-thin-down" size={24} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
                         :
-                        <Entypo name="chevron-thin-up" size={24} color="black" />
+                        <Entypo name="chevron-thin-up" size={24} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
                       }
                     </ResultHide>
                   </>
@@ -217,14 +240,36 @@ const Home = () => {
                     onChangeText={(text) => setDeviceQuantity(text)}
                     keyboardType="numeric"
                   />
-                  <Input
-                    isDark={isDark}
-                    placeholder="Время работы в день (часы)"
-                    placeholderTextColor="#808080"
-                    value={deviceHours}
-                    onChangeText={(text) => setDeviceHours(text)}
-                    keyboardType="numeric"
-                  />
+                  {plan === "fixed" ? (
+                    <Input
+                      isDark={isDark}
+                      placeholder="Время работы в день (часы)"
+                      placeholderTextColor="#808080"
+                      value={deviceHours}
+                      onChangeText={(text) => setDeviceHours(text)}
+                      keyboardType="numeric"
+                    />
+                  ) : (
+                    <>
+                      <Input
+                        isDark={isDark}
+                        placeholder="Время работы днем (часы)"
+                        placeholderTextColor="#808080"
+                        value={dayDeviceHours}
+                        onChangeText={(text) => setDayDeviceHours(text)}
+                        keyboardType="numeric"
+                      />
+                      <Input
+                        isDark={isDark}
+                        placeholder="Время работы ночью (часы)"
+                        placeholderTextColor="#808080"
+                        value={nightDeviceHours}
+                        onChangeText={(text) => setNightDeviceHours(text)}
+                        keyboardType="numeric"
+                      />
+                    </>
+                  )}
+                  
                   <ButtonComponent title="Добавить" onPress={addDevice} style={{borderWidth: 0, backgroundColor: '#f4511e', marginHorizontal: 10, marginBottom: 10}}/>
                 </ModalContainer>
               )}
@@ -234,6 +279,7 @@ const Home = () => {
 
             <ListItems
               devices={devices}
+              plan={plan}
               isDark={isDark}
               setDevices={setDevices}
             />

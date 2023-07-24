@@ -6,22 +6,30 @@ import styled from 'styled-components/native';
 import ItemSection from '../components/ItemSection'
 import SectionText from '../components/SectionText';
 import ButtonComponent from '../components/Button';
+import SwitchSelector from "react-native-switch-selector";
 import { getLocales } from 'expo-localization';
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
 
 export default function Settings() {
+  const { isDark, handleIsDark } = useContext(ThemeContext);
+
   const [language, setLanguage] = useState('');
   const [currency, setCurrency] = useState('');
   const [price, setPrice] = useState('');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const textInputRef = useRef(null);
 
-  const { isDark, handleIsDark } = useContext(ThemeContext);
+  const [plan, setPlan] = useState('');
+  const [dayPrice, setDayPrice] = useState('');
+  const [nightPrice, setNightPrice] = useState('');
+
+  const fixedTextInputRef = useRef(null);
   const pickerLanguageRef = useRef(false);
   const pickerCurrencyRef = useRef(false);
+  const dayTextInputRef = useRef(null);
+  const nightTextInputRef = useRef(null);
 
   const [{ currencyCode, languageCode }] = getLocales();
 
@@ -66,9 +74,23 @@ export default function Settings() {
     showToast(`Установлен ${value} язык`)
   };
 
-  const handlePriceChange = async (text) => {
-    setPrice(text);
-    await AsyncStorage.setItem('price', text);
+  const handlePlanChange = async (plan) => {
+    setPlan(plan)
+    await AsyncStorage.setItem('plan', plan);
+    await AsyncStorage.removeItem('devices');
+  }
+
+  const handlePriceChange = async (text, type) => {
+    if(type === 'fixed'){
+      setPrice(text);
+      await AsyncStorage.setItem('price', text);
+    } else if(type === 'dual-day'){
+      setDayPrice(text)
+      await AsyncStorage.setItem('dayPrice', text);
+    } else {
+      setNightPrice(text)
+      await AsyncStorage.setItem('nightPrice', text);
+    }
   };
 
   const handleDefault = () => {
@@ -100,22 +122,8 @@ export default function Settings() {
     handleIsDark(!isDark);
   };
 
-  const handleTextInputFocus = () => {
-    if (textInputRef.current) {
-      textInputRef.current.focus();
-    }
-  };
-
-  const handlePickerLanguageFocus = () => {
-    if (textInputRef.current) {
-      pickerLanguageRef.current.focus();
-    }
-  }
-
-  const handlePickerCurrencyFocus = () => {
-    if (textInputRef.current) {
-      pickerCurrencyRef.current.focus();
-    }
+  const handleFocus = (refHook) => {
+    refHook.current.focus();
   }
 
   const showToast = (message) => {
@@ -137,7 +145,7 @@ export default function Settings() {
         >
           <ItemSection 
             isDark={isDark} 
-            onPress={handlePickerLanguageFocus}
+            onPress={() => handleFocus(pickerLanguageRef)}
             style={{height: 60}}
           >
             <SectionText isDark={isDark}>Language:</SectionText>
@@ -155,7 +163,7 @@ export default function Settings() {
           </ItemSection>
           <ItemSection 
             isDark={isDark} 
-            onPress={handlePickerCurrencyFocus}
+            onPress={() => handleFocus(pickerCurrencyRef)}
             style={{height: 60}}
           >
             <SectionText isDark={isDark}>Currency:</SectionText>
@@ -171,20 +179,72 @@ export default function Settings() {
               <Picker.Item label="RUB" value="RUB" />
             </Picker>
           </ItemSection>
-          <ItemSection 
-            isDark={isDark}
-            onPress={handleTextInputFocus}
-            style={{height: 60}}
-          >
-            <SectionText isDark={isDark}>Enter the price per kWh:</SectionText>
-            <Input
+          <SectionText isDark={isDark}>Выберете тарифный план:</SectionText>
+          <SwitchSelector
+            initial={plan == 'dual' ? 1 : 0}
+            style={{marginBottom: 10}}
+            onPress={handlePlanChange}
+            textColor={isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor}
+            buttonColor={"#f4511e"}
+            backgroundColor={isDark ? DARK_COLORS.backgroundColor : LIGHT_COLORS.backgroundColor}
+            borderColor={isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor}
+            fontSize={12}
+            hasPadding
+            options={[
+              { label: "Однотарифный", value: "fixed"},
+              { label: "Двухтарифный", value: "dual"},
+              // { label: "Трехтарифный", value: "triple"}
+            ]}
+          />
+          {plan === "fixed" ? (
+            <ItemSection 
               isDark={isDark}
-              value={price}
-              onChangeText={handlePriceChange}
-              keyboardType="numeric"
-              ref={textInputRef}
-            />
-          </ItemSection>
+              onPress={() => handleFocus(fixedTextInputRef)}
+              style={{height: 60}}
+            >
+              <SectionText isDark={isDark}>Цена за Кв*ч:</SectionText>
+              <Input
+                isDark={isDark}
+                value={price}
+                onChangeText={(text) => handlePriceChange(text, 'fixed')}
+                keyboardType="numeric"
+                ref={fixedTextInputRef}
+              />
+            </ItemSection>
+          ) : (
+            <>
+              <SectionText isDark={isDark}>Цена за Кв*ч:</SectionText>
+              <ItemSection
+                isDark={isDark}
+                onPress={() => handleFocus(dayTextInputRef)}
+                style={{height: 60}}
+              >
+                <SectionText isDark={isDark}>День(7:00-23:00):</SectionText>
+                <Input
+                  isDark={isDark}
+                  value={dayPrice}
+                  onChangeText={(text) => handlePriceChange(text, 'dual-day')}
+                  keyboardType="numeric"
+                  ref={dayTextInputRef}
+                />
+              </ItemSection>
+              <ItemSection
+                isDark={isDark}
+                onPress={() => handleFocus(nightTextInputRef)}
+                style={{height: 60}}
+              >
+                <SectionText isDark={isDark}>Ночь(23:00-7:00):</SectionText>
+                <Input
+                  isDark={isDark}
+                  value={nightPrice}
+                  onChangeText={(text) => handlePriceChange(text, 'dual-night')}
+                  keyboardType="numeric"
+                  ref={nightTextInputRef}
+                />
+              </ItemSection>
+            </>
+          )}
+          
           <ItemSection
             isDark={isDark}
             onPress={handleChangeColorTheme}
