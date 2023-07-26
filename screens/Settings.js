@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { Alert, Switch, ToastAndroid } from 'react-native';
+import { Alert, Switch, ToastAndroid, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
-import SwitchSelector from "react-native-switch-selector";
+// import SwitchSelector from "react-native-switch-selector";
 import { getLocales } from 'expo-localization';
+import { AntDesign } from '@expo/vector-icons';
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
@@ -30,6 +31,7 @@ function Settings() {
   const fixedTextInputRef = useRef(null);
   const pickerLanguageRef = useRef(false);
   const pickerCurrencyRef = useRef(false);
+  const pickerPlanRef = useRef(false);
   const dayTextInputRef = useRef(null);
   const nightTextInputRef = useRef(null);
 
@@ -45,6 +47,7 @@ function Settings() {
       const savedCurrency = await AsyncStorage.getItem('currency');
       const savedLangugae = await AsyncStorage.getItem('language');
       const savedPrice = await AsyncStorage.getItem('price');
+      const savedPlan = await AsyncStorage.getItem('plan');
       if (!savedCurrency) {
         setCurrency(currencyCode);
         await AsyncStorage.setItem('currency', currencyCode);
@@ -56,6 +59,12 @@ function Settings() {
         await AsyncStorage.setItem('langugage', languageCode);
       } else {
         setLanguage(savedLangugae);
+      }
+      if (!savedPlan) {
+        setPlan('fixed');
+        await AsyncStorage.setItem('plan', languageCode);
+      } else {
+        setPlan(savedPlan);
       }
       setPrice(savedPrice);
       setLoading(false);
@@ -136,123 +145,135 @@ function Settings() {
         <SectionLoading isDark={isDark} />
       ) : (
         <ContainerComponent isDark={isDark} loadData={loadData}>
-          <ItemSection 
-            isDark={isDark} 
-            onPress={() => handleFocus(pickerLanguageRef)}
-            style={{height: 60}}
-          >
-            <SectionText isDark={isDark}>Language:</SectionText>
-            <Picker
-              style={{ color: isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor, paddingHorizontal: 80}}
-              selectedValue={language}
-              onValueChange={handleLanguageChange}
-              dropdownIconColor={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor}
-              ref={pickerLanguageRef}
-            >
-              <Picker.Item label="English" value="en" />
-              <Picker.Item label="Russian" value="ru" />
-              <Picker.Item label="German" value="de" />
-            </Picker>
-          </ItemSection>
-          <ItemSection 
-            isDark={isDark} 
-            onPress={() => handleFocus(pickerCurrencyRef)}
-            style={{height: 60}}
-          >
-            <SectionText isDark={isDark}>Currency:</SectionText>
-            <Picker
-              style={{ color: isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor, paddingHorizontal: 60}}
-              selectedValue={currency}
-              onValueChange={handleCurrencyChange}
-              dropdownIconColor={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor}
-              ref={pickerCurrencyRef}
-            >
-              <Picker.Item label="EUR" value="EUR" />
-              <Picker.Item label="USD" value="USD" />
-              <Picker.Item label="RUB" value="RUB" />
-            </Picker>
-          </ItemSection>
-          <SectionText isDark={isDark}>Выберете тарифный план:</SectionText>
-          <SwitchSelector
-            initial={plan == 'dual' ? 1 : 0}
-            style={{marginBottom: 10}}
-            onPress={handlePlanChange}
-            textColor={isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor}
-            buttonColor={"#f4511e"}
-            backgroundColor={isDark ? DARK_COLORS.backgroundColor : LIGHT_COLORS.backgroundColor}
-            borderColor={isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor}
-            fontSize={12}
-            hasPadding
-            options={[
-              { label: "Однотарифный", value: "fixed"},
-              { label: "Двухтарифный", value: "dual"},
-              // { label: "Трехтарифный", value: "triple"}
-            ]}
-          />
-          {plan === "fixed" ? (
+          <SettingSection isDark={isDark}>
+            <SectionText isDark={isDark} style={{fontSize: 20, fontWeight: 'bold', paddingTop: 10, paddingLeft: 10}}>Основные</SectionText>
             <ItemSection 
-              isDark={isDark}
-              onPress={() => handleFocus(fixedTextInputRef)}
+              isDark={isDark} 
+              onPress={() => handleFocus(pickerLanguageRef)}
               style={{height: 60}}
             >
-              <SectionText isDark={isDark}>Цена за Кв*ч:</SectionText>
-              <Input
-                isDark={isDark}
-                value={price}
-                onChangeText={(text) => handlePriceChange(text, 'fixed')}
-                ref={fixedTextInputRef}
-                keyboardType="numeric"
-                maxLength={15}
+              <SectionText isDark={isDark}>Language:</SectionText>
+              <Picker
+                style={{display: 'none'}}
+                selectedValue={language}
+                onValueChange={handleLanguageChange}
+                ref={pickerLanguageRef}
+              >
+                <Picker.Item label="English" value="en" />
+                <Picker.Item label="Russian" value="ru" />
+                <Picker.Item label="German" value="de" />
+              </Picker> 
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <SectionText isDark={isDark} style={{paddingRight: 20}}>{language === 'en' ? 'English' : (language === 'ru' ? 'Russian' : 'German')}</SectionText>
+                <AntDesign name="caretdown" size={9} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
+              </View>
+            </ItemSection>
+            <ItemSection 
+              isDark={isDark} 
+              onPress={() => handleFocus(pickerCurrencyRef)}
+              style={{height: 60}}
+            >
+              <SectionText isDark={isDark}>Currency:</SectionText>
+              <Picker
+                style={{display: 'none'}}
+                selectedValue={currency}
+                onValueChange={handleCurrencyChange}
+                ref={pickerCurrencyRef}
+              >
+                <Picker.Item label="EUR" value="EUR" />
+                <Picker.Item label="USD" value="USD" />
+                <Picker.Item label="RUB" value="RUB" />
+              </Picker> 
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <SectionText isDark={isDark} style={{paddingRight: 20}}>{currency}</SectionText>
+                <AntDesign name="caretdown" size={9} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
+              </View>
+            </ItemSection>
+            <ItemSection
+              isDark={isDark}
+              onPress={handleChangeColorTheme}
+              style={{height: 60}}
+            >
+              <SectionText isDark={isDark}>Темная тема</SectionText>
+              <Switch
+                value={isDark}
+                onValueChange={handleChangeColorTheme}
               />
             </ItemSection>
-          ) : (
-            <>
-              <SectionText isDark={isDark}>Цена за Кв*ч:</SectionText>
-              <ItemSection
+          </SettingSection>
+          <SettingSection isDark={isDark}>
+            <SectionText isDark={isDark} style={{fontSize: 20, fontWeight: 'bold', paddingTop: 10, paddingLeft: 10}}>Тарифный план</SectionText>
+            <ItemSection 
+              isDark={isDark} 
+              onPress={() => handleFocus(pickerPlanRef)}
+              style={{height: 60}}
+            >
+              <SectionText isDark={isDark}>Выбрать план:</SectionText>
+              <Picker
+                style={{display: 'none'}}
+                selectedValue={plan}
+                onValueChange={handlePlanChange}
+                ref={pickerPlanRef}
+              >
+                <Picker.Item label="Однотарифный" value="fixed" />
+                <Picker.Item label="Двухтарифный" value="dual" />
+              </Picker>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <SectionText isDark={isDark} style={{paddingRight: 20}}>{plan === 'fixed' ? 'Однотарифный' : 'Двутарифный'}</SectionText>
+                <AntDesign name="caretdown" size={9} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
+              </View>
+            </ItemSection>
+            {plan === "fixed" ? (
+              <ItemSection 
                 isDark={isDark}
-                onPress={() => handleFocus(dayTextInputRef)}
+                onPress={() => handleFocus(fixedTextInputRef)}
                 style={{height: 60}}
               >
-                <SectionText isDark={isDark}>День(7:00-23:00):</SectionText>
+                <SectionText isDark={isDark}>Цена за Кв*ч:</SectionText>
                 <Input
                   isDark={isDark}
-                  value={dayPrice}
-                  onChangeText={(text) => handlePriceChange(text, 'dual-day')}
-                  ref={dayTextInputRef}
+                  value={price}
+                  onChangeText={(text) => handlePriceChange(text, 'fixed')}
+                  ref={fixedTextInputRef}
                   keyboardType="numeric"
                   maxLength={15}
                 />
               </ItemSection>
-              <ItemSection
-                isDark={isDark}
-                onPress={() => handleFocus(nightTextInputRef)}
-                style={{height: 60}}
-              >
-                <SectionText isDark={isDark}>Ночь(23:00-7:00):</SectionText>
-                <Input
+            ) : (
+              <>
+                <ItemSection
                   isDark={isDark}
-                  value={nightPrice}
-                  onChangeText={(text) => handlePriceChange(text, 'dual-night')}
-                  ref={nightTextInputRef}
-                  keyboardType="numeric"
-                  maxLength={15}
-                />
-              </ItemSection>
-            </>
-          )}
-          
-          <ItemSection
-            isDark={isDark}
-            onPress={handleChangeColorTheme}
-            style={{height: 60}}
-          >
-            <SectionText isDark={isDark}>Темная тема</SectionText>
-            <Switch
-              value={isDark}
-              onValueChange={handleChangeColorTheme}
-            />
-          </ItemSection>
-          
+                  onPress={() => handleFocus(dayTextInputRef)}
+                  style={{height: 60}}
+                >
+                  <SectionText isDark={isDark}>День(7:00-23:00):</SectionText>
+                  <Input
+                    isDark={isDark}
+                    value={dayPrice}
+                    onChangeText={(text) => handlePriceChange(text, 'dual-day')}
+                    ref={dayTextInputRef}
+                    keyboardType="numeric"
+                    maxLength={15}
+                  />
+                </ItemSection>
+                <ItemSection
+                  isDark={isDark}
+                  onPress={() => handleFocus(nightTextInputRef)}
+                  style={{height: 60}}
+                >
+                  <SectionText isDark={isDark}>Ночь(23:00-7:00):</SectionText>
+                  <Input
+                    isDark={isDark}
+                    value={nightPrice}
+                    onChangeText={(text) => handlePriceChange(text, 'dual-night')}
+                    ref={nightTextInputRef}
+                    keyboardType="numeric"
+                    maxLength={15}
+                  />
+                </ItemSection>
+              </>
+            )}
+          </SettingSection>
           <ButtonComponent title="Сбросить настройки" onPress={handleDefault} />
           
         </ContainerComponent>
@@ -260,6 +281,13 @@ function Settings() {
     </>
   );
 }
+
+const SettingSection = styled.View`
+  background-color: ${(props) => (props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor)};
+  /* padding: 10px 10px 0 20px; */
+  border-radius: 10px;
+  margin-bottom: 20px;
+`;
 
 const Input = styled.TextInput`
   font-size: 16px;
