@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { ToastAndroid, Animated} from 'react-native';
+import { ToastAndroid, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Entypo } from '@expo/vector-icons'; 
 import styled from 'styled-components/native';
-// import * as Animatable from 'react-native-animatable'; // Import the Animatable library
+import Animated, { useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
@@ -35,6 +35,9 @@ const Home = () => {
   const [isResultHide, setIsResultHide] = useState(false);
 
   const { isDark } = useContext(ThemeContext);
+
+  const [ addDeviceHeight, setAddDeviceHeight ] = useState(0)
+  const [ resultHeight, setResultHeight ] = useState(0)
 
   useEffect(() => {
     loadData();
@@ -74,6 +77,29 @@ const Home = () => {
       setLoading(false);
     }
   };
+
+  const onLayout = (LayoutChangeEvent, value, setvalue) => {
+    const layoutHeight = LayoutChangeEvent.nativeEvent.layout.height
+
+    if(layoutHeight > 0 && layoutHeight !== value) {
+      setvalue(layoutHeight)
+    }
+  }
+
+  const addDeviceAnimatedsStyle = useAnimatedStyle(() => {
+    const animatedHeight = addDeviceVisible ? withTiming(addDeviceHeight) : withTiming(0)
+    return {
+      height: animatedHeight,
+      overflow: 'hidden'
+    }
+  })
+  
+  const resultAnimatedsStyle = useAnimatedStyle(() => {
+    const animatedHeight = !isResultHide ? withTiming(resultHeight) : withTiming(120)
+    return {
+      height: animatedHeight
+    }
+  })
 
   const addDevice = async () => {
     if (deviceName && deviceWatts && deviceQuantity && (deviceHours || (dayDeviceHours && nightDeviceHours))) {
@@ -129,10 +155,6 @@ const Home = () => {
       ) : (
         <ContainerComponent isDark={isDark} loadData={loadData}>
           <SectionText isDark={isDark} style={{fontSize: 20}}>Потребление электричества:</SectionText>
-          {/* <Animatable.View // Wrap the Result block with Animatable.View
-            animation="slideInDown"
-            duration={500}
-          > */}
             <Result isDark={isDark}>
               {!price || !currency ? (
                 <ResultHeader isDark={isDark}>
@@ -140,47 +162,51 @@ const Home = () => {
                 </ResultHeader>
               ) : (
                 <>
-                  <ResultContainer isResultHide={isResultHide}>
-                    <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
-                      <ResultHeader isDark={isDark}>
-                        <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В день</SectionText>
-                      </ResultHeader>
-                      <ResultInfo isDark={isDark}>
-                        <SectionText isDark={isDark} style={{fontSize: 14}}>
-                          {roundNumber(getTotalWatts() / 1000)} Квт*ч
-                        </SectionText>
-                        <SectionText isDark={isDark} style={{fontSize: 14}}>
-                          {roundNumber((getTotalWatts() / 1000) * price)} {currency}
-                        </SectionText>
-                      </ResultInfo>
-                    </ResultItem>
-                    <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
-                      <ResultHeader isDark={isDark}>
-                        <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В месяц</SectionText>
-                      </ResultHeader>
-                      <ResultInfo isDark={isDark}>
-                        <SectionText isDark={isDark} style={{fontSize: 14}}>
-                          {roundNumber((getTotalWatts() / 1000) * 30)} Квт*ч
-                        </SectionText>
-                        <SectionText isDark={isDark} style={{fontSize: 14}}>
-                          {roundNumber(((getTotalWatts() / 1000) * price) * 30)} {currency}
-                        </SectionText>
-                      </ResultInfo>
-                    </ResultItem>
-                    <ResultItem>
-                      <ResultHeader isDark={isDark}>
-                        <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В год</SectionText>
-                      </ResultHeader>
-                      <ResultInfo isDark={isDark}>
-                        <SectionText isDark={isDark} style={{fontSize: 14}}>
-                          {roundNumber((getTotalWatts() / 1000) * 365)} Квт*ч
-                        </SectionText>
-                        <SectionText isDark={isDark} style={{fontSize: 14}}>
-                          {roundNumber(((getTotalWatts() / 1000) * price) * 365)} {currency}
-                        </SectionText>
-                      </ResultInfo>
-                    </ResultItem>
-                  </ResultContainer>
+                  <Animated.View style={[resultAnimatedsStyle]}>
+                    <AnimatedContainer onLayout={(event) => onLayout(event, resultHeight, setResultHeight)}>
+                      <ResultContainer>
+                        <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
+                          <ResultHeader isDark={isDark}>
+                            <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В день</SectionText>
+                          </ResultHeader>
+                          <ResultInfo isDark={isDark}>
+                            <SectionText isDark={isDark} style={{fontSize: 14}}>
+                              {roundNumber(getTotalWatts() / 1000)} Квт*ч
+                            </SectionText>
+                            <SectionText isDark={isDark} style={{fontSize: 14}}>
+                              {roundNumber((getTotalWatts() / 1000) * price)} {currency}
+                            </SectionText>
+                          </ResultInfo>
+                        </ResultItem>
+                        <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
+                          <ResultHeader isDark={isDark}>
+                            <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В месяц</SectionText>
+                          </ResultHeader>
+                          <ResultInfo isDark={isDark}>
+                            <SectionText isDark={isDark} style={{fontSize: 14}}>
+                              {roundNumber((getTotalWatts() / 1000) * 30)} Квт*ч
+                            </SectionText>
+                            <SectionText isDark={isDark} style={{fontSize: 14}}>
+                              {roundNumber(((getTotalWatts() / 1000) * price) * 30)} {currency}
+                            </SectionText>
+                          </ResultInfo>
+                        </ResultItem>
+                        <ResultItem>
+                          <ResultHeader isDark={isDark}>
+                            <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В год</SectionText>
+                          </ResultHeader>
+                          <ResultInfo isDark={isDark}>
+                            <SectionText isDark={isDark} style={{fontSize: 14}}>
+                              {roundNumber((getTotalWatts() / 1000) * 365)} Квт*ч
+                            </SectionText>
+                            <SectionText isDark={isDark} style={{fontSize: 14}}>
+                              {roundNumber(((getTotalWatts() / 1000) * price) * 365)} {currency}
+                            </SectionText>
+                          </ResultInfo>
+                        </ResultItem>
+                      </ResultContainer>
+                    </AnimatedContainer>
+                  </Animated.View>
                   <ResultHide onPress={() => setIsResultHide(!isResultHide)}>
                     {isResultHide ? 
                       <Entypo name="chevron-thin-down" size={24} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
@@ -191,76 +217,77 @@ const Home = () => {
                 </>
               )}
             </Result>
-          {/* </Animatable.View> */}
-          
           <SectionText isDark={isDark} style={{ marginBottom: 10, fontSize: 20}}>Список устройств:</SectionText>
 
           <AddDevice isDark={isDark}>
             <ButtonComponent title="Добавить электроустройство" onPress={() => setAddDeviceVisible(!addDeviceVisible)} style={{borderWidth: 0}}/>
-            {addDeviceVisible &&(
-              <ModalContainer>
-                <Input
-                  isDark={isDark}
-                  placeholder="Имя электроустройства"
-                  placeholderTextColor="#808080"
-                  value={deviceName}
-                  onChangeText={(text) => setDeviceName(text)}
-                  maxLength={19}
-                />
-                <Input
-                  isDark={isDark}
-                  placeholder="Ватты"
-                  placeholderTextColor="#808080"
-                  value={deviceWatts}
-                  onChangeText={(text) => setDeviceWatts(text)}
-                  keyboardType="numeric"
-                  maxLength={5}
-                />
-                <Input
-                  isDark={isDark}
-                  placeholder="Количество"
-                  placeholderTextColor="#808080"
-                  value={deviceQuantity}
-                  onChangeText={(text) => setDeviceQuantity(text)}
-                  keyboardType="numeric"
-                  maxLength={5}
-                />
-                {plan === "fixed" ? (
+
+            <Animated.View style={[addDeviceAnimatedsStyle]}>
+              <AnimatedContainer onLayout={(event) => onLayout(event, addDeviceHeight, setAddDeviceHeight)}>
+                <ModalContainer>
                   <Input
                     isDark={isDark}
-                    placeholder="Время работы в день (часы)"
+                    placeholder="Имя электроустройства"
                     placeholderTextColor="#808080"
-                    value={deviceHours}
-                    onChangeText={(text) => text <= 24 ? setDeviceHours(text) : setDeviceHours('24')}
-                    keyboardType="numeric"
-                    maxLength={2}
+                    value={deviceName}
+                    onChangeText={(text) => setDeviceName(text)}
+                    maxLength={19}
                   />
-                ) : (
-                  <>
+                  <Input
+                    isDark={isDark}
+                    placeholder="Ватты"
+                    placeholderTextColor="#808080"
+                    value={deviceWatts}
+                    onChangeText={(text) => setDeviceWatts(text)}
+                    keyboardType="numeric"
+                    maxLength={5}
+                  />
+                  <Input
+                    isDark={isDark}
+                    placeholder="Количество"
+                    placeholderTextColor="#808080"
+                    value={deviceQuantity}
+                    onChangeText={(text) => setDeviceQuantity(text)}
+                    keyboardType="numeric"
+                    maxLength={5}
+                  />
+                  {plan === "fixed" ? (
                     <Input
                       isDark={isDark}
-                      placeholder="Время работы днем (16 часов макс.)"
+                      placeholder="Время работы в день (часы)"
                       placeholderTextColor="#808080"
-                      value={dayDeviceHours}
-                      onChangeText={(text) => text <= 16 ? setDayDeviceHours(text) : setDayDeviceHours('16')}
+                      value={deviceHours}
+                      onChangeText={(text) => text <= 24 ? setDeviceHours(text) : setDeviceHours('24')}
                       keyboardType="numeric"
                       maxLength={2}
                     />
-                    <Input
-                      isDark={isDark}
-                      placeholder="Время работы ночью (8 часов макс)"
-                      placeholderTextColor="#808080"
-                      value={nightDeviceHours}
-                      onChangeText={(text) => text <= 8 ? setNightDeviceHours(text) : setNightDeviceHours('8')}
-                      keyboardType="numeric"
-                      maxLength={2}
-                    />
-                  </>
-                )}
-                
-                <ButtonComponent title="Добавить" onPress={addDevice} style={{borderWidth: 0, backgroundColor: '#f4511e', marginHorizontal: 10, marginBottom: 10}}/>
-              </ModalContainer>
-            )}
+                  ) : (
+                    <>
+                      <Input
+                        isDark={isDark}
+                        placeholder="Время работы днем (16 часов макс.)"
+                        placeholderTextColor="#808080"
+                        value={dayDeviceHours}
+                        onChangeText={(text) => text <= 16 ? setDayDeviceHours(text) : setDayDeviceHours('16')}
+                        keyboardType="numeric"
+                        maxLength={2}
+                      />
+                      <Input
+                        isDark={isDark}
+                        placeholder="Время работы ночью (8 часов макс)"
+                        placeholderTextColor="#808080"
+                        value={nightDeviceHours}
+                        onChangeText={(text) => text <= 8 ? setNightDeviceHours(text) : setNightDeviceHours('8')}
+                        keyboardType="numeric"
+                        maxLength={2}
+                      />
+                    </>
+                  )}
+                  
+                  <ButtonComponent title="Добавить" onPress={addDevice} style={{borderWidth: 0, backgroundColor: '#f4511e', marginHorizontal: 10, marginBottom: 10}}/>
+                </ModalContainer>
+              </AnimatedContainer>
+            </Animated.View>
           </AddDevice>
 
           <ListItems
@@ -276,8 +303,15 @@ const Home = () => {
   );
 };
 
+const AnimatedContainer = styled.View`
+position: absolute;
+width: 100%;
+`;
+
 const ModalContainer = styled.View`
   padding-top: 20px;
+  /* position: absolute; */
+  width: 100%;
 `;
 
 const Input = styled.TextInput`
@@ -299,6 +333,7 @@ const AddDevice = styled.View`
 const Result = styled.View`
   position: relative;
   padding: 0 10px;
+  /* padding-bottom: 25px; */
   border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
   border-radius: 10px;
   overflow: hidden;
@@ -307,8 +342,7 @@ const Result = styled.View`
 `;
 
 const ResultContainer = styled.View`
-  ${(props) => props.isResultHide && 'height: 130px;'};
-  overflow: hidden;
+  margin-bottom: 25px;
 `;
 
 const ResultItem = styled.View`
