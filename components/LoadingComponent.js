@@ -3,10 +3,10 @@ import { ActivityIndicator } from 'react-native';
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import styled from 'styled-components/native';
 
-const SectionLoading = ({ isDark}) => {
+const SectionLoading = ({ isDark }) => {
   return (
     <Loading isDark={isDark}>
-      <ActivityIndicator size="large" color="#0000ff" />
+      <ActivityIndicator size="large" color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
     </Loading>
   );
 };

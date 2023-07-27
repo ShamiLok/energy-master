@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { ToastAndroid, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Entypo } from '@expo/vector-icons'; 
@@ -15,6 +15,18 @@ import SectionText from '../components/SectionText';
 import ListItems from '../components/ListItems';
 
 const Home = () => {
+  const { 
+    isDark,
+    language,
+    currency,
+    price,
+    plan,
+    dayPrice,
+    nightPrice,
+    loadData,
+    loading
+  } = useContext(ThemeContext);
+
   const [addDeviceVisible, setAddDeviceVisible] = useState(false);
   const [devices, setDevices] = useState([]);
 
@@ -25,58 +37,10 @@ const Home = () => {
   const [dayDeviceHours, setDayDeviceHours] = useState('');
   const [nightDeviceHours, setNightDeviceHours] = useState('');
 
-  const [currency, setCurrency] = useState('');
-  const [plan, setPlan] = useState('');
-  // const [dayPrice, setDayPrice] = useState('');
-  // const [nightPrice, setNightPrice] = useState('');
-  const [price, setPrice] = useState('');
-
-  const [loading, setLoading] = useState(true);
   const [isResultHide, setIsResultHide] = useState(false);
-
-  const { isDark } = useContext(ThemeContext);
 
   const [ addDeviceHeight, setAddDeviceHeight ] = useState(0)
   const [ resultHeight, setResultHeight ] = useState(0)
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    try {
-      setLoading(true);
-
-      const savedCurrency = await AsyncStorage.getItem('currency');
-      const savedPlan = await AsyncStorage.getItem('plan');
-      const savedDayPrice = await AsyncStorage.getItem('dayPrice');
-      const savedNightPrice = await AsyncStorage.getItem('nightPrice');
-      const savedPrice = await AsyncStorage.getItem('price');
-      const savedDevices = await AsyncStorage.getItem('devices');
-
-      setPlan(savedPlan);
-      if(savedPlan === 'fixed') {
-        setPrice(savedPrice);
-      } else {
-        setPrice((Number(savedDayPrice) + Number(savedNightPrice))/2 );
-      }
-      // setDayPrice(savedDayPrice)
-      // setNightPrice(savedNightPrice)
-      setCurrency(savedCurrency);
-      // setPrice(savedPrice);
-
-      if (savedDevices) {
-        setDevices(JSON.parse(savedDevices));
-      } else {
-        setDevices([]);
-      }
-
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
 
   const onLayout = (LayoutChangeEvent, value, setvalue) => {
     const layoutHeight = LayoutChangeEvent.nativeEvent.layout.height

@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { Alert, Switch, ToastAndroid, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
-// import SwitchSelector from "react-native-switch-selector";
-import { getLocales } from 'expo-localization';
 import { AntDesign } from '@expo/vector-icons';
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
@@ -17,16 +15,17 @@ import ContainerComponent from '../components/ContainerComponent';
 import SectionLoading from '../components/LoadingComponent'
 
 function Settings() {
-  const { isDark, handleIsDark } = useContext(ThemeContext);
-
-  const [language, setLanguage] = useState('');
-  const [currency, setCurrency] = useState('');
-  const [price, setPrice] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  const [plan, setPlan] = useState('');
-  const [dayPrice, setDayPrice] = useState('');
-  const [nightPrice, setNightPrice] = useState('');
+  const { 
+    isDark, handleIsDark,
+    language, setLanguage,
+    currency, setCurrency,
+    price, setPrice,
+    plan, setPlan,
+    dayPrice, setDayPrice,
+    nightPrice, setNightPrice,
+    loadData,
+    loading
+  } = useContext(ThemeContext);
 
   const fixedTextInputRef = useRef(null);
   const pickerLanguageRef = useRef(false);
@@ -34,44 +33,6 @@ function Settings() {
   const pickerPlanRef = useRef(false);
   const dayTextInputRef = useRef(null);
   const nightTextInputRef = useRef(null);
-
-  const [{ currencyCode, languageCode }] = getLocales();
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      const savedCurrency = await AsyncStorage.getItem('currency');
-      const savedLangugae = await AsyncStorage.getItem('language');
-      const savedPrice = await AsyncStorage.getItem('price');
-      const savedPlan = await AsyncStorage.getItem('plan');
-      if (!savedCurrency) {
-        setCurrency(currencyCode);
-        await AsyncStorage.setItem('currency', currencyCode);
-      } else {
-        setCurrency(savedCurrency);
-      }
-      if (!savedLangugae) {
-        setLanguage(languageCode);
-        await AsyncStorage.setItem('langugage', languageCode);
-      } else {
-        setLanguage(savedLangugae);
-      }
-      if (!savedPlan) {
-        setPlan('fixed');
-        await AsyncStorage.setItem('plan', languageCode);
-      } else {
-        setPlan(savedPlan);
-      }
-      setPrice(savedPrice);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleCurrencyChange = async (value) => {
     setCurrency(value);

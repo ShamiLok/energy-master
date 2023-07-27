@@ -16,11 +16,24 @@ import Settings from "./screens/Settings";
 import { LIGHT_COLORS, DARK_COLORS } from './constants/colors';
 import { ThemeContext } from "./contexts/themes";
 
+import { getLocales } from 'expo-localization';
+
 const Drawer = createDrawerNavigator();
 
 export default function App() {
 
   const [isDark, setIsDark] = useState(false)
+
+  const [language, setLanguage] = useState('');
+  const [currency, setCurrency] = useState('');
+  const [price, setPrice] = useState('');
+  const [plan, setPlan] = useState('');
+  const [dayPrice, setDayPrice] = useState('');
+  const [nightPrice, setNightPrice] = useState('');
+
+  const [{ currencyCode, languageCode }] = getLocales();
+
+  const [loading, setLoading] = useState(false);
   
   useEffect(() => {
     loadData();
@@ -28,12 +41,39 @@ export default function App() {
 
   const loadData = async () => {
     try {
+      setLoading(true);
       const savedTheme = await AsyncStorage.getItem("theme");
+      const savedCurrency = await AsyncStorage.getItem('currency');
+      const savedLangugae = await AsyncStorage.getItem('language');
+      const savedPrice = await AsyncStorage.getItem('price');
+      const savedPlan = await AsyncStorage.getItem('plan');
+      if (!savedCurrency) {
+        setCurrency(currencyCode);
+        await AsyncStorage.setItem('currency', currencyCode);
+      } else {
+        setCurrency(savedCurrency);
+      }
+      if (!savedLangugae) {
+        setLanguage(languageCode);
+        await AsyncStorage.setItem('langugage', languageCode);
+      } else {
+        setLanguage(savedLangugae);
+      }
+      if (!savedPlan) {
+        setPlan('fixed');
+        await AsyncStorage.setItem('plan', languageCode);
+      } else {
+        setPlan(savedPlan);
+      }
+      setPrice(savedPrice);
+
       if(handleIsDark){
         setIsDark(JSON.parse(savedTheme));
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   }
 
@@ -52,7 +92,17 @@ export default function App() {
   }
 
   return (
-    <ThemeContext.Provider value={{isDark, handleIsDark}}>
+    <ThemeContext.Provider value={{
+      isDark, handleIsDark,
+      language, setLanguage,
+      currency, setCurrency,
+      price, setPrice,
+      plan, setPlan,
+      dayPrice, setDayPrice,
+      nightPrice, setNightPrice,
+      loadData,
+      loading
+    }}>
       <NavigationContainer>
         <Drawer.Navigator
           drawerContent={
