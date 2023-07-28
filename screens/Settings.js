@@ -23,6 +23,7 @@ function Settings() {
     plan, setPlan,
     dayPrice, setDayPrice,
     nightPrice, setNightPrice,
+    setDevices,
     loadData,
     loading
   } = useContext(ThemeContext);
@@ -49,6 +50,7 @@ function Settings() {
   const handlePlanChange = async (plan) => {
     setPlan(plan)
     await AsyncStorage.setItem('plan', plan);
+    setDevices([]);
     await AsyncStorage.removeItem('devices');
   }
 

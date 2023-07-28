@@ -30,6 +30,7 @@ export default function App() {
   const [plan, setPlan] = useState('');
   const [dayPrice, setDayPrice] = useState('');
   const [nightPrice, setNightPrice] = useState('');
+  const [devices, setDevices] = useState([]);
 
   const [{ currencyCode, languageCode }] = getLocales();
 
@@ -47,6 +48,8 @@ export default function App() {
       const savedLangugae = await AsyncStorage.getItem('language');
       const savedPrice = await AsyncStorage.getItem('price');
       const savedPlan = await AsyncStorage.getItem('plan');
+      const savedDevices = await AsyncStorage.getItem('devices');
+
       if (!savedCurrency) {
         setCurrency(currencyCode);
         await AsyncStorage.setItem('currency', currencyCode);
@@ -64,6 +67,11 @@ export default function App() {
         await AsyncStorage.setItem('plan', languageCode);
       } else {
         setPlan(savedPlan);
+      }
+      if (savedDevices) {
+        setDevices(JSON.parse(savedDevices));
+      } else {
+        setDevices([]);
       }
       setPrice(savedPrice);
 
@@ -100,8 +108,9 @@ export default function App() {
       plan, setPlan,
       dayPrice, setDayPrice,
       nightPrice, setNightPrice,
+      devices, setDevices,
       loadData,
-      loading
+      loading, setLoading
     }}>
       <NavigationContainer>
         <Drawer.Navigator

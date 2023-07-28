@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ToastAndroid, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Entypo } from '@expo/vector-icons'; 
@@ -23,12 +23,12 @@ const Home = () => {
     plan,
     dayPrice,
     nightPrice,
+    devices, setDevices,
     loadData,
-    loading
+    loading, setLoading
   } = useContext(ThemeContext);
 
   const [addDeviceVisible, setAddDeviceVisible] = useState(false);
-  const [devices, setDevices] = useState([]);
 
   const [deviceName, setDeviceName] = useState('');
   const [deviceWatts, setDeviceWatts] = useState('');
@@ -82,6 +82,8 @@ const Home = () => {
       setDeviceWatts('');
       setDeviceQuantity('');
       setDeviceHours('');
+      setDayDeviceHours('');
+      setNightDeviceHours('')
 
       await AsyncStorage.setItem('devices', JSON.stringify([...devices, newDevice]));
       showToast('устройство было добавлено')
