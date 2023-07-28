@@ -14,6 +14,8 @@ import ButtonComponent from '../components/Button';
 import SectionText from '../components/SectionText';
 import ListItems from '../components/ListItems';
 
+import { i18n } from '../localizations/i18n';
+
 const Home = () => {
   const { 
     isDark,
@@ -86,9 +88,9 @@ const Home = () => {
       setNightDeviceHours('')
 
       await AsyncStorage.setItem('devices', JSON.stringify([...devices, newDevice]));
-      showToast('устройство было добавлено')
+      showToast(i18n.t('deviceAdded'))
     } else {
-      showToast('заполните все поля')
+      showToast(i18n.t('fillFields'))
     }
   };
 
@@ -120,11 +122,11 @@ const Home = () => {
         <SectionLoading isDark={isDark} />
       ) : (
         <ContainerComponent isDark={isDark} loadData={loadData}>
-          <SectionText isDark={isDark} style={{fontSize: 20}}>Потребление электричества:</SectionText>
+          <SectionText isDark={isDark} style={{fontSize: 20}}>{i18n.t('consumption')}</SectionText>
             <Result isDark={isDark}>
               {!price || !currency ? (
                 <ResultHeader isDark={isDark}>
-                  <SectionText isDark={isDark}>Выберете цену за квт в настройках</SectionText>
+                  <SectionText isDark={isDark}>{i18n.t('choosePrice')}</SectionText>
                 </ResultHeader>
               ) : (
                 <>
@@ -133,11 +135,11 @@ const Home = () => {
                       <ResultContainer>
                         <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
                           <ResultHeader isDark={isDark}>
-                            <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В день</SectionText>
+                            <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perDay')}</SectionText>
                           </ResultHeader>
                           <ResultInfo isDark={isDark}>
                             <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber(getTotalWatts() / 1000)} Квт*ч
+                              {roundNumber(getTotalWatts() / 1000)} kWh
                             </SectionText>
                             <SectionText isDark={isDark} style={{fontSize: 14}}>
                               {roundNumber((getTotalWatts() / 1000) * price)} {currency}
@@ -146,11 +148,11 @@ const Home = () => {
                         </ResultItem>
                         <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
                           <ResultHeader isDark={isDark}>
-                            <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В месяц</SectionText>
+                            <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perMonth')}</SectionText>
                           </ResultHeader>
                           <ResultInfo isDark={isDark}>
                             <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber((getTotalWatts() / 1000) * 30)} Квт*ч
+                              {roundNumber((getTotalWatts() / 1000) * 30)} kWh
                             </SectionText>
                             <SectionText isDark={isDark} style={{fontSize: 14}}>
                               {roundNumber(((getTotalWatts() / 1000) * price) * 30)} {currency}
@@ -159,11 +161,11 @@ const Home = () => {
                         </ResultItem>
                         <ResultItem>
                           <ResultHeader isDark={isDark}>
-                            <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>В год</SectionText>
+                            <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perYear')}</SectionText>
                           </ResultHeader>
                           <ResultInfo isDark={isDark}>
                             <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber((getTotalWatts() / 1000) * 365)} Квт*ч
+                              {roundNumber((getTotalWatts() / 1000) * 365)} kWh
                             </SectionText>
                             <SectionText isDark={isDark} style={{fontSize: 14}}>
                               {roundNumber(((getTotalWatts() / 1000) * price) * 365)} {currency}
@@ -183,17 +185,17 @@ const Home = () => {
                 </>
               )}
             </Result>
-          <SectionText isDark={isDark} style={{ marginBottom: 10, fontSize: 20}}>Список устройств:</SectionText>
+          <SectionText isDark={isDark} style={{ marginBottom: 10, fontSize: 20}}>{i18n.t('deviceList')}</SectionText>
 
           <AddDevice isDark={isDark}>
-            <ButtonComponent title="Добавить электроустройство" onPress={() => setAddDeviceVisible(!addDeviceVisible)} style={{borderWidth: 0}}/>
+            <ButtonComponent title={i18n.t('addDevice')} onPress={() => setAddDeviceVisible(!addDeviceVisible)} style={{borderWidth: 0}}/>
 
             <Animated.View style={[addDeviceAnimatedsStyle]}>
               <AnimatedContainer onLayout={(event) => onLayout(event, addDeviceHeight, setAddDeviceHeight)}>
                 <ModalContainer>
                   <Input
                     isDark={isDark}
-                    placeholder="Имя электроустройства"
+                    placeholder={i18n.t('deviceName')}
                     placeholderTextColor="#808080"
                     value={deviceName}
                     onChangeText={(text) => setDeviceName(text)}
@@ -201,7 +203,7 @@ const Home = () => {
                   />
                   <Input
                     isDark={isDark}
-                    placeholder="Ватты"
+                    placeholder={i18n.t('watts')}
                     placeholderTextColor="#808080"
                     value={deviceWatts}
                     onChangeText={(text) => setDeviceWatts(text)}
@@ -210,7 +212,7 @@ const Home = () => {
                   />
                   <Input
                     isDark={isDark}
-                    placeholder="Количество"
+                    placeholder={i18n.t('quantity')}
                     placeholderTextColor="#808080"
                     value={deviceQuantity}
                     onChangeText={(text) => setDeviceQuantity(text)}
@@ -220,7 +222,7 @@ const Home = () => {
                   {plan === "fixed" ? (
                     <Input
                       isDark={isDark}
-                      placeholder="Время работы в день (часы)"
+                      placeholder={i18n.t('workingHours')}
                       placeholderTextColor="#808080"
                       value={deviceHours}
                       onChangeText={(text) => text <= 24 ? setDeviceHours(text) : setDeviceHours('24')}
@@ -231,7 +233,7 @@ const Home = () => {
                     <>
                       <Input
                         isDark={isDark}
-                        placeholder="Время работы днем (16 часов макс.)"
+                        placeholder={i18n.t('peakHours')}
                         placeholderTextColor="#808080"
                         value={dayDeviceHours}
                         onChangeText={(text) => text <= 16 ? setDayDeviceHours(text) : setDayDeviceHours('16')}
@@ -240,7 +242,7 @@ const Home = () => {
                       />
                       <Input
                         isDark={isDark}
-                        placeholder="Время работы ночью (8 часов макс)"
+                        placeholder={i18n.t('offPeakHours')}
                         placeholderTextColor="#808080"
                         value={nightDeviceHours}
                         onChangeText={(text) => text <= 8 ? setNightDeviceHours(text) : setNightDeviceHours('8')}
@@ -250,7 +252,7 @@ const Home = () => {
                     </>
                   )}
                   
-                  <ButtonComponent title="Добавить" onPress={addDevice} style={{borderWidth: 0, backgroundColor: '#f4511e', marginHorizontal: 10, marginBottom: 10}}/>
+                  <ButtonComponent title={i18n.t('add')} onPress={addDevice} style={{borderWidth: 0, backgroundColor: '#f4511e', marginHorizontal: 10, marginBottom: 10}}/>
                 </ModalContainer>
               </AnimatedContainer>
             </Animated.View>
@@ -261,6 +263,7 @@ const Home = () => {
             plan={plan}
             isDark={isDark}
             setDevices={setDevices}
+            language={language}
           />
 
         </ContainerComponent>

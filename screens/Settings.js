@@ -14,6 +14,8 @@ import ButtonComponent from '../components/Button';
 import ContainerComponent from '../components/ContainerComponent';
 import SectionLoading from '../components/LoadingComponent'
 
+import { i18n } from '../localizations/i18n';
+
 function Settings() {
   const { 
     isDark, handleIsDark,
@@ -34,6 +36,8 @@ function Settings() {
   const pickerPlanRef = useRef(false);
   const dayTextInputRef = useRef(null);
   const nightTextInputRef = useRef(null);
+
+  i18n.locale = language;
 
   const handleCurrencyChange = async (value) => {
     setCurrency(value);
@@ -109,13 +113,13 @@ function Settings() {
       ) : (
         <ContainerComponent isDark={isDark} loadData={loadData}>
           <SettingSection isDark={isDark}>
-            <SectionText isDark={isDark} style={{fontSize: 20, fontWeight: 'bold', paddingTop: 10, paddingLeft: 10}}>Основные</SectionText>
+            <SectionText isDark={isDark} style={{fontSize: 20, fontWeight: 'bold', paddingTop: 10, paddingLeft: 10}}>{i18n.t('main')}</SectionText>
             <ItemSection 
               isDark={isDark} 
               onPress={() => handleFocus(pickerLanguageRef)}
               style={{height: 60}}
             >
-              <SectionText isDark={isDark}>Language:</SectionText>
+              <SectionText isDark={isDark}>{i18n.t('language')}</SectionText>
               <Picker
                 style={{display: 'none'}}
                 selectedValue={language}
@@ -136,7 +140,7 @@ function Settings() {
               onPress={() => handleFocus(pickerCurrencyRef)}
               style={{height: 60}}
             >
-              <SectionText isDark={isDark}>Currency:</SectionText>
+              <SectionText isDark={isDark}>{i18n.t('currency')}</SectionText>
               <Picker
                 style={{display: 'none'}}
                 selectedValue={currency}
@@ -157,7 +161,7 @@ function Settings() {
               onPress={handleChangeColorTheme}
               style={{height: 60}}
             >
-              <SectionText isDark={isDark}>Темная тема</SectionText>
+              <SectionText isDark={isDark}>{i18n.t('darkTheme')}</SectionText>
               <Switch
                 value={isDark}
                 onValueChange={handleChangeColorTheme}
@@ -165,24 +169,24 @@ function Settings() {
             </ItemSection>
           </SettingSection>
           <SettingSection isDark={isDark}>
-            <SectionText isDark={isDark} style={{fontSize: 20, fontWeight: 'bold', paddingTop: 10, paddingLeft: 10}}>Тарифный план</SectionText>
+            <SectionText isDark={isDark} style={{fontSize: 20, fontWeight: 'bold', paddingTop: 10, paddingLeft: 10}}>{i18n.t('ratePlan')}</SectionText>
             <ItemSection 
               isDark={isDark} 
               onPress={() => handleFocus(pickerPlanRef)}
               style={{height: 60}}
             >
-              <SectionText isDark={isDark}>Выбрать план:</SectionText>
+              <SectionText isDark={isDark}>{i18n.t('choosePlan')}</SectionText>
               <Picker
                 style={{display: 'none'}}
                 selectedValue={plan}
                 onValueChange={handlePlanChange}
                 ref={pickerPlanRef}
               >
-                <Picker.Item label="Однотарифный" value="fixed" />
-                <Picker.Item label="Двухтарифный" value="dual" />
+                <Picker.Item label={i18n.t('planFixed')} value="fixed" />
+                <Picker.Item label={i18n.t('planPeakOffpeak')} value="dual" />
               </Picker>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <SectionText isDark={isDark} style={{paddingRight: 20}}>{plan === 'fixed' ? 'Однотарифный' : 'Двутарифный'}</SectionText>
+                <SectionText isDark={isDark} style={{paddingRight: 20}}>{plan === 'fixed' ? i18n.t('planFixed') : i18n.t('planPeakOffpeak')}</SectionText>
                 <AntDesign name="caretdown" size={9} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
               </View>
             </ItemSection>
@@ -192,7 +196,7 @@ function Settings() {
                 onPress={() => handleFocus(fixedTextInputRef)}
                 style={{height: 60}}
               >
-                <SectionText isDark={isDark}>Цена за Кв*ч:</SectionText>
+                <SectionText isDark={isDark}>{i18n.t('pricePerkWh')}</SectionText>
                 <Input
                   isDark={isDark}
                   value={price}
@@ -209,7 +213,7 @@ function Settings() {
                   onPress={() => handleFocus(dayTextInputRef)}
                   style={{height: 60}}
                 >
-                  <SectionText isDark={isDark}>День(7:00-23:00):</SectionText>
+                  <SectionText isDark={isDark}>{i18n.t('planPeak')}</SectionText>
                   <Input
                     isDark={isDark}
                     value={dayPrice}
@@ -224,7 +228,7 @@ function Settings() {
                   onPress={() => handleFocus(nightTextInputRef)}
                   style={{height: 60}}
                 >
-                  <SectionText isDark={isDark}>Ночь(23:00-7:00):</SectionText>
+                  <SectionText isDark={isDark}>{i18n.t('planOffPeak')}</SectionText>
                   <Input
                     isDark={isDark}
                     value={nightPrice}
@@ -237,7 +241,7 @@ function Settings() {
               </>
             )}
           </SettingSection>
-          <ButtonComponent title="Сбросить настройки" onPress={handleDefault} />
+          <ButtonComponent title={i18n.t('resetSettings')} onPress={handleDefault} />
           
         </ContainerComponent>
       )}

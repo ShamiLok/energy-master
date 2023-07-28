@@ -7,7 +7,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ItemSection from './ItemSection';
 
-const ListItems = ({ devices, plan, isDark, setDevices }) => {
+import { i18n } from '../localizations/i18n'
+
+const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
   const [editIndex, setEditIndex] = useState(-1);
   
   const [editedName, setEditedName] = useState('');
@@ -21,7 +23,7 @@ const ListItems = ({ devices, plan, isDark, setDevices }) => {
     const updatedDevices = devices.filter((_, i) => i !== index);
     setDevices(updatedDevices);
     await AsyncStorage.setItem('devices', JSON.stringify(updatedDevices));
-    showToast('устроqство было удалено')
+    showToast(i18n.t('deviceDeleted'))
   };
   
   const editDevice = async (index) => {
@@ -38,7 +40,7 @@ const ListItems = ({ devices, plan, isDark, setDevices }) => {
         await AsyncStorage.setItem('devices', JSON.stringify(updatedDevices));
         setEditIndex(-1)
       } else {
-        showToast('Заполните все поля')
+        showToast(i18n.t('fillFields'))
       }
       
     } else {
@@ -69,20 +71,29 @@ const ListItems = ({ devices, plan, isDark, setDevices }) => {
   }
   
   const hoursFormat = (hours) => {
-    if(hours == 1) {
-      return 'час'
-    } else if (hours < 5) {
-      return 'часа'
+    if(language == 'ru'){
+      if(hours == 1) {
+        return 'час'
+      } else if (hours < 5) {
+        return 'часа'
+      } else {
+        return 'часов'
+      }
     } else {
-      return 'часов'
+      if(hours == 1) {
+        return i18n.t('hour')
+      } else {
+        return i18n.t('hours')
+      }
     }
+    
   }
 
   return (
     <View>
       {devices.length === 0 ? (
         <ItemSection isDark={isDark}>
-          <SectionText isDark={isDark}>Устройства еще не были добавлены</SectionText>
+          <SectionText isDark={isDark}>{i18n.t('deviceListEmpty')}</SectionText>
         </ItemSection>
       ) : (
         <>
@@ -93,18 +104,18 @@ const ListItems = ({ devices, plan, isDark, setDevices }) => {
                   <SectionText isDark={isDark}>{item.name}</SectionText>
                   {plan === 'fixed' ? (
                     <SectionText isDark={isDark}>
-                      {item.watts} ватт, {item.hours} {hoursFormat(item.hours)}
+                      {item.watts} {i18n.t('watt')}, {item.hours} {hoursFormat(item.hours)}
                     </SectionText>
                   ) : (
                   <>
                     <SectionText isDark={isDark}>
-                      {item.watts} ватт
+                      {item.watts} {i18n.t('watt')}
                     </SectionText>
                     <SectionText isDark={isDark}>
-                      {item.dayHours} {hoursFormat(item.dayHours)} днем
+                      {item.dayHours} {hoursFormat(item.dayHours)} {i18n.t('day')}
                     </SectionText>
                     <SectionText isDark={isDark}>
-                      {item.nightHours} {hoursFormat(item.nightHours)} ночью
+                      {item.nightHours} {hoursFormat(item.nightHours)} {i18n.t('night')}
                     </SectionText>
                   </>
                   )}
@@ -148,14 +159,14 @@ const ListItems = ({ devices, plan, isDark, setDevices }) => {
               {editIndex === index && (
                 <View>
                   <Input
-                    placeholder='Имя электроустройства'
+                    placeholder={i18n.t('deviceName')}
                     placeholderTextColor="#808080"
                     value={editedName}
                     onChangeText={setEditedName}
                     isDark={isDark}
                   />
                   <Input
-                    placeholder="Ватты"
+                    placeholder={i18n.t('watts')}
                     placeholderTextColor="#808080"
                     value={editedWatts}
                     onChangeText={setEditedWatts}
@@ -163,7 +174,7 @@ const ListItems = ({ devices, plan, isDark, setDevices }) => {
                     keyboardType="numeric"
                   />
                   <Input
-                    placeholder="Количество"
+                    placeholder={i18n.t('quantity')}
                     placeholderTextColor="#808080"
                     value={editedQuantity}
                     onChangeText={setEditedQuantity}
@@ -172,7 +183,7 @@ const ListItems = ({ devices, plan, isDark, setDevices }) => {
                   />
                   {plan === 'fixed' ? (
                     <Input
-                      placeholder="Время работы в день (часы)"
+                      placeholder={i18n.t('workingHours')}
                       placeholderTextColor="#808080"
                       value={editedHours}
                       onChangeText={(text) => text <= 24 ? setEditedHours(text) : setEditedHours('24')}
@@ -181,7 +192,7 @@ const ListItems = ({ devices, plan, isDark, setDevices }) => {
                   ) : (
                     <>
                       <Input
-                        placeholder="Время работы днем (16 часов макс.)"
+                        placeholder={i18n.t('peakHours')}
                         placeholderTextColor="#808080"
                         value={editedDayHours}
                         onChangeText={(text) => text <= 16 ? setEditedDayHours(text) : setEditedDayHours('16')}
@@ -189,7 +200,7 @@ const ListItems = ({ devices, plan, isDark, setDevices }) => {
                         keyboardType="numeric"
                       />
                       <Input
-                        placeholder="Время работы ночью (8 часов макс)"
+                        placeholder={i18n.t('offPeakHours')}
                         placeholderTextColor="#808080"
                         value={editedNightHours}
                         onChangeText={(text) => text <= 8 ? setEditedNightHours(text) : setEditedNightHours('8')}

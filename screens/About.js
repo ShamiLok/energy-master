@@ -8,6 +8,8 @@ import ItemSection from '../components/ItemSection';
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
 
+import { i18n } from '../localizations/i18n';
+
 const About = () => {
   const { isDark} = useContext(ThemeContext);
 
@@ -31,23 +33,23 @@ const About = () => {
       contentContainerStyle={{ padding: 20 }}
       overScrollMode="never"
     >
-      <SectionText isDark={isDark} style={{fontSize: 24}}>Energy Master</SectionText>
-        <SectionText style={{marginBottom: 10}} isDark={isDark}>Version: {appVersion}</SectionText>
-        <ItemSection isDark={isDark}>
-            <SectionText isDark={isDark}>Оценить приложение</SectionText>
-            <ButtonComponent title="Rate" onPress={handleRateApp} style={{width: 100}}/>
-        </ItemSection>
-        <ItemSection isDark={isDark}>
-            <SectionText isDark={isDark}>Связь с разабочтиком</SectionText>
-            <ButtonComponent title="Contact" onPress={handleContactDeveloper}  style={{width: 100}}/>
-        </ItemSection>
-        <ItemSection isDark={isDark}>
-            <SectionText isDark={isDark}>Проверить обновления</SectionText>
-            <ButtonComponent title="Check" onPress={handleCheckUpdates}  style={{width: 100}}/>
-        </ItemSection>
-        <Copyright>
-            <SectionText isDark={isDark}>&copy; 2023 Energy Master</SectionText>
-        </Copyright>
+      <SectionText isDark={isDark} style={{ fontSize: 24 }}>{i18n.t('energyMaster')}</SectionText>
+      <SectionText style={{ marginBottom: 10 }} isDark={isDark}>{i18n.t('version')}: under development</SectionText>
+      <ItemSection isDark={isDark}>
+        <SectionText isDark={isDark}>{i18n.t('rateApp')}</SectionText>
+        <ButtonComponent title={i18n.t('rate')} onPress={handleRateApp} />
+      </ItemSection>
+      <ItemSection isDark={isDark}>
+        <SectionText isDark={isDark}>{i18n.t('contactDeveloper')}</SectionText>
+        <ButtonComponent title={i18n.t('contact')} onPress={handleContactDeveloper} />
+      </ItemSection>
+      <ItemSection isDark={isDark}>
+        <SectionText isDark={isDark}>{i18n.t('checkUpdates')}</SectionText>
+        <ButtonComponent title={i18n.t('check')} onPress={handleCheckUpdates} />
+      </ItemSection>
+      <Copyright>
+        <SectionText isDark={isDark}>{i18n.t('copyright')}</SectionText>
+      </Copyright>
       
     </Container>
   );
