@@ -11,6 +11,9 @@ const ru = {
   hours: "часов",
   day: "днем",
   night: "ночью",
+  home: "Главная",
+  settings: "Настройки",
+  about: "О программе",
 
   //Settings
   main: "Основные",
@@ -52,6 +55,7 @@ const ru = {
   deviceListEmpty: "Устройства еще не были добавлены",
   deviceDeleted: "Устройство было удалено",
   watts: "Мощность, Вт",
+  quantityUnit: "шт",
 
 };
 export default ru;

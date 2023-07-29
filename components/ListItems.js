@@ -128,11 +128,11 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                     onChangeText={(newQuantity) => updateQuantity(index, newQuantity)}
                     keyboardType="numeric"
                   />
-                  <SectionText isDark={isDark}>шт</SectionText>
+                  <SectionText isDark={isDark}>{i18n.t('quantityUnit')}</SectionText>
                 </ListItemQuantity>
 
                 <ListItemEdit>
-                {editIndex === index ? (
+                  {editIndex === index ? (
                     <Feather
                       name="check"
                       size={20}
@@ -225,13 +225,13 @@ const ListItemsContainer = styled.View`
   background-color: ${(props) => (props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor)};
   border-radius: 10px;
   margin-bottom: 10px;
-  padding-bottom: 5px;
 `;
 
 const ListItemQuantity = styled.View`
   flex-direction: column;
   position: absolute;
   right: 100px;
+  top: 6px;
 `;
 
 const ListItemEdit = styled.View`

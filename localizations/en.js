@@ -11,6 +11,9 @@ const en = {
   hours: "hours",
   day: "day",
   night: "night",
+  home: "Home",
+  settings: "Settings",
+  about: "About",
 
   //Settings
   main: "Main",
@@ -52,5 +55,6 @@ const en = {
   deviceListEmpty: "Devices have not been added yet",
   deviceDeleted: "Device has been deleted",
   watts: "Power, W",
+  quantityUnit: "pcs",
 };
 export default en;

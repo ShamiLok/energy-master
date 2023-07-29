@@ -94,13 +94,20 @@ const Home = () => {
     }
   };
 
-  const getTotalWatts = () => {
+  const getDaykWh = () => {
     if(plan === 'fixed'){
-      return devices.reduce((total, device) => total + device.watts * device.quantity * device.hours, 0);
+      return devices.reduce((total, device) => total + device.watts * device.quantity * device.hours, 0) / 1000;
     } else {
-      return devices.reduce((total, device) => total + device.watts * device.quantity * ((device.dayHours/device.nightHours)*10), 0);
+      return devices.reduce((total, device) => total + device.quantity * (device.watts * device.dayHours / 1000 + device.watts * device.nightHours / 1000), 0);
     }
-    
+  };
+
+  const getDayPrice = () => {
+    if(plan === 'fixed'){
+      return devices.reduce((total, device) => total + device.watts * device.quantity * device.hours, 0) / 1000 * price;
+    } else {
+      return devices.reduce((total, device) => total + device.quantity * (device.watts * device.dayHours / 1000 * dayPrice + device.watts * device.nightHours / 1000 * nightPrice), 0);
+    }
   };
 
   function roundNumber(number) {
@@ -139,10 +146,10 @@ const Home = () => {
                           </ResultHeader>
                           <ResultInfo isDark={isDark}>
                             <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber(getTotalWatts() / 1000)} kWh
+                              {roundNumber(getDaykWh())} kWh
                             </SectionText>
                             <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber((getTotalWatts() / 1000) * price)} {currency}
+                              {roundNumber(getDayPrice())} {currency}
                             </SectionText>
                           </ResultInfo>
                         </ResultItem>
@@ -152,10 +159,10 @@ const Home = () => {
                           </ResultHeader>
                           <ResultInfo isDark={isDark}>
                             <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber((getTotalWatts() / 1000) * 30)} kWh
+                              {roundNumber(getDaykWh() * 30)} kWh
                             </SectionText>
                             <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber(((getTotalWatts() / 1000) * price) * 30)} {currency}
+                              {roundNumber(getDayPrice() * 30)} {currency}
                             </SectionText>
                           </ResultInfo>
                         </ResultItem>
@@ -165,10 +172,10 @@ const Home = () => {
                           </ResultHeader>
                           <ResultInfo isDark={isDark}>
                             <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber((getTotalWatts() / 1000) * 365)} kWh
+                              {roundNumber(getDaykWh() * 365)} kWh
                             </SectionText>
                             <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber(((getTotalWatts() / 1000) * price) * 365)} {currency}
+                              {roundNumber(getDayPrice() * 365)} {currency}
                             </SectionText>
                           </ResultInfo>
                         </ResultItem>

@@ -11,6 +11,9 @@ const de = {
   hours: "Stunden",
   day: "tagsüber",
   night: "nachts",
+  home: "Startseite",
+  settings: "Einstellungen",
+  about: "Über",
 
   //Settings
   main: "Haupt",
@@ -52,6 +55,8 @@ const de = {
   deviceListEmpty: "Geräte wurden noch nicht hinzugefügt",
   deviceDeleted: "Gerät wurde gelöscht",
   watts: "Leistung, W",
+  quantityUnit: "Stk",
+  
 };
 export default de;
   

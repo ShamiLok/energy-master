@@ -18,6 +18,8 @@ import { ThemeContext } from "./contexts/themes";
 
 import { getLocales } from 'expo-localization';
 
+import { i18n } from "./localizations/i18n";
+
 const Drawer = createDrawerNavigator();
 
 export default function App() {
@@ -47,6 +49,8 @@ export default function App() {
       const savedCurrency = await AsyncStorage.getItem('currency');
       const savedLangugae = await AsyncStorage.getItem('language');
       const savedPrice = await AsyncStorage.getItem('price');
+      const savedDayPrice = await AsyncStorage.getItem('dayPrice');
+      const savedNightPrice = await AsyncStorage.getItem('nightPrice');
       const savedPlan = await AsyncStorage.getItem('plan');
       const savedDevices = await AsyncStorage.getItem('devices');
 
@@ -73,7 +77,10 @@ export default function App() {
       } else {
         setDevices([]);
       }
+
       setPrice(savedPrice);
+      setDayPrice(savedDayPrice);
+      setNightPrice(savedNightPrice)
 
       if(handleIsDark){
         setIsDark(JSON.parse(savedTheme));
@@ -144,8 +151,8 @@ export default function App() {
           <Drawer.Screen
             name="Home"
             options={{
-              drawerLabel: "Home",
-              title: "Home",
+              drawerLabel: i18n.t('home'),
+              title: i18n.t('home'),
               drawerIcon: () => (
                 <SimpleLineIcons name="home" size={20} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
               )
@@ -156,8 +163,8 @@ export default function App() {
           <Drawer.Screen
             name="Settings"
             options={{
-              drawerLabel: "Settings",
-              title: "Settings",
+              drawerLabel: i18n.t('settings'),
+              title: i18n.t('settings'),
               drawerIcon: () => (
                 <SimpleLineIcons name="settings" size={20} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
               )
@@ -168,8 +175,8 @@ export default function App() {
           <Drawer.Screen
             name="About"
             options={{
-              drawerLabel: "About",
-              title: "About",
+              drawerLabel: i18n.t('about'),
+              title: i18n.t('about'),
               drawerIcon: () => (
                 <Ionicons name="information-circle-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
               )
