@@ -35,8 +35,8 @@ export default function App() {
   const [devices, setDevices] = useState([]);
 
   const [{ currencyCode, languageCode }] = getLocales();
-
-  const [loading, setLoading] = useState(false);
+  
+  i18n.locale = language;
   
   useEffect(() => {
     loadData();
@@ -44,7 +44,6 @@ export default function App() {
 
   const loadData = async () => {
     try {
-      setLoading(true);
       const savedTheme = await AsyncStorage.getItem("theme");
       const savedCurrency = await AsyncStorage.getItem('currency');
       const savedLangugae = await AsyncStorage.getItem('language');
@@ -85,10 +84,8 @@ export default function App() {
       if(handleIsDark){
         setIsDark(JSON.parse(savedTheme));
       }
-      setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
   }
 
@@ -116,8 +113,7 @@ export default function App() {
       dayPrice, setDayPrice,
       nightPrice, setNightPrice,
       devices, setDevices,
-      loadData,
-      loading, setLoading
+      loadData
     }}>
       <NavigationContainer>
         <Drawer.Navigator

@@ -8,7 +8,6 @@ import Animated, { useAnimatedStyle, withTiming, Easing } from 'react-native-rea
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
 
-import SectionLoading from '../components/LoadingComponent'
 import ContainerComponent from '../components/ContainerComponent';
 import ButtonComponent from '../components/Button';
 import SectionText from '../components/SectionText';
@@ -26,8 +25,7 @@ const Home = () => {
     dayPrice,
     nightPrice,
     devices, setDevices,
-    loadData,
-    loading, setLoading
+    loadData
   } = useContext(ThemeContext);
 
   const [addDeviceVisible, setAddDeviceVisible] = useState(false);
@@ -124,158 +122,152 @@ const Home = () => {
   }
 
   return (
-    <>
-      {loading ? (
-        <SectionLoading isDark={isDark} />
-      ) : (
-        <ContainerComponent isDark={isDark} loadData={loadData}>
-          <SectionText isDark={isDark} style={{fontSize: 20}}>{i18n.t('consumption')}</SectionText>
-            <Result isDark={isDark}>
-              {!price || !currency ? (
-                <ResultHeader isDark={isDark}>
-                  <SectionText isDark={isDark}>{i18n.t('choosePrice')}</SectionText>
-                </ResultHeader>
+    <ContainerComponent isDark={isDark} loadData={loadData}>
+      <SectionText isDark={isDark} style={{fontSize: 20}}>{i18n.t('consumption')}</SectionText>
+        <Result isDark={isDark}>
+          {!price || !currency ? (
+            <ResultHeader isDark={isDark}>
+              <SectionText isDark={isDark}>{i18n.t('choosePrice')}</SectionText>
+            </ResultHeader>
+          ) : (
+            <>
+              <Animated.View style={[resultAnimatedsStyle]}>
+                <AnimatedContainer onLayout={(event) => onLayout(event, resultHeight, setResultHeight)}>
+                  <ResultContainer>
+                    <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
+                      <ResultHeader isDark={isDark}>
+                        <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perDay')}</SectionText>
+                      </ResultHeader>
+                      <ResultInfo isDark={isDark}>
+                        <SectionText isDark={isDark} style={{fontSize: 14}}>
+                          {roundNumber(getDaykWh())} kWh
+                        </SectionText>
+                        <SectionText isDark={isDark} style={{fontSize: 14}}>
+                          {roundNumber(getDayPrice())} {currency}
+                        </SectionText>
+                      </ResultInfo>
+                    </ResultItem>
+                    <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
+                      <ResultHeader isDark={isDark}>
+                        <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perMonth')}</SectionText>
+                      </ResultHeader>
+                      <ResultInfo isDark={isDark}>
+                        <SectionText isDark={isDark} style={{fontSize: 14}}>
+                          {roundNumber(getDaykWh() * 30)} kWh
+                        </SectionText>
+                        <SectionText isDark={isDark} style={{fontSize: 14}}>
+                          {roundNumber(getDayPrice() * 30)} {currency}
+                        </SectionText>
+                      </ResultInfo>
+                    </ResultItem>
+                    <ResultItem>
+                      <ResultHeader isDark={isDark}>
+                        <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perYear')}</SectionText>
+                      </ResultHeader>
+                      <ResultInfo isDark={isDark}>
+                        <SectionText isDark={isDark} style={{fontSize: 14}}>
+                          {roundNumber(getDaykWh() * 365)} kWh
+                        </SectionText>
+                        <SectionText isDark={isDark} style={{fontSize: 14}}>
+                          {roundNumber(getDayPrice() * 365)} {currency}
+                        </SectionText>
+                      </ResultInfo>
+                    </ResultItem>
+                  </ResultContainer>
+                </AnimatedContainer>
+              </Animated.View>
+              <ResultHide onPress={() => setIsResultHide(!isResultHide)}>
+                {isResultHide ? 
+                  <Entypo name="chevron-thin-down" size={24} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
+                  :
+                  <Entypo name="chevron-thin-up" size={24} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
+                }
+              </ResultHide>
+            </>
+          )}
+        </Result>
+      <SectionText isDark={isDark} style={{ marginBottom: 10, fontSize: 20}}>{i18n.t('deviceList')}</SectionText>
+
+      <AddDevice isDark={isDark}>
+        <ButtonComponent title={i18n.t('addDevice')} onPress={() => setAddDeviceVisible(!addDeviceVisible)} style={{borderWidth: 0}}/>
+
+        <Animated.View style={[addDeviceAnimatedsStyle]}>
+          <AnimatedContainer onLayout={(event) => onLayout(event, addDeviceHeight, setAddDeviceHeight)}>
+            <ModalContainer>
+              <Input
+                isDark={isDark}
+                placeholder={i18n.t('deviceName')}
+                placeholderTextColor="#808080"
+                value={deviceName}
+                onChangeText={(text) => setDeviceName(text)}
+                maxLength={19}
+              />
+              <Input
+                isDark={isDark}
+                placeholder={i18n.t('watts')}
+                placeholderTextColor="#808080"
+                value={deviceWatts}
+                onChangeText={(text) => setDeviceWatts(text)}
+                keyboardType="numeric"
+                maxLength={5}
+              />
+              <Input
+                isDark={isDark}
+                placeholder={i18n.t('quantity')}
+                placeholderTextColor="#808080"
+                value={deviceQuantity}
+                onChangeText={(text) => setDeviceQuantity(text)}
+                keyboardType="numeric"
+                maxLength={5}
+              />
+              {plan === "fixed" ? (
+                <Input
+                  isDark={isDark}
+                  placeholder={i18n.t('workingHours')}
+                  placeholderTextColor="#808080"
+                  value={deviceHours}
+                  onChangeText={(text) => text <= 24 ? setDeviceHours(text) : setDeviceHours('24')}
+                  keyboardType="numeric"
+                  maxLength={2}
+                />
               ) : (
                 <>
-                  <Animated.View style={[resultAnimatedsStyle]}>
-                    <AnimatedContainer onLayout={(event) => onLayout(event, resultHeight, setResultHeight)}>
-                      <ResultContainer>
-                        <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
-                          <ResultHeader isDark={isDark}>
-                            <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perDay')}</SectionText>
-                          </ResultHeader>
-                          <ResultInfo isDark={isDark}>
-                            <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber(getDaykWh())} kWh
-                            </SectionText>
-                            <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber(getDayPrice())} {currency}
-                            </SectionText>
-                          </ResultInfo>
-                        </ResultItem>
-                        <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
-                          <ResultHeader isDark={isDark}>
-                            <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perMonth')}</SectionText>
-                          </ResultHeader>
-                          <ResultInfo isDark={isDark}>
-                            <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber(getDaykWh() * 30)} kWh
-                            </SectionText>
-                            <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber(getDayPrice() * 30)} {currency}
-                            </SectionText>
-                          </ResultInfo>
-                        </ResultItem>
-                        <ResultItem>
-                          <ResultHeader isDark={isDark}>
-                            <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perYear')}</SectionText>
-                          </ResultHeader>
-                          <ResultInfo isDark={isDark}>
-                            <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber(getDaykWh() * 365)} kWh
-                            </SectionText>
-                            <SectionText isDark={isDark} style={{fontSize: 14}}>
-                              {roundNumber(getDayPrice() * 365)} {currency}
-                            </SectionText>
-                          </ResultInfo>
-                        </ResultItem>
-                      </ResultContainer>
-                    </AnimatedContainer>
-                  </Animated.View>
-                  <ResultHide onPress={() => setIsResultHide(!isResultHide)}>
-                    {isResultHide ? 
-                      <Entypo name="chevron-thin-down" size={24} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
-                      :
-                      <Entypo name="chevron-thin-up" size={24} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
-                    }
-                  </ResultHide>
+                  <Input
+                    isDark={isDark}
+                    placeholder={i18n.t('peakHours')}
+                    placeholderTextColor="#808080"
+                    value={dayDeviceHours}
+                    onChangeText={(text) => text <= 16 ? setDayDeviceHours(text) : setDayDeviceHours('16')}
+                    keyboardType="numeric"
+                    maxLength={2}
+                  />
+                  <Input
+                    isDark={isDark}
+                    placeholder={i18n.t('offPeakHours')}
+                    placeholderTextColor="#808080"
+                    value={nightDeviceHours}
+                    onChangeText={(text) => text <= 8 ? setNightDeviceHours(text) : setNightDeviceHours('8')}
+                    keyboardType="numeric"
+                    maxLength={2}
+                  />
                 </>
               )}
-            </Result>
-          <SectionText isDark={isDark} style={{ marginBottom: 10, fontSize: 20}}>{i18n.t('deviceList')}</SectionText>
+              
+              <ButtonComponent title={i18n.t('add')} onPress={addDevice} style={{borderWidth: 0, backgroundColor: '#f4511e', marginHorizontal: 10, marginBottom: 10}}/>
+            </ModalContainer>
+          </AnimatedContainer>
+        </Animated.View>
+      </AddDevice>
 
-          <AddDevice isDark={isDark}>
-            <ButtonComponent title={i18n.t('addDevice')} onPress={() => setAddDeviceVisible(!addDeviceVisible)} style={{borderWidth: 0}}/>
+      <ListItems
+        devices={devices}
+        plan={plan}
+        isDark={isDark}
+        setDevices={setDevices}
+        language={language}
+      />
 
-            <Animated.View style={[addDeviceAnimatedsStyle]}>
-              <AnimatedContainer onLayout={(event) => onLayout(event, addDeviceHeight, setAddDeviceHeight)}>
-                <ModalContainer>
-                  <Input
-                    isDark={isDark}
-                    placeholder={i18n.t('deviceName')}
-                    placeholderTextColor="#808080"
-                    value={deviceName}
-                    onChangeText={(text) => setDeviceName(text)}
-                    maxLength={19}
-                  />
-                  <Input
-                    isDark={isDark}
-                    placeholder={i18n.t('watts')}
-                    placeholderTextColor="#808080"
-                    value={deviceWatts}
-                    onChangeText={(text) => setDeviceWatts(text)}
-                    keyboardType="numeric"
-                    maxLength={5}
-                  />
-                  <Input
-                    isDark={isDark}
-                    placeholder={i18n.t('quantity')}
-                    placeholderTextColor="#808080"
-                    value={deviceQuantity}
-                    onChangeText={(text) => setDeviceQuantity(text)}
-                    keyboardType="numeric"
-                    maxLength={5}
-                  />
-                  {plan === "fixed" ? (
-                    <Input
-                      isDark={isDark}
-                      placeholder={i18n.t('workingHours')}
-                      placeholderTextColor="#808080"
-                      value={deviceHours}
-                      onChangeText={(text) => text <= 24 ? setDeviceHours(text) : setDeviceHours('24')}
-                      keyboardType="numeric"
-                      maxLength={2}
-                    />
-                  ) : (
-                    <>
-                      <Input
-                        isDark={isDark}
-                        placeholder={i18n.t('peakHours')}
-                        placeholderTextColor="#808080"
-                        value={dayDeviceHours}
-                        onChangeText={(text) => text <= 16 ? setDayDeviceHours(text) : setDayDeviceHours('16')}
-                        keyboardType="numeric"
-                        maxLength={2}
-                      />
-                      <Input
-                        isDark={isDark}
-                        placeholder={i18n.t('offPeakHours')}
-                        placeholderTextColor="#808080"
-                        value={nightDeviceHours}
-                        onChangeText={(text) => text <= 8 ? setNightDeviceHours(text) : setNightDeviceHours('8')}
-                        keyboardType="numeric"
-                        maxLength={2}
-                      />
-                    </>
-                  )}
-                  
-                  <ButtonComponent title={i18n.t('add')} onPress={addDevice} style={{borderWidth: 0, backgroundColor: '#f4511e', marginHorizontal: 10, marginBottom: 10}}/>
-                </ModalContainer>
-              </AnimatedContainer>
-            </Animated.View>
-          </AddDevice>
-
-          <ListItems
-            devices={devices}
-            plan={plan}
-            isDark={isDark}
-            setDevices={setDevices}
-            language={language}
-          />
-
-        </ContainerComponent>
-      )}
-    </>
+    </ContainerComponent>
   );
 };
 
