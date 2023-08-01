@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Energy Master",
-    "slug": "Energy Master",
-    "version": "1.0.0",
+    "slug": "EnergyMaster",
+    "version": "0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -21,13 +21,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.shmldev.EnergyMaster"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-localization"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "9a3d11cf-5500-42e2-849a-256176ee3257"
+      }
+    }
   }
 }

@@ -13,7 +13,7 @@ import { i18n } from '../localizations/i18n';
 const About = () => {
   const { isDark} = useContext(ThemeContext);
 
-  const appVersion = 'in develop';
+  const appVersion = '0.1 alpha';
 
   const handleRateApp = () => {
     
