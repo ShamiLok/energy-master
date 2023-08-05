@@ -4,7 +4,7 @@ import { Button } from 'react-native-elements';
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
 
-const ButtonComponent = ({ title, onPress, style }) => {
+const ButtonComponent = ({ title, onPress, style, textColor }) => {
     const {isDark} = useContext(ThemeContext)
 
   return (
@@ -19,7 +19,7 @@ const ButtonComponent = ({ title, onPress, style }) => {
         ...style,
       }}
       titleStyle={{
-        color: isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor,
+        color: textColor ? textColor : (isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor),
       }}
     />
   );

@@ -28,8 +28,6 @@ const Home = () => {
     loadData
   } = useContext(ThemeContext);
 
-  const [addDeviceVisible, setAddDeviceVisible] = useState(false);
-
   const [deviceName, setDeviceName] = useState('');
   const [deviceWatts, setDeviceWatts] = useState('');
   const [deviceQuantity, setDeviceQuantity] = useState('');
@@ -37,6 +35,7 @@ const Home = () => {
   const [dayDeviceHours, setDayDeviceHours] = useState('');
   const [nightDeviceHours, setNightDeviceHours] = useState('');
 
+  const [addDeviceVisible, setAddDeviceVisible] = useState(false);
   const [isResultHide, setIsResultHide] = useState(false);
 
   const [ addDeviceHeight, setAddDeviceHeight ] = useState(0)
@@ -59,7 +58,7 @@ const Home = () => {
   })
   
   const resultAnimatedsStyle = useAnimatedStyle(() => {
-    const animatedHeight = !isResultHide ? withTiming(resultHeight) : withTiming(120)
+    const animatedHeight = isResultHide ? withTiming(resultHeight) : withTiming(120)
     return {
       height: animatedHeight
     }
@@ -121,8 +120,14 @@ const Home = () => {
     );
   }
 
+  const handleRefresh = () => {
+    setAddDeviceVisible(false)
+    setIsResultHide(false)
+    loadData()
+  }
+ 
   return (
-    <ContainerComponent isDark={isDark} loadData={loadData}>
+    <ContainerComponent isDark={isDark} loadData={handleRefresh}>
       <SectionText isDark={isDark} style={{fontSize: 20}}>{i18n.t('consumption')}</SectionText>
         <Result isDark={isDark}>
           {!price || !currency ? (
@@ -253,7 +258,7 @@ const Home = () => {
                 </>
               )}
               
-              <ButtonComponent title={i18n.t('add')} onPress={addDevice} style={{borderWidth: 0, backgroundColor: '#f4511e', marginHorizontal: 10, marginBottom: 10}}/>
+              <ButtonComponent title={i18n.t('add')} onPress={addDevice} style={{borderWidth: 0, backgroundColor: '#f4511e', marginHorizontal: 10, marginBottom: 10}} textColor="#fff" />
             </ModalContainer>
           </AnimatedContainer>
         </Animated.View>
@@ -294,6 +299,7 @@ const Input = styled.TextInput`
 
 const AddDevice = styled.View`
   background-color: ${(props) => props.isDark ? DARK_COLORS.buttonBackgroundColor : LIGHT_COLORS.buttonBackgroundColor};
+  border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
   border-radius: 10px;
   margin-bottom: 10px;
 `;
@@ -301,7 +307,6 @@ const AddDevice = styled.View`
 const Result = styled.View`
   position: relative;
   padding: 0 10px;
-  /* padding-bottom: 25px; */
   border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
   border-radius: 10px;
   overflow: hidden;

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { Alert, Switch, ToastAndroid, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -241,7 +241,6 @@ function Settings() {
 
 const SettingSection = styled.View`
   background-color: ${(props) => (props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor)};
-  /* padding: 10px 10px 0 20px; */
   border-radius: 10px;
   margin-bottom: 20px;
 `;

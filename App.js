@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ToastAndroid } from "react-native";
+import { ToastAndroid, StatusBar } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   SimpleLineIcons,
@@ -115,6 +115,7 @@ export default function App() {
       devices, setDevices,
       loadData
     }}>
+      <StatusBar backgroundColor="#f4511e" />
       <NavigationContainer>
         <Drawer.Navigator
           drawerContent={
