@@ -47,11 +47,22 @@ function Settings() {
     showToast(`Установлен ${value} язык`)
   };
 
-  const handlePlanChange = async (plan) => {
-    setPlan(plan)
-    await AsyncStorage.setItem('plan', plan);
-    setDevices([]);
-    await AsyncStorage.removeItem('devices');
+  const handlePlanChange = (plan) => {
+    Alert.alert('Изменить план', 'Все добавленные устройства будут удалены', [
+      {
+        text: 'Да',
+        onPress: async () => {
+          setPlan(plan)
+          await AsyncStorage.setItem('plan', plan);
+          setDevices([]);
+          await AsyncStorage.removeItem('devices');
+        },
+      },
+      {
+        text: 'Нет',
+        style: 'cancel',
+      },
+    ]);
   }
 
   const handlePriceChange = async (text, type) => {
@@ -240,6 +251,7 @@ function Settings() {
 }
 
 const SettingSection = styled.View`
+  border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
   background-color: ${(props) => (props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor)};
   border-radius: 10px;
   margin-bottom: 20px;

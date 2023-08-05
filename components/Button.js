@@ -14,7 +14,7 @@ const ButtonComponent = ({ title, onPress, style, textColor }) => {
       buttonStyle={{
         backgroundColor: isDark ? DARK_COLORS.buttonBackgroundColor : LIGHT_COLORS.buttonBackgroundColor,
         borderRadius: 10,
-        borderColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor,
+        borderColor: isDark ? DARK_COLORS.buttonBorderColor : LIGHT_COLORS.buttonBorderColor,
         borderWidth: 1,
         ...style,
       }}

@@ -6,6 +6,7 @@ import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ItemSection from './ItemSection';
+import SectionText from './SectionText';
 
 import { i18n } from '../localizations/i18n'
 
@@ -103,9 +104,14 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                 <View>
                   <SectionText isDark={isDark}>{item.name}</SectionText>
                   {plan === 'fixed' ? (
-                    <SectionText isDark={isDark}>
-                      {item.watts} {i18n.t('watt')}, {item.hours} {hoursFormat(item.hours)}
-                    </SectionText>
+                    <>
+                      <SectionText isDark={isDark}>
+                        {item.watts} {i18n.t('watt')}
+                      </SectionText>
+                      <SectionText isDark={isDark}>
+                        {item.hours} {hoursFormat(item.hours)}
+                      </SectionText>
+                    </>
                   ) : (
                   <>
                     <SectionText isDark={isDark}>
@@ -121,14 +127,14 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                   )}
                 </View>
 
-                <ListItemQuantity>
+                <ListItemQuantity plan={plan}>
                   <TextInput
                     style={{ color: isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor }}
                     value={item.quantity.toString()}
                     onChangeText={(newQuantity) => updateQuantity(index, newQuantity)}
                     keyboardType="numeric"
                   />
-                  <SectionText isDark={isDark}>{i18n.t('quantityUnit')}</SectionText>
+                  <SectionText isDark={isDark}> {i18n.t('quantityUnit')}</SectionText>
                 </ListItemQuantity>
 
                 <ListItemEdit>
@@ -158,55 +164,77 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
               </ItemSection>
               {editIndex === index && (
                 <View>
-                  <Input
-                    placeholder={i18n.t('deviceName')}
-                    placeholderTextColor="#808080"
-                    value={editedName}
-                    onChangeText={setEditedName}
-                    isDark={isDark}
-                  />
-                  <Input
-                    placeholder={i18n.t('watts')}
-                    placeholderTextColor="#808080"
-                    value={editedWatts}
-                    onChangeText={setEditedWatts}
-                    isDark={isDark}
-                    keyboardType="numeric"
-                  />
-                  <Input
-                    placeholder={i18n.t('quantity')}
-                    placeholderTextColor="#808080"
-                    value={editedQuantity}
-                    onChangeText={setEditedQuantity}
-                    isDark={isDark}
-                    keyboardType="numeric"
-                  />
-                  {plan === 'fixed' ? (
+                  <SectionEdit>
+                    <SectionText isDark={isDark} style={{fontSize: 12}}>{i18n.t('deviceName')}</SectionText>
                     <Input
-                      placeholder={i18n.t('workingHours')}
+                      placeholder={i18n.t('deviceName')}
                       placeholderTextColor="#808080"
-                      value={editedHours}
-                      onChangeText={(text) => text <= 24 ? setEditedHours(text) : setEditedHours('24')}
+                      value={editedName}
+                      onChangeText={setEditedName}
                       isDark={isDark}
                     />
+                  </SectionEdit>
+                  <SectionEdit>
+                    <SectionText isDark={isDark} style={{fontSize: 12}}>{i18n.t('watts')}</SectionText>
+                    <Input
+                      placeholder={i18n.t('watts')}
+                      placeholderTextColor="#808080"
+                      value={editedWatts}
+                      onChangeText={setEditedWatts}
+                      isDark={isDark}
+                      keyboardType="numeric"
+                    />
+                  </SectionEdit>
+                  <SectionEdit>
+                    <SectionText isDark={isDark} style={{fontSize: 12}}>{i18n.t('quantity')}</SectionText>
+                    <Input
+                      placeholder={i18n.t('quantity')}
+                      placeholderTextColor="#808080"
+                      value={editedQuantity}
+                      onChangeText={setEditedQuantity}
+                      isDark={isDark}
+                      keyboardType="numeric"
+                    />
+                  </SectionEdit>
+                  
+                  {plan === 'fixed' ? (
+                    <SectionEdit>
+                      <SectionText isDark={isDark} style={{fontSize: 12}}>{i18n.t('workingHours')}</SectionText>
+                      <Input
+                        placeholder={i18n.t('workingHours')}
+                        placeholderTextColor="#808080"
+                        value={editedHours}
+                        onChangeText={(text) => text <= 24 ? setEditedHours(text) : setEditedHours('24')}
+                        isDark={isDark}
+                      />
+                    </SectionEdit>
+                    
                   ) : (
                     <>
-                      <Input
-                        placeholder={i18n.t('peakHours')}
-                        placeholderTextColor="#808080"
-                        value={editedDayHours}
-                        onChangeText={(text) => text <= 16 ? setEditedDayHours(text) : setEditedDayHours('16')}
-                        isDark={isDark}
-                        keyboardType="numeric"
-                      />
-                      <Input
-                        placeholder={i18n.t('offPeakHours')}
-                        placeholderTextColor="#808080"
-                        value={editedNightHours}
-                        onChangeText={(text) => text <= 8 ? setEditedNightHours(text) : setEditedNightHours('8')}
-                        isDark={isDark}
-                        keyboardType="numeric"
-                      />
+                      <SectionEdit>
+                        <SectionText isDark={isDark} style={{fontSize: 12}}>{i18n.t('peakHours')}</SectionText>
+                        <Input
+                          placeholder={i18n.t('peakHours')}
+                          placeholderTextColor="#808080"
+                          value={editedDayHours}
+                          onChangeText={(text) => text <= 16 ? setEditedDayHours(text) : setEditedDayHours('16')}
+                          isDark={isDark}
+                          keyboardType="numeric"
+                        />
+                      </SectionEdit>
+                      <SectionEdit>
+                        <SectionText isDark={isDark} style={{fontSize: 12}}>{i18n.t('offPeakHours')}</SectionText>
+                        <Input
+                          placeholder={i18n.t('offPeakHours')}
+                          placeholderTextColor="#808080"
+                          value={editedNightHours}
+                          onChangeText={(text) => text <= 8 ? setEditedNightHours(text) : setEditedNightHours('8')}
+                          isDark={isDark}
+                          keyboardType="numeric"
+                        />
+                      </SectionEdit>
+                      
+                      
                     </>
                   )}
                   
@@ -222,16 +250,18 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
 };
 
 const ListItemsContainer = styled.View`
+  border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
+
   background-color: ${(props) => (props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor)};
   border-radius: 10px;
   margin-bottom: 10px;
 `;
 
 const ListItemQuantity = styled.View`
-  flex-direction: column;
+  flex-direction: row;
   position: absolute;
   right: 100px;
-  top: 6px;
+  top: ${(props) => (props.plan === 'fixed' ? '30px' : '42px')};
 `;
 
 const ListItemEdit = styled.View`
@@ -240,18 +270,21 @@ const ListItemEdit = styled.View`
   width: 60px;
 `;
 
-const SectionText = styled.Text`
-  font-size: 16px;
-  color: ${(props) => (props.isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor)};
+const SectionEdit = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin: 0 10px 10px 10px;
 `;
 
 const Input = styled.TextInput`
+  flex: 1;
   border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
   border-radius: 10px;
   padding: 10px 15px;
-  margin: 5px 10px;
+  margin-left: 10px;
   color: ${(props) => props.isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor};
-  background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
+  background-color: ${(props) => props.isDark ? DARK_COLORS.backgroundColor : LIGHT_COLORS.backgroundColor};
 `;
+
 
 export default ListItems;

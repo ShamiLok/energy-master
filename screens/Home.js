@@ -299,7 +299,7 @@ const Input = styled.TextInput`
 
 const AddDevice = styled.View`
   background-color: ${(props) => props.isDark ? DARK_COLORS.buttonBackgroundColor : LIGHT_COLORS.buttonBackgroundColor};
-  border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
+  border: 1px solid ${(props) => props.isDark ? DARK_COLORS.buttonBorderColor : LIGHT_COLORS.buttonBorderColor};
   border-radius: 10px;
   margin-bottom: 10px;
 `;
