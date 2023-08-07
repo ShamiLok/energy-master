@@ -14,6 +14,10 @@ const en = {
   home: "Home",
   settings: "Settings",
   about: "About",
+  yes: "Yes",
+  no: "No",
+  lightThemeSet: "Light theme set",
+  darkThemeSet: "Dark theme set",
 
   //Settings
   main: "Main",
@@ -28,6 +32,10 @@ const en = {
   resetSettings: 'Reset settings',
   planFixed: 'Fixed',
   planPeakOffpeak: 'Peak/off-peak',
+  changePlan: "Change Plan",
+  confirmDeviceDeletion: "All added devices will be deleted.",
+  confirmReset: "Are you sure you want to reset the settings?",
+  settingsReset: "Settings have been reset.",
 
   //About
   energyMaster: "Energy Master",

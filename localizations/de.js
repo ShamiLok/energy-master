@@ -14,6 +14,10 @@ const de = {
   home: "Startseite",
   settings: "Einstellungen",
   about: "Über",
+  yes: "Ja",
+  no: "Nein",
+  lightThemeSet: "Helle Themen gewählt",
+  darkThemeSet: "Dunkle Themen gewählt",
 
   //Settings
   main: "Haupt",
@@ -28,6 +32,10 @@ const de = {
   resetSettings: "Einstellungen zurücksetzen",
   planFixed: "Festpreis",
   planPeakOffpeak: "Haupt-/Nebenzeit",
+  changePlan: "Plan ändern",
+  confirmDeviceDeletion: "Alle hinzugefügten Geräte werden gelöscht.",
+  confirmReset: "Möchten Sie die Einstellungen wirklich zurücksetzen?",
+  settingsReset: "Die Einstellungen wurden zurückgesetzt.",
 
   //About
   energyMaster: "Energy Master",

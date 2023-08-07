@@ -14,6 +14,10 @@ const ru = {
   home: "Главная",
   settings: "Настройки",
   about: "О программе",
+  yes: "Да",
+  no: "Нет",
+  lightThemeSet: "Установлена светлая тема",
+  darkThemeSet: "Установлена темная тема",
 
   //Settings
   main: "Основные",
@@ -28,6 +32,10 @@ const ru = {
   resetSettings: 'Сбросить настройки',
   planFixed: 'Однотарифный',
   planPeakOffpeak: 'Двутарифный',
+  changePlan: "Изменить план",
+  confirmDeviceDeletion: "Все добавленные устройства будут удалены.",
+  confirmReset: "Вы уверены, что хотите сбросить настройки?",
+  settingsReset: "Настройки были сброшены.",
 
   //About
   energyMaster: "Energy Master",

@@ -38,19 +38,17 @@ function Settings() {
   const handleCurrencyChange = async (value) => {
     setCurrency(value);
     await AsyncStorage.setItem('currency', value);
-    showToast(`Выбрана валюта ${value}`)
   };
 
   const handleLanguageChange = async (value) => {
     setLanguage(value);
     await AsyncStorage.setItem('language', value);
-    showToast(`Установлен ${value} язык`)
   };
 
   const handlePlanChange = (plan) => {
-    Alert.alert('Изменить план', 'Все добавленные устройства будут удалены', [
+    Alert.alert(i18n.t('changePlan'), i18n.t('confirmDeviceDeletion'), [
       {
-        text: 'Да',
+        text: i18n.t('yes'),
         onPress: async () => {
           setPlan(plan)
           await AsyncStorage.setItem('plan', plan);
@@ -59,7 +57,7 @@ function Settings() {
         },
       },
       {
-        text: 'Нет',
+        text: i18n.t('no'),
         style: 'cancel',
       },
     ]);
@@ -79,13 +77,13 @@ function Settings() {
   };
 
   const handleDefault = () => {
-    Alert.alert('Сброс настроек', 'Вы уверены, что хотите сбросить настройки?', [
+    Alert.alert(i18n.t('resetSettings'), i18n.t('confirmReset'), [
       {
-        text: 'Да',
+        text: i18n.t('yes'),
         onPress: () => handleResetConfirmation(),
       },
       {
-        text: 'Нет',
+        text: i18n.t('no'),
         style: 'cancel',
       },
     ]);
@@ -94,7 +92,7 @@ function Settings() {
   const handleResetConfirmation = async () => {
     await AsyncStorage.clear();
     loadData();
-    showToast('Настройки были сброшены')
+    showToast(i18n.t('settingsReset'))
   };
 
   const handleChangeColorTheme = () => {
@@ -202,6 +200,7 @@ function Settings() {
             <SectionText isDark={isDark}>{i18n.t('pricePerkWh')}</SectionText>
             <Input
               isDark={isDark}
+              // defaultValue='0'
               value={price}
               onChangeText={(text) => handlePriceChange(text, 'fixed')}
               ref={fixedTextInputRef}

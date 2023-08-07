@@ -53,35 +53,51 @@ export default function App() {
       const savedPlan = await AsyncStorage.getItem('plan');
       const savedDevices = await AsyncStorage.getItem('devices');
 
-      if (!savedCurrency) {
+      if (savedCurrency) {
+        setCurrency(savedCurrency);
+      } else {
         setCurrency(currencyCode);
         await AsyncStorage.setItem('currency', currencyCode);
-      } else {
-        setCurrency(savedCurrency);
       }
-      if (!savedLangugae) {
+
+      if (savedLangugae) {
+        setLanguage(savedLangugae);
+      } else {
         setLanguage(languageCode);
         await AsyncStorage.setItem('langugage', languageCode);
-      } else {
-        setLanguage(savedLangugae);
       }
-      if (!savedPlan) {
-        setPlan('fixed');
-        await AsyncStorage.setItem('plan', languageCode);
-      } else {
+
+      if (savedPlan) {
         setPlan(savedPlan);
+      } else {
+        setPlan('fixed');
       }
+
       if (savedDevices) {
         setDevices(JSON.parse(savedDevices));
       } else {
         setDevices([]);
       }
 
-      setPrice(savedPrice);
-      setDayPrice(savedDayPrice);
-      setNightPrice(savedNightPrice)
+      if (savedPrice) {
+        setPrice(JSON.parse(savedPrice));
+      } else {
+        setPrice('0');
+      }
 
-      if(handleIsDark){
+      if (savedDayPrice) {
+        setDayPrice(JSON.parse(savedDayPrice));
+      } else {
+        setDayPrice('0');
+      }
+
+      if (savedNightPrice) {
+        setNightPrice(JSON.parse(savedNightPrice));
+      } else {
+        setNightPrice('0');
+      }
+      
+      if(savedTheme !== null){
         setIsDark(JSON.parse(savedTheme));
       }
     } catch (error) {
@@ -92,7 +108,7 @@ export default function App() {
   const handleIsDark = async (value) => {
     setIsDark(value);
     await AsyncStorage.setItem("theme", JSON.stringify(value));
-    showToast(`Установлена ${isDark ? 'светлая' : 'темная'} тема`)
+    showToast(isDark ? i18n.t('lightThemeSet') : i18n.t('darkThemeSet'))
   };
 
   const showToast = (message) => {
