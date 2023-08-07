@@ -64,6 +64,8 @@ function Settings() {
   }
 
   const handlePriceChange = async (text, type) => {
+    
+    console.log(typeof text)
     if(type === 'fixed'){
       setPrice(text);
       await AsyncStorage.setItem('price', text);
@@ -200,8 +202,7 @@ function Settings() {
             <SectionText isDark={isDark}>{i18n.t('pricePerkWh')}</SectionText>
             <Input
               isDark={isDark}
-              // defaultValue='0'
-              value={price}
+              value={String(price)}
               onChangeText={(text) => handlePriceChange(text, 'fixed')}
               ref={fixedTextInputRef}
               keyboardType="numeric"
@@ -218,11 +219,12 @@ function Settings() {
               <SectionText isDark={isDark}>{i18n.t('planPeak')}</SectionText>
               <Input
                 isDark={isDark}
-                value={dayPrice}
+                value={String(dayPrice)}
                 onChangeText={(text) => handlePriceChange(text, 'dual-day')}
                 ref={dayTextInputRef}
                 keyboardType="numeric"
                 maxLength={15}
+                onSubmitEditing={() => { this.secondPlanTextInput.focus(); }}
               />
             </ItemSection>
             <ItemSection
@@ -233,11 +235,12 @@ function Settings() {
               <SectionText isDark={isDark}>{i18n.t('planOffPeak')}</SectionText>
               <Input
                 isDark={isDark}
-                value={nightPrice}
+                value={String(nightPrice)}
                 onChangeText={(text) => handlePriceChange(text, 'dual-night')}
                 ref={nightTextInputRef}
                 keyboardType="numeric"
                 maxLength={15}
+                ref={(input) => { this.secondPlanTextInput = input; }}
               />
             </ItemSection>
           </>

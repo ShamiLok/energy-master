@@ -93,7 +93,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
   return (
     <View>
       {devices.length === 0 ? (
-        <ItemSection isDark={isDark}>
+        <ItemSection isDark={isDark} style={{borderWidth: 1, borderColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor}}>
           <SectionText isDark={isDark}>{i18n.t('deviceListEmpty')}</SectionText>
         </ItemSection>
       ) : (
@@ -172,6 +172,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                       value={editedName}
                       onChangeText={setEditedName}
                       isDark={isDark}
+                      onSubmitEditing={() => { this.secondEditTextInput.focus(); }}
                     />
                   </SectionEdit>
                   <SectionEdit>
@@ -183,6 +184,8 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                       onChangeText={setEditedWatts}
                       isDark={isDark}
                       keyboardType="numeric"
+                      ref={(input) => { this.secondEditTextInput = input; }}
+                      onSubmitEditing={() => { this.thirdEditTextInput.focus(); }}
                     />
                   </SectionEdit>
                   <SectionEdit>
@@ -194,6 +197,8 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                       onChangeText={setEditedQuantity}
                       isDark={isDark}
                       keyboardType="numeric"
+                      ref={(input) => { this.thirdEditTextInput = input; }}
+                      onSubmitEditing={() => { this.forthEditTextInput.focus(); }}
                     />
                   </SectionEdit>
                   
@@ -206,6 +211,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                         value={editedHours}
                         onChangeText={(text) => text <= 24 ? setEditedHours(text) : setEditedHours('24')}
                         isDark={isDark}
+                        ref={(input) => { this.forthEditTextInput = input; }}
                       />
                     </SectionEdit>
                     
@@ -220,6 +226,8 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                           onChangeText={(text) => text <= 16 ? setEditedDayHours(text) : setEditedDayHours('16')}
                           isDark={isDark}
                           keyboardType="numeric"
+                          ref={(input) => { this.forthEditTextInput = input; }}
+                          onSubmitEditing={() => { this.fifthEditTextInput.focus(); }}
                         />
                       </SectionEdit>
                       <SectionEdit>
@@ -231,6 +239,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                           onChangeText={(text) => text <= 8 ? setEditedNightHours(text) : setEditedNightHours('8')}
                           isDark={isDark}
                           keyboardType="numeric"
+                          ref={(input) => { this.fifthEditTextInput = input; }}
                         />
                       </SectionEdit>
                       
@@ -251,7 +260,6 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
 
 const ListItemsContainer = styled.View`
   border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
-
   background-color: ${(props) => (props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor)};
   border-radius: 10px;
   margin-bottom: 10px;

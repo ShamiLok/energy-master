@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { ToastAndroid, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Entypo } from '@expo/vector-icons'; 
@@ -182,7 +182,7 @@ const Home = () => {
                 </AnimatedContainer>
               </Animated.View>
               <ResultHide onPress={() => setIsResultHide(!isResultHide)}>
-                {isResultHide ? 
+                {!isResultHide ? 
                   <Entypo name="chevron-thin-down" size={24} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
                   :
                   <Entypo name="chevron-thin-up" size={24} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
@@ -206,6 +206,7 @@ const Home = () => {
                 value={deviceName}
                 onChangeText={(text) => setDeviceName(text)}
                 maxLength={19}
+                onSubmitEditing={() => { this.secondAddDeviceTextInput.focus(); }}
               />
               <Input
                 isDark={isDark}
@@ -215,6 +216,8 @@ const Home = () => {
                 onChangeText={(text) => setDeviceWatts(text)}
                 keyboardType="numeric"
                 maxLength={5}
+                ref={(input) => { this.secondAddDeviceTextInput = input; }}
+                onSubmitEditing={() => { this.thirdAddDeviceTextInput.focus(); }}
               />
               <Input
                 isDark={isDark}
@@ -224,6 +227,8 @@ const Home = () => {
                 onChangeText={(text) => setDeviceQuantity(text)}
                 keyboardType="numeric"
                 maxLength={5}
+                ref={(input) => { this.thirdAddDeviceTextInput = input; }}
+                onSubmitEditing={() => { this.forthAddDeviceTextInput.focus(); }}
               />
               {plan === "fixed" ? (
                 <Input
@@ -234,6 +239,7 @@ const Home = () => {
                   onChangeText={(text) => text <= 24 ? setDeviceHours(text) : setDeviceHours('24')}
                   keyboardType="numeric"
                   maxLength={2}
+                  ref={(input) => { this.forthAddDeviceTextInput = input; }}
                 />
               ) : (
                 <>
@@ -245,6 +251,8 @@ const Home = () => {
                     onChangeText={(text) => text <= 16 ? setDayDeviceHours(text) : setDayDeviceHours('16')}
                     keyboardType="numeric"
                     maxLength={2}
+                    ref={(input) => { this.forthAddDeviceTextInput = input; }}
+                    onSubmitEditing={() => { this.fifthAddDeviceTextInput.focus(); }}
                   />
                   <Input
                     isDark={isDark}
@@ -254,6 +262,7 @@ const Home = () => {
                     onChangeText={(text) => text <= 8 ? setNightDeviceHours(text) : setNightDeviceHours('8')}
                     keyboardType="numeric"
                     maxLength={2}
+                    ref={(input) => { this.fifthAddDeviceTextInput = input; }}
                   />
                 </>
               )}

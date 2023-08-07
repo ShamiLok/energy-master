@@ -3,7 +3,8 @@ import { ToastAndroid, StatusBar } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   SimpleLineIcons,
-  Ionicons ,
+  Ionicons,
+  Foundation 
 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
@@ -12,6 +13,7 @@ import { DrawerItemList, createDrawerNavigator } from "@react-navigation/drawer"
 import About from "./screens/About";
 import Home from "./screens/Home";
 import Settings from "./screens/Settings";
+import Report from "./screens/Report";
 
 import { LIGHT_COLORS, DARK_COLORS } from './constants/colors';
 import { ThemeContext } from "./contexts/themes";
@@ -79,19 +81,19 @@ export default function App() {
         setDevices([]);
       }
 
-      if (savedPrice) {
+      if (savedPrice !== null) {
         setPrice(JSON.parse(savedPrice));
       } else {
         setPrice('0');
       }
 
-      if (savedDayPrice) {
+      if (savedDayPrice !== null) {
         setDayPrice(JSON.parse(savedDayPrice));
       } else {
         setDayPrice('0');
       }
 
-      if (savedNightPrice) {
+      if (savedNightPrice !== null) {
         setNightPrice(JSON.parse(savedNightPrice));
       } else {
         setNightPrice('0');
@@ -171,6 +173,18 @@ export default function App() {
               )
             }}
             component={Home}
+          />
+
+          <Drawer.Screen
+            name="Report"
+            options={{
+              drawerLabel: 'Report',
+              title: 'Report',
+              drawerIcon: () => (
+                <Foundation name="results" size={22} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
+              )
+            }}
+            component={Report}
           />
 
           <Drawer.Screen
