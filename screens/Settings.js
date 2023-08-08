@@ -64,8 +64,6 @@ function Settings() {
   }
 
   const handlePriceChange = async (text, type) => {
-    
-    console.log(typeof text)
     if(type === 'fixed'){
       setPrice(text);
       await AsyncStorage.setItem('price', text);
@@ -224,7 +222,7 @@ function Settings() {
                 ref={dayTextInputRef}
                 keyboardType="numeric"
                 maxLength={15}
-                onSubmitEditing={() => { this.secondPlanTextInput.focus(); }}
+                onSubmitEditing={() => handleFocus(nightTextInputRef)}
               />
             </ItemSection>
             <ItemSection
@@ -240,7 +238,6 @@ function Settings() {
                 ref={nightTextInputRef}
                 keyboardType="numeric"
                 maxLength={15}
-                ref={(input) => { this.secondPlanTextInput = input; }}
               />
             </ItemSection>
           </>

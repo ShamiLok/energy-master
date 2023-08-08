@@ -178,8 +178,8 @@ export default function App() {
           <Drawer.Screen
             name="Report"
             options={{
-              drawerLabel: 'Report',
-              title: 'Report',
+              drawerLabel: i18n.t('report'),
+              title: i18n.t('report'),
               drawerIcon: () => (
                 <Foundation name="results" size={22} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
               )

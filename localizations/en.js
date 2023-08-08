@@ -18,6 +18,7 @@ const en = {
   no: "No",
   lightThemeSet: "Light theme set",
   darkThemeSet: "Dark theme set",
+  report: "Report",
 
   //Settings
   main: "Main",

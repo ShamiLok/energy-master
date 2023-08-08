@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
-
+import { VictoryPie } from 'victory-native';
 
 import ContainerComponent from '../components/ContainerComponent';
 import SectionText from '../components/SectionText';
@@ -22,6 +22,8 @@ const Report = () => {
     devices,
     loadData
   } = useContext(ThemeContext);
+
+  const colorScale = ['#008080', '#FF6347', '#6A5ACD', '#32CD32'];
 
   const getDaykWh = () => {
     if(plan === 'fixed'){
@@ -45,17 +47,20 @@ const Report = () => {
   }
 
   const handleRefresh = () => {
-    setIsResultHide(false)
     loadData()
   }
 
-  const data = [
-    { quarter: 1, earnings: 13000 },
-    { quarter: 2, earnings: 16500 },
-    { quarter: 3, earnings: 14250 },
-    { quarter: 4, earnings: 19000 }
-  ];
+  const getPieChartData = () => {
+    return devices.map((device, index) => {
+      const usage = plan === 'fixed' ? (device.watts * device.quantity * device.hours) / 1000 : (device.quantity * (device.watts * device.dayHours / 1000 + device.watts * device.nightHours / 1000));
+      return {
+        x: device.name,
+        y: usage
+      };
+    });
+  };
  
+  console.log(getPieChartData())
   return (
     <ContainerComponent isDark={isDark} loadData={handleRefresh}>
         <Result isDark={isDark}>
@@ -107,9 +112,28 @@ const Report = () => {
             </ResultContainer>
             )}
         </Result>
-        {/* <VictoryChart width={350} theme={VictoryTheme.material}>
-          <VictoryBar data={data} x="quarter" y="earnings" />
-        </VictoryChart> */}
+        <PieChart>
+        <VictoryPie
+          labelRadius={({ innerRadius }) => innerRadius + 15}
+          data={getPieChartData()}
+          colorScale={colorScale}
+          innerRadius={30}
+          style={{
+            labels: {
+              fill: isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor,
+            },
+          }}
+        />
+      </PieChart>
+      <DeviceList>
+        {devices.map((device, index) => (
+          <DeviceItem key={index} bgColor={colorScale[index % colorScale.length]}>
+            <SectionText isDark={isDark}>
+              {device.name}: {roundNumber(plan === 'fixed' ? (device.watts * device.quantity * device.hours) / 1000 : (device.quantity * (device.watts * device.dayHours / 1000 + device.watts * device.nightHours / 1000)))} kWh
+            </SectionText>
+          </DeviceItem>
+        ))}
+      </DeviceList>
     </ContainerComponent>
   );
 };
@@ -140,6 +164,23 @@ const ResultInfo = styled.View`
     padding: 10px;
     flex-direction: column;
     justify-content: space-around;
+`;
+
+const PieChart = styled.View`
+  align-items: center;
+`;
+
+const DeviceList = styled.View`
+  margin-top: 20px;
+`;
+
+const DeviceItem = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
+  background-color: ${(props) => props.bgColor};
+  padding: 10px;
+  border-radius: 10px;
 `;
 
 export default Report;

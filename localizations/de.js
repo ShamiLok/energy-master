@@ -18,6 +18,7 @@ const de = {
   no: "Nein",
   lightThemeSet: "Helle Themen gewählt",
   darkThemeSet: "Dunkle Themen gewählt",
+  report: "Bericht",
 
   //Settings
   main: "Haupt",

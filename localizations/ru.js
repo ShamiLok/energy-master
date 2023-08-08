@@ -18,6 +18,7 @@ const ru = {
   no: "Нет",
   lightThemeSet: "Установлена светлая тема",
   darkThemeSet: "Установлена темная тема",
+  report: "Отчет",
 
   //Settings
   main: "Основные",
