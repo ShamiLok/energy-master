@@ -32,7 +32,7 @@ const About = () => {
       overScrollMode="never"
     >
       <SectionText isDark={isDark} style={{ fontSize: 24 }}>{i18n.t('energyMaster')}</SectionText>
-      <SectionText style={{ marginBottom: 10 }} isDark={isDark}>{i18n.t('version')}: v0.3.1 alpha</SectionText>
+      <SectionText style={{ marginBottom: 10 }} isDark={isDark}>{i18n.t('version')}: v0.3.2 alpha</SectionText>
       <ItemSection isDark={isDark}>
         <SectionText isDark={isDark}>{i18n.t('rateApp')}</SectionText>
         <ButtonComponent title={i18n.t('rate')} onPress={handleRateApp} />

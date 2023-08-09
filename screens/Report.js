@@ -22,34 +22,47 @@ const Report = () => {
     loadData
   } = useContext(ThemeContext);
 
-  // const colorScale = ['#008080', '#FF6347', '#6A5ACD', '#32CD32'];
-  const colorScale = [
-    '#f4511e', // Оранжевый
-    '#ffea00', // Золотистый
-    '#00bcd4', // Голубой
-    '#8e24aa', // Пурпурный
-    '#c2185b', // Розовый
-    '#3f51b5', // Синий
-    '#7b1fa2', // Темно-пурпурный
-    '#0288d1', // Темно-голубой
-    '#009688', // Темно-зеленый
-    '#558b2f', // Зеленый
-    '#ffeb3b', // Желтый
-    '#ff5722', // Темно-оранжевый
-    '#795548', // Темно-коричневый
-    '#9e9e9e', // Серый
-    '#607d8b', // Темно-серый
-    '#ec407a', // Ярко-розовый
-    '#42a5f5', // Ярко-синий
-    '#43a047', // Ярко-зеленый
-    '#ef6c00', // Ярко-оранжевый
-    '#d4e157', // Ярко-желтый
-    '#ffa726', // Ярко-коричневый
-    '#78909c', // Ярко-серый
-    '#26a69a', // Морской волны
-    '#8d6e63', // Коричневый
-    '#ff7043', // Ярко-оранжевый
-  ];
+  const getPieChartData = () => {
+    if(devices.length === 0) {
+      return [{ y: 1 }]
+    }
+    return devices.map((device, index) => {
+      const usage = plan === 'fixed' ? (device.watts * device.quantity * device.hours) / 1000 : (device.quantity * (device.watts * device.dayHours / 1000 + device.watts * device.nightHours / 1000));
+      return {
+        x: device.name,
+        y: usage
+      };
+    })
+    .sort((a, b) => b.y - a.y);
+  };
+
+  const colorScale = devices.length !== 0 ? [
+    '#f4511e',
+    '#ffea00',
+    '#00bcd4',
+    '#8e24aa',
+    '#c2185b',
+    '#3f51b5',
+    '#7b1fa2',
+    '#0288d1',
+    '#009688',
+    '#558b2f',
+    '#ffeb3b',
+    '#ff5722',
+    '#795548',
+    '#9e9e9e',
+    '#607d8b',
+    '#ec407a',
+    '#42a5f5',
+    '#43a047',
+    '#ef6c00',
+    '#d4e157',
+    '#ffa726',
+    '#78909c',
+    '#26a69a',
+    '#8d6e63',
+    '#ff7043',
+  ] : ['grey'];
 
   const getDaykWh = () => {
     if(plan === 'fixed'){
@@ -76,17 +89,6 @@ const Report = () => {
     loadData()
   }
 
-  const getPieChartData = () => {
-    return devices.map((device, index) => {
-      const usage = plan === 'fixed' ? (device.watts * device.quantity * device.hours) / 1000 : (device.quantity * (device.watts * device.dayHours / 1000 + device.watts * device.nightHours / 1000));
-      return {
-        x: device.name,
-        y: usage
-      };
-    })
-    .sort((a, b) => b.y - a.y);
-  };
-
   return (
     <ContainerComponent isDark={isDark} loadData={handleRefresh}>
       <Result isDark={isDark}>
@@ -106,6 +108,19 @@ const Report = () => {
               </SectionText>
               <SectionText isDark={isDark} style={{fontSize: 14}}>
                 {roundNumber(getDayPrice())} {currency}
+              </SectionText>
+            </ResultInfo>
+          </ResultItem>
+          <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
+            <ResultHeader isDark={isDark}>
+              <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perWeek')}</SectionText>
+            </ResultHeader>
+            <ResultInfo isDark={isDark}>
+              <SectionText isDark={isDark} style={{fontSize: 14}}>
+                {roundNumber(getDaykWh() * 7)} kWh
+              </SectionText>
+              <SectionText isDark={isDark} style={{fontSize: 14}}>
+                {roundNumber(getDayPrice() * 7)} {currency}
               </SectionText>
             </ResultInfo>
           </ResultItem>
@@ -146,26 +161,40 @@ const Report = () => {
           style={{
             labels: {
               fill: isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor,
+            },
+            data: {
+              fillOpacity: 0.9, stroke: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, strokeWidth: 1
             }
           }}
           labels={() => null}
           height={300}
+          
         />
       </PieChart>
       <DeviceList>
-        {devices
-          .sort((a, b) => {
-            const usageA = plan === 'fixed' ? (a.watts * a.quantity * a.hours) / 1000 : (a.quantity * (a.watts * a.dayHours / 1000 + a.watts * a.nightHours / 1000));
-            const usageB = plan === 'fixed' ? (b.watts * b.quantity * b.hours) / 1000 : (b.quantity * (b.watts * b.dayHours / 1000 + b.watts * b.nightHours / 1000));
-            return usageB - usageA;
-          })
-          .map((device, index) => (
+      {devices.length === 0 ? (
+        <DeviceItem style={{backgroundColor: isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor}}>
+          <SectionText isDark={isDark}>
+            {i18n.t('deviceListEmpty')}
+          </SectionText>
+        </DeviceItem>
+      ) : (
+        <>
+          {devices
+            .sort((a, b) => {
+              const usageA = plan === 'fixed' ? (a.watts * a.quantity * a.hours) / 1000 : (a.quantity * (a.watts * a.dayHours / 1000 + a.watts * a.nightHours / 1000));
+              const usageB = plan === 'fixed' ? (b.watts * b.quantity * b.hours) / 1000 : (b.quantity * (b.watts * b.dayHours / 1000 + b.watts * b.nightHours / 1000));
+              return usageB - usageA;
+            })
+            .map((device, index) => (
             <DeviceItem key={index} bgColor={colorScale[index % colorScale.length]}>
               <SectionText isDark={isDark}>
                 {device.name}: {roundNumber(plan === 'fixed' ? (device.watts * device.quantity * device.hours) / 1000 : (device.quantity * (device.watts * device.dayHours / 1000 + device.watts * device.nightHours / 1000)))} kWh
               </SectionText>
             </DeviceItem>
           ))}
+        </>)}
+        
       </DeviceList>
     </ContainerComponent>
   );

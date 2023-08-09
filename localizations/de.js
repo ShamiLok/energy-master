@@ -19,6 +19,10 @@ const de = {
   lightThemeSet: "Helle Themen gewählt",
   darkThemeSet: "Dunkle Themen gewählt",
   report: "Bericht",
+  perDay: "Pro Tag",
+  perWeek: "Pro Woche",
+  perMonth: "Pro Monat",
+  perYear: "Pro Jahr",
 
   //Settings
   main: "Haupt",
@@ -53,9 +57,6 @@ const de = {
   consumption: "Gesamtverbrauch:",
   deviceList: "Geräteliste:",
   choosePrice: "Wählen Sie den Preis pro kWh in den Einstellungen",
-  perDay: "Pro Tag",
-  perMonth: "Pro Monat",
-  perYear: "Pro Jahr",
   addDevice: "Elektrisches Gerät hinzufügen",
   add: "Hinzufügen",
   deviceAdded: "Gerät wurde hinzugefügt",

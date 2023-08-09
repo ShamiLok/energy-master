@@ -19,6 +19,10 @@ const en = {
   lightThemeSet: "Light theme set",
   darkThemeSet: "Dark theme set",
   report: "Report",
+  perDay: "Per day",
+  perWeek: "Per week",
+  perMonth: "Per month",
+  perYear: "Per year",
 
   //Settings
   main: "Main",
@@ -53,9 +57,6 @@ const en = {
   consumption: "Total Consumption:",
   deviceList: "Device List:",
   choosePrice: "Select the price per kWh in settings",
-  perDay: "Per day",
-  perMonth: "Per month",
-  perYear: "Per year",
   addDevice: "Add device",
   add: "Add",
   deviceAdded: "Device has been added",

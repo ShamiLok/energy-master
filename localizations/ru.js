@@ -19,6 +19,10 @@ const ru = {
   lightThemeSet: "Установлена светлая тема",
   darkThemeSet: "Установлена темная тема",
   report: "Отчет",
+  perDay: "В день",
+  perWeek: "В неделю",
+  perMonth: "В месяц",
+  perYear: "В год",
 
   //Settings
   main: "Основные",
@@ -53,9 +57,6 @@ const ru = {
   consumption: "Общее потребление:",
   deviceList: "Список устройств:",
   choosePrice: "Выберите цену за кВт в настройках",
-  perDay: "В день",
-  perMonth: "В месяц",
-  perYear: "В год",
   addDevice: "Добавить электроустройство",
   add: "Добавить",
   deviceAdded: "Устройство было добавлено",
