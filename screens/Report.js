@@ -16,8 +16,6 @@ const Report = () => {
     currency,
     price,
     plan,
-    dayPrice,
-    nightPrice,
     devices,
     loadData
   } = useContext(ThemeContext);
@@ -76,7 +74,7 @@ const Report = () => {
     if(plan === 'fixed'){
       return devices.reduce((total, device) => total + device.watts * device.quantity * device.hours, 0) / 1000 * price;
     } else {
-      return devices.reduce((total, device) => total + device.quantity * (device.watts * device.dayHours / 1000 * dayPrice + device.watts * device.nightHours / 1000 * nightPrice), 0);
+      return devices.reduce((total, device) => total + device.quantity * (device.watts * device.dayHours / 1000 * price[0] + device.watts * device.nightHours / 1000 * price[1]), 0);
     }
   };
 

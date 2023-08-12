@@ -10,9 +10,7 @@ import SectionText from './SectionText';
 
 import { i18n } from '../localizations/i18n'
 
-const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
-  const [editIndex, setEditIndex] = useState(-1);
-  
+const ListItems = ({ devices, plan, isDark, setDevices, editIndex, setEditIndex }) => {
   const [editedName, setEditedName] = useState('');
   const [editedWatts, setEditedWatts] = useState('');
   const [editedQuantity, setEditedQuantity] = useState('');
@@ -21,6 +19,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
   const [editedNightHours, setEditedNightHours] = useState('');
 
   const removeDevice = async (index) => {
+    editIndex === index && setEditIndex(-1)
     const updatedDevices = devices.filter((_, i) => i !== index);
     setDevices(updatedDevices);
     await AsyncStorage.setItem('devices', JSON.stringify(updatedDevices));
@@ -72,22 +71,21 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
   }
   
   const hoursFormat = (hours) => {
-    if(language == 'ru'){
-      if(hours == 1) {
-        return 'час'
-      } else if (hours < 5) {
-        return 'часа'
-      } else {
-        return 'часов'
-      }
+    if(hours == 1) {
+      return i18n.t('hour')
     } else {
-      if(hours == 1) {
-        return i18n.t('hour')
-      } else {
-        return i18n.t('hours')
+      return i18n.t('hours')
+    }
+  }
+
+  const validCheck = (text) => {
+    let s = text
+    if(s.length > 1){
+      while(s.charAt(0) === '0'){
+        s = s.substring(1);
       }
     }
-    
+    return s
   }
 
   return (
@@ -181,7 +179,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                       placeholder={i18n.t('watts')}
                       placeholderTextColor="#808080"
                       value={editedWatts}
-                      onChangeText={setEditedWatts}
+                      onChangeText={(text) => setEditedWatts(validCheck(text))}
                       isDark={isDark}
                       keyboardType="numeric"
                       ref={(input) => { this.secondEditTextInput = input; }}
@@ -194,7 +192,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                       placeholder={i18n.t('quantity')}
                       placeholderTextColor="#808080"
                       value={editedQuantity}
-                      onChangeText={setEditedQuantity}
+                      onChangeText={(text) => setEditedQuantity(validCheck(text))}
                       isDark={isDark}
                       keyboardType="numeric"
                       ref={(input) => { this.thirdEditTextInput = input; }}
@@ -209,8 +207,9 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                         placeholder={i18n.t('workingHours')}
                         placeholderTextColor="#808080"
                         value={editedHours}
-                        onChangeText={(text) => text <= 24 ? setEditedHours(text) : setEditedHours('24')}
+                        onChangeText={(text) => text <= 24 ? setEditedHours(validCheck(text)) : setEditedHours('24')}
                         isDark={isDark}
+                        keyboardType="numeric"
                         ref={(input) => { this.forthEditTextInput = input; }}
                       />
                     </SectionEdit>
@@ -223,7 +222,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                           placeholder={i18n.t('peakHours')}
                           placeholderTextColor="#808080"
                           value={editedDayHours}
-                          onChangeText={(text) => text <= 16 ? setEditedDayHours(text) : setEditedDayHours('16')}
+                          onChangeText={(text) => text <= 16 ? setEditedDayHours(validCheck(text)) : setEditedDayHours('16')}
                           isDark={isDark}
                           keyboardType="numeric"
                           ref={(input) => { this.forthEditTextInput = input; }}
@@ -236,7 +235,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, language }) => {
                           placeholder={i18n.t('offPeakHours')}
                           placeholderTextColor="#808080"
                           value={editedNightHours}
-                          onChangeText={(text) => text <= 8 ? setEditedNightHours(text) : setEditedNightHours('8')}
+                          onChangeText={(text) => text <= 8 ? setEditedNightHours(validCheck(text)) : setEditedNightHours('8')}
                           isDark={isDark}
                           keyboardType="numeric"
                           ref={(input) => { this.fifthEditTextInput = input; }}

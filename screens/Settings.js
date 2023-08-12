@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import { Alert, Switch, ToastAndroid, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -22,8 +22,6 @@ function Settings() {
     currency, setCurrency,
     price, setPrice,
     plan, setPlan,
-    dayPrice, setDayPrice,
-    nightPrice, setNightPrice,
     setDevices,
     loadData,
   } = useContext(ThemeContext);
@@ -51,6 +49,11 @@ function Settings() {
         text: i18n.t('yes'),
         onPress: async () => {
           setPlan(plan)
+          if(plan === 'fixed'){
+            setPrice(['0'])
+          } else {
+            setPrice(['0', '0'])
+          }
           await AsyncStorage.setItem('plan', plan);
           setDevices([]);
           await AsyncStorage.removeItem('devices');
@@ -63,18 +66,21 @@ function Settings() {
     ]);
   }
 
-  const handlePriceChange = async (text, type) => {
-    if(type === 'fixed'){
-      setPrice(text);
-      await AsyncStorage.setItem('price', text);
-    } else if(type === 'dual-day'){
-      setDayPrice(text)
-      await AsyncStorage.setItem('dayPrice', text);
+  const handlePriceChange = async (text, index) => {
+    if (plan === 'fixed') {
+      setPrice([text]);
     } else {
-      setNightPrice(text)
-      await AsyncStorage.setItem('nightPrice', text);
+      setPrice(prevPrice => {
+        const newPrice = [...prevPrice];
+        newPrice[index] = text;
+        return newPrice;
+      });
     }
   };
+
+  useEffect(() => {
+    AsyncStorage.setItem('price', JSON.stringify(price));
+  }, [price]);
 
   const handleDefault = () => {
     Alert.alert(i18n.t('resetSettings'), i18n.t('confirmReset'), [
@@ -109,6 +115,16 @@ function Settings() {
       ToastAndroid.SHORT,
       ToastAndroid.BOTTOM,
     );
+  }
+
+  const validCheck = (text) => {
+    let s = text
+    if(s.length > 1){
+      while(s.charAt(0) === '0'){
+        s = s.substring(1);
+      }
+    }
+    return s
   }
 
   return (
@@ -200,8 +216,8 @@ function Settings() {
             <SectionText isDark={isDark}>{i18n.t('pricePerkWh')}</SectionText>
             <Input
               isDark={isDark}
-              value={String(price)}
-              onChangeText={(text) => handlePriceChange(text, 'fixed')}
+              value={String(price[0])}
+              onChangeText={(text) => handlePriceChange(validCheck(text))}
               ref={fixedTextInputRef}
               keyboardType="numeric"
               maxLength={15}
@@ -214,11 +230,14 @@ function Settings() {
               onPress={() => handleFocus(dayTextInputRef)}
               style={{height: 60}}
             >
-              <SectionText isDark={isDark}>{i18n.t('planPeak')}</SectionText>
+              <View>
+                <SectionText isDark={isDark}>{i18n.t('planPeak')}</SectionText>
+                <SectionText isDark={isDark} style={{fontSize: 14}}>7:00-23:00</SectionText>
+              </View>
               <Input
                 isDark={isDark}
-                value={String(dayPrice)}
-                onChangeText={(text) => handlePriceChange(text, 'dual-day')}
+                value={String(price[0])}
+                onChangeText={(text) => handlePriceChange(validCheck(text), '0')}
                 ref={dayTextInputRef}
                 keyboardType="numeric"
                 maxLength={15}
@@ -230,11 +249,14 @@ function Settings() {
               onPress={() => handleFocus(nightTextInputRef)}
               style={{height: 60}}
             >
-              <SectionText isDark={isDark}>{i18n.t('planOffPeak')}</SectionText>
+              <View>
+                <SectionText isDark={isDark}>{i18n.t('planOffPeak')}</SectionText>
+                <SectionText isDark={isDark} style={{fontSize: 14}}>23:00-7:00</SectionText>
+              </View>
               <Input
                 isDark={isDark}
-                value={String(nightPrice)}
-                onChangeText={(text) => handlePriceChange(text, 'dual-night')}
+                value={String(price[1])}
+                onChangeText={(text) => handlePriceChange(validCheck(text), '1')}
                 ref={nightTextInputRef}
                 keyboardType="numeric"
                 maxLength={15}

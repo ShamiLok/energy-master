@@ -30,10 +30,10 @@ export default function App() {
 
   const [language, setLanguage] = useState('');
   const [currency, setCurrency] = useState('');
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState([]);
   const [plan, setPlan] = useState('');
-  const [dayPrice, setDayPrice] = useState('');
-  const [nightPrice, setNightPrice] = useState('');
+  // const [dayPrice, setDayPrice] = useState('');
+  // const [nightPrice, setNightPrice] = useState('');
   const [devices, setDevices] = useState([]);
 
   const [{ currencyCode, languageCode }] = getLocales();
@@ -50,8 +50,6 @@ export default function App() {
       const savedCurrency = await AsyncStorage.getItem('currency');
       const savedLangugae = await AsyncStorage.getItem('language');
       const savedPrice = await AsyncStorage.getItem('price');
-      const savedDayPrice = await AsyncStorage.getItem('dayPrice');
-      const savedNightPrice = await AsyncStorage.getItem('nightPrice');
       const savedPlan = await AsyncStorage.getItem('plan');
       const savedDevices = await AsyncStorage.getItem('devices');
 
@@ -84,19 +82,7 @@ export default function App() {
       if (savedPrice !== null) {
         setPrice(JSON.parse(savedPrice));
       } else {
-        setPrice('0');
-      }
-
-      if (savedDayPrice !== null) {
-        setDayPrice(JSON.parse(savedDayPrice));
-      } else {
-        setDayPrice('0');
-      }
-
-      if (savedNightPrice !== null) {
-        setNightPrice(JSON.parse(savedNightPrice));
-      } else {
-        setNightPrice('0');
+        setPrice(plan === 'fixed' ? ['0'] : ['0', '0']);
       }
       
       if(savedTheme !== null){
@@ -128,8 +114,6 @@ export default function App() {
       currency, setCurrency,
       price, setPrice,
       plan, setPlan,
-      dayPrice, setDayPrice,
-      nightPrice, setNightPrice,
       devices, setDevices,
       loadData
     }}>
