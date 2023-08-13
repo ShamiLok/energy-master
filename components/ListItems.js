@@ -100,7 +100,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, editIndex, setEditIndex 
             <ListItemsContainer key={index} isDark={isDark}>
               <ItemSection isDark={isDark} style={{position: 'relative', paddingBottom: 0}}>
                 <View>
-                  <SectionText isDark={isDark}>{item.name}</SectionText>
+                  <SectionText isDark={isDark} style={{fontSize: 18, textTransform: 'uppercase'}}>{item.name}</SectionText>
                   {plan === 'fixed' ? (
                     <>
                       <SectionText isDark={isDark}>
@@ -129,24 +129,25 @@ const ListItems = ({ devices, plan, isDark, setDevices, editIndex, setEditIndex 
                   <TextInput
                     style={{ color: isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor }}
                     value={item.quantity.toString()}
-                    onChangeText={(newQuantity) => updateQuantity(index, newQuantity)}
+                    onChangeText={(newQuantity) => updateQuantity(index, validCheck(newQuantity))}
                     keyboardType="numeric"
+                    maxLength={5}
                   />
-                  <SectionText isDark={isDark}> {i18n.t('quantityUnit')}</SectionText>
+                  <SectionText isDark={isDark} style={{fontSize: 14}}> {i18n.t('quantityUnit')}</SectionText>
                 </ListItemQuantity>
 
                 <ListItemEdit>
                   {editIndex === index ? (
                     <Feather
                       name="check"
-                      size={20}
+                      size={24}
                       color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor}
                       onPress={() => editDevice(index)}
                     />
                   ) : (
                     <Feather
                       name="edit-3"
-                      size={20}
+                      size={19}
                       color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor}
                       onPress={() => editDevice(index)}
                     />
@@ -171,6 +172,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, editIndex, setEditIndex 
                       onChangeText={setEditedName}
                       isDark={isDark}
                       onSubmitEditing={() => { this.secondEditTextInput.focus(); }}
+                      maxLength={19}
                     />
                   </SectionEdit>
                   <SectionEdit>
@@ -184,6 +186,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, editIndex, setEditIndex 
                       keyboardType="numeric"
                       ref={(input) => { this.secondEditTextInput = input; }}
                       onSubmitEditing={() => { this.thirdEditTextInput.focus(); }}
+                      maxLength={5}
                     />
                   </SectionEdit>
                   <SectionEdit>
@@ -197,6 +200,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, editIndex, setEditIndex 
                       keyboardType="numeric"
                       ref={(input) => { this.thirdEditTextInput = input; }}
                       onSubmitEditing={() => { this.forthEditTextInput.focus(); }}
+                      maxLength={5}
                     />
                   </SectionEdit>
                   
@@ -211,6 +215,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, editIndex, setEditIndex 
                         isDark={isDark}
                         keyboardType="numeric"
                         ref={(input) => { this.forthEditTextInput = input; }}
+                        maxLength={2}
                       />
                     </SectionEdit>
                     
@@ -227,6 +232,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, editIndex, setEditIndex 
                           keyboardType="numeric"
                           ref={(input) => { this.forthEditTextInput = input; }}
                           onSubmitEditing={() => { this.fifthEditTextInput.focus(); }}
+                          maxLength={2}
                         />
                       </SectionEdit>
                       <SectionEdit>
@@ -239,6 +245,7 @@ const ListItems = ({ devices, plan, isDark, setDevices, editIndex, setEditIndex 
                           isDark={isDark}
                           keyboardType="numeric"
                           ref={(input) => { this.fifthEditTextInput = input; }}
+                          maxLength={2}
                         />
                       </SectionEdit>
                       
@@ -269,12 +276,14 @@ const ListItemQuantity = styled.View`
   position: absolute;
   right: 100px;
   top: ${(props) => (props.plan === 'fixed' ? '30px' : '42px')};
+  align-items: center;
 `;
 
 const ListItemEdit = styled.View`
   flex-direction: row;
   justify-content: space-between;
   width: 60px;
+  align-items: center;
 `;
 
 const SectionEdit = styled.View`

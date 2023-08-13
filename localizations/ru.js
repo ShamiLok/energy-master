@@ -65,7 +65,7 @@ const ru = {
   deviceListEmpty: "Устройства еще не были добавлены",
   deviceDeleted: "Устройство было удалено",
   watts: "Мощность, Вт",
-  quantityUnit: "шт",
+  quantityUnit: "шт.",
 
 };
 export default ru;

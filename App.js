@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ToastAndroid, StatusBar } from "react-native";
+import { ToastAndroid, StatusBar, Appearance, ActivityIndicator, View} from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   SimpleLineIcons,
@@ -25,23 +25,27 @@ import { i18n } from "./localizations/i18n";
 const Drawer = createDrawerNavigator();
 
 export default function App() {
-
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(Appearance.getColorScheme() === 'dark')
 
   const [language, setLanguage] = useState('');
   const [currency, setCurrency] = useState('');
   const [price, setPrice] = useState([]);
   const [plan, setPlan] = useState('');
-  // const [dayPrice, setDayPrice] = useState('');
-  // const [nightPrice, setNightPrice] = useState('');
   const [devices, setDevices] = useState([]);
 
+  const [loading, setLoading ] = useState(false);
+
   const [{ currencyCode, languageCode }] = getLocales();
-  
+
   i18n.locale = language;
-  
-  useEffect(() => {
-    loadData();
+
+  useEffect(  () => {
+    const wrapper = async () => {
+      setLoading(true);
+      await loadData();
+      setLoading(false)
+    }
+    wrapper()
   }, []);
 
   const loadData = async () => {
@@ -108,94 +112,103 @@ export default function App() {
   }
 
   return (
-    <ThemeContext.Provider value={{
-      isDark, handleIsDark,
-      language, setLanguage,
-      currency, setCurrency,
-      price, setPrice,
-      plan, setPlan,
-      devices, setDevices,
-      loadData
-    }}>
-      <StatusBar backgroundColor="#f4511e" />
-      <NavigationContainer>
-        <Drawer.Navigator
-          drawerContent={
-            (props) => {
-              return (
-                <SafeAreaView>
-                  <DrawerItemList {...props} />
-                </SafeAreaView>
-              )
-            }
-          }
-          screenOptions={{
-            drawerStyle: {
-              backgroundColor: isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor,
-              width: 250
-            },
-            headerStyle: {
-              backgroundColor: "#f4511e",
-            },
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-              fontWeight: "bold"
-            },
-            drawerLabelStyle: {
-              color: isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor
-            },
-            drawerActiveBackgroundColor: isDark ? DARK_COLORS.activeBackgroundColor : LIGHT_COLORS.activeBackgroundColor
-          }}
-        >
-          <Drawer.Screen
-            name="Home"
-            options={{
-              drawerLabel: i18n.t('home'),
-              title: i18n.t('home'),
-              drawerIcon: () => (
-                <SimpleLineIcons name="home" size={20} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
-              )
-            }}
-            component={Home}
-          />
-
-          <Drawer.Screen
-            name="Report"
-            options={{
-              drawerLabel: i18n.t('report'),
-              title: i18n.t('report'),
-              drawerIcon: () => (
-                <Foundation name="results" size={22} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
-              )
-            }}
-            component={Report}
-          />
-
-          <Drawer.Screen
-            name="Settings"
-            options={{
-              drawerLabel: i18n.t('settings'),
-              title: i18n.t('settings'),
-              drawerIcon: () => (
-                <SimpleLineIcons name="settings" size={20} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
-              )
-            }}
-            component={Settings}
-          />
-
-          <Drawer.Screen
-            name="About"
-            options={{
-              drawerLabel: i18n.t('about'),
-              title: i18n.t('about'),
-              drawerIcon: () => (
-                <Ionicons name="information-circle-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
-              )
-            }}
-            component={About}
-          />
-        </Drawer.Navigator>
-      </NavigationContainer>
-    </ThemeContext.Provider>
+    <>
+      {loading ? (
+        <View style={{justifyContent: 'center', flex: 1, backgroundColor: isDark ? DARK_COLORS.backgroundColor : LIGHT_COLORS.backgroundColor}}>
+          <ActivityIndicator size="large" color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
+        </View>
+      ) : (
+        <ThemeContext.Provider value={{
+          isDark, handleIsDark,
+          language, setLanguage,
+          currency, setCurrency,
+          price, setPrice,
+          plan, setPlan,
+          devices, setDevices,
+          loadData
+        }}>
+          <StatusBar backgroundColor="#f4511e" />
+          <NavigationContainer>
+            <Drawer.Navigator
+              drawerContent={
+                (props) => {
+                  return (
+                    <SafeAreaView>
+                      <DrawerItemList {...props} />
+                    </SafeAreaView>
+                  )
+                }
+              }
+              screenOptions={{
+                drawerStyle: {
+                  backgroundColor: isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor,
+                  width: 250
+                },
+                headerStyle: {
+                  backgroundColor: "#f4511e",
+                },
+                headerTintColor: "#fff",
+                headerTitleStyle: {
+                  fontWeight: "bold"
+                },
+                drawerLabelStyle: {
+                  color: isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor
+                },
+                drawerActiveBackgroundColor: isDark ? DARK_COLORS.activeBackgroundColor : LIGHT_COLORS.activeBackgroundColor
+              }}
+            >
+              <Drawer.Screen
+                name="Home"
+                options={{
+                  drawerLabel: i18n.t('home'),
+                  title: i18n.t('home'),
+                  drawerIcon: () => (
+                    <SimpleLineIcons name="home" size={20} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
+                  )
+                }}
+                component={Home}
+              />
+    
+              <Drawer.Screen
+                name="Report"
+                options={{
+                  drawerLabel: i18n.t('report'),
+                  title: i18n.t('report'),
+                  drawerIcon: () => (
+                    <Foundation name="results" size={22} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
+                  )
+                }}
+                component={Report}
+              />
+    
+              <Drawer.Screen
+                name="Settings"
+                options={{
+                  drawerLabel: i18n.t('settings'),
+                  title: i18n.t('settings'),
+                  drawerIcon: () => (
+                    <SimpleLineIcons name="settings" size={20} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
+                  )
+                }}
+                component={Settings}
+              />
+    
+              <Drawer.Screen
+                name="About"
+                options={{
+                  drawerLabel: i18n.t('about'),
+                  title: i18n.t('about'),
+                  drawerIcon: () => (
+                    <Ionicons name="information-circle-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
+                  )
+                }}
+                component={About}
+              />
+            </Drawer.Navigator>
+          </NavigationContainer>
+        </ThemeContext.Provider>
+        
+      )}
+    </>
   );
 }
