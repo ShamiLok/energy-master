@@ -24,6 +24,7 @@ function Settings() {
     plan, setPlan,
     setDevices,
     loadData,
+    languages
   } = useContext(ThemeContext);
 
   const fixedTextInputRef = useRef(null);
@@ -143,12 +144,12 @@ function Settings() {
             onValueChange={handleLanguageChange}
             ref={pickerLanguageRef}
           >
-            <Picker.Item label="English" value="en" />
-            <Picker.Item label="Russian" value="ru" />
-            <Picker.Item label="German" value="de" />
+            <Picker.Item label={languages.en.label} value={languages.en.value} />
+            <Picker.Item label={languages.ru.label} value={languages.ru.value} />
+            <Picker.Item label={languages.de.label} value={languages.de.value} />
           </Picker> 
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <SectionText isDark={isDark} style={{paddingRight: 20}}>{language === 'en' ? 'English' : (language === 'ru' ? 'Russian' : 'German')}</SectionText>
+            <SectionText isDark={isDark} style={{paddingRight: 20}}>{languages[language].label}</SectionText>
             <AntDesign name="caretdown" size={9} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
           </View>
         </ItemSection>

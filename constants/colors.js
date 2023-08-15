@@ -20,6 +20,6 @@ export const LIGHT_COLORS = {
     borderColor: "#E5E5E5",
     boolColor: 'black',
     refreshColor: '#f0fff0',
-    screenIconColor: "#030303",
+    screenIconColor: "#383838",
     activeBackgroundColor: '#E0E0E0'
   };

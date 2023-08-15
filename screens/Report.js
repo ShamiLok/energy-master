@@ -10,6 +10,8 @@ import SectionText from '../components/SectionText';
 
 import { i18n } from '../localizations/i18n';
 
+import { FontAwesome5, MaterialCommunityIcons  } from '@expo/vector-icons'; 
+
 const Report = () => {
   const { 
     isDark,
@@ -72,7 +74,7 @@ const Report = () => {
 
   const getDayPrice = () => {
     if(plan === 'fixed'){
-      return devices.reduce((total, device) => total + device.watts * device.quantity * device.hours, 0) / 1000 * price;
+      return devices.reduce((total, device) => total + device.quantity * (device.watts * device.hours / 1000 * price), 0);
     } else {
       return devices.reduce((total, device) => total + device.quantity * (device.watts * device.dayHours / 1000 * price[0] + device.watts * device.nightHours / 1000 * price[1]), 0);
     }
@@ -101,12 +103,22 @@ const Report = () => {
               <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perDay')}</SectionText>
             </ResultHeader>
             <ResultInfo isDark={isDark}>
-              <SectionText isDark={isDark} style={{fontSize: 14}}>
-                {roundNumber(getDaykWh())} kWh
-              </SectionText>
-              <SectionText isDark={isDark} style={{fontSize: 14}}>
-                {roundNumber(getDayPrice())} {currency}
-              </SectionText>
+              <ResultInfoItem>
+                <IconContainer>
+                  <MaterialCommunityIcons name="lightning-bolt" size={15} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor}/>
+                </IconContainer>
+                <SectionText isDark={isDark} style={{fontSize: 14}}>
+                  {roundNumber(getDaykWh())} kW⋅h
+                </SectionText>
+              </ResultInfoItem>
+              <ResultInfoItem>
+                <IconContainer>
+                  <FontAwesome5 name="coins" size={11} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} style={{paddingHorizontal: 2}}/> 
+                </IconContainer>
+                <SectionText isDark={isDark} style={{fontSize: 14}}>
+                  {roundNumber(getDayPrice())} {currency}
+                </SectionText>
+              </ResultInfoItem>
             </ResultInfo>
           </ResultItem>
           <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
@@ -114,12 +126,22 @@ const Report = () => {
               <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perWeek')}</SectionText>
             </ResultHeader>
             <ResultInfo isDark={isDark}>
-              <SectionText isDark={isDark} style={{fontSize: 14}}>
-                {roundNumber(getDaykWh() * 7)} kWh
-              </SectionText>
-              <SectionText isDark={isDark} style={{fontSize: 14}}>
-                {roundNumber(getDayPrice() * 7)} {currency}
-              </SectionText>
+              <ResultInfoItem>
+                <IconContainer>
+                  <MaterialCommunityIcons name="lightning-bolt" size={15} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor}/>
+                </IconContainer>
+                <SectionText isDark={isDark} style={{fontSize: 14}}>
+                  {roundNumber(getDaykWh() * 7)} kW⋅h
+                </SectionText>
+              </ResultInfoItem>
+              <ResultInfoItem>
+                <IconContainer>
+                  <FontAwesome5 name="coins" size={11} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} style={{paddingHorizontal: 2}}/> 
+                </IconContainer>
+                <SectionText isDark={isDark} style={{fontSize: 14}}>
+                  {roundNumber(getDayPrice() * 7)} {currency}
+                </SectionText>
+              </ResultInfoItem>
             </ResultInfo>
           </ResultItem>
           <ResultItem style={{borderBottomColor: isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor, borderBottomWidth: 1}}>
@@ -127,12 +149,22 @@ const Report = () => {
               <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perMonth')}</SectionText>
             </ResultHeader>
             <ResultInfo isDark={isDark}>
-              <SectionText isDark={isDark} style={{fontSize: 14}}>
-                {roundNumber(getDaykWh() * 30)} kWh
-              </SectionText>
-              <SectionText isDark={isDark} style={{fontSize: 14}}>
-                {roundNumber(getDayPrice() * 30)} {currency}
-              </SectionText>
+              <ResultInfoItem>
+                <IconContainer>
+                  <MaterialCommunityIcons name="lightning-bolt" size={15} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor}/>
+                </IconContainer>
+                <SectionText isDark={isDark} style={{fontSize: 14}}>
+                  {roundNumber(getDaykWh() * 30)} kW⋅h
+                </SectionText>
+              </ResultInfoItem>
+              <ResultInfoItem>
+                <IconContainer>
+                  <FontAwesome5 name="coins" size={11} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} style={{paddingHorizontal: 2}}/> 
+                </IconContainer>
+                <SectionText isDark={isDark} style={{fontSize: 14}}>
+                  {roundNumber(getDayPrice() * 30)} {currency}
+                </SectionText>
+              </ResultInfoItem>
             </ResultInfo>
           </ResultItem>
           <ResultItem>
@@ -140,12 +172,22 @@ const Report = () => {
               <SectionText isDark={isDark} style={{fontWeight: 'bold'}}>{i18n.t('perYear')}</SectionText>
             </ResultHeader>
             <ResultInfo isDark={isDark}>
-              <SectionText isDark={isDark} style={{fontSize: 14}}>
-                {roundNumber(getDaykWh() * 365)} kWh
-              </SectionText>
-              <SectionText isDark={isDark} style={{fontSize: 14}}>
-                {roundNumber(getDayPrice() * 365)} {currency}
-              </SectionText>
+              <ResultInfoItem>
+                <IconContainer>
+                  <MaterialCommunityIcons name="lightning-bolt" size={15} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor}/>
+                </IconContainer>
+                <SectionText isDark={isDark} style={{fontSize: 14}}>
+                  {roundNumber(getDaykWh() * 365)} kW⋅h
+                </SectionText>
+              </ResultInfoItem>
+              <ResultInfoItem>
+                <IconContainer>
+                  <FontAwesome5 name="coins" size={11} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} style={{paddingHorizontal: 2}}/> 
+                </IconContainer>
+                <SectionText isDark={isDark} style={{fontSize: 14}}>
+                  {roundNumber(getDayPrice() * 365)} {currency}
+                </SectionText>
+              </ResultInfoItem>
             </ResultInfo>
           </ResultItem>
         </ResultContainer>
@@ -199,13 +241,13 @@ const Report = () => {
 };
 
 const Result = styled.View`
-    position: relative;
-    padding: 0 10px;
-    border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
-    border-radius: 10px;
-    overflow: hidden;
-    background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
-    margin: 10px 0;
+  position: relative;
+  padding: 0 10px;
+  border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
+  margin: 10px 0;
 `;
 
 const ResultContainer = styled.View`
@@ -215,15 +257,24 @@ const ResultItem = styled.View`
 `;
 
 const ResultHeader = styled.View`
-    padding-top: 5px;
-    align-items: center;
-    background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
+  padding-top: 5px;
+  align-items: center;
+  background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
 `;
 
 const ResultInfo = styled.View`
-    padding: 10px;
-    flex-direction: column;
-    justify-content: space-around;
+  padding: 10px;
+  flex-direction: column;
+`;
+
+const ResultInfoItem = styled.View`
+  flex-direction: row;
+`;
+
+const IconContainer = styled.View`
+  margin-right: 4px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const PieChart = styled.View`

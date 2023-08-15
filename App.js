@@ -39,6 +39,22 @@ export default function App() {
 
   i18n.locale = language;
 
+  
+  const languages = {
+    en: {
+      label: "English",
+      value: 'en'
+    },
+    ru: {
+      label: "Russian",
+      value: 'ru'
+    },
+    de: {
+      label: "German",
+      value: 'de'
+    }
+  }
+
   useEffect(  () => {
     const wrapper = async () => {
       setLoading(true);
@@ -52,7 +68,7 @@ export default function App() {
     try {
       const savedTheme = await AsyncStorage.getItem("theme");
       const savedCurrency = await AsyncStorage.getItem('currency');
-      const savedLangugae = await AsyncStorage.getItem('language');
+      const savedLanguage = await AsyncStorage.getItem('language');
       const savedPrice = await AsyncStorage.getItem('price');
       const savedPlan = await AsyncStorage.getItem('plan');
       const savedDevices = await AsyncStorage.getItem('devices');
@@ -64,11 +80,16 @@ export default function App() {
         await AsyncStorage.setItem('currency', currencyCode);
       }
 
-      if (savedLangugae) {
-        setLanguage(savedLangugae);
+      if (savedLanguage) {
+        setLanguage(savedLanguage);
       } else {
-        setLanguage(languageCode);
-        await AsyncStorage.setItem('langugage', languageCode);
+        if(languages.languageCode){
+          setLanguage(languageCode);
+          await AsyncStorage.setItem('language', languageCode);
+        } else {
+          setLanguage('en');
+          await AsyncStorage.setItem('language', 'en');
+        }
       }
 
       if (savedPlan) {
@@ -125,7 +146,8 @@ export default function App() {
           price, setPrice,
           plan, setPlan,
           devices, setDevices,
-          loadData
+          loadData,
+          languages
         }}>
           <StatusBar backgroundColor="#f4511e" />
           <NavigationContainer>

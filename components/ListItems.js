@@ -290,16 +290,18 @@ const SectionEdit = styled.View`
   flex-direction: row;
   align-items: center;
   margin: 0 10px 10px 10px;
+  justify-content: space-between;
 `;
 
 const Input = styled.TextInput`
-  flex: 1;
+  /* flex: 1; */
   border: 1px solid ${(props) => props.isDark ? DARK_COLORS.borderColor : LIGHT_COLORS.borderColor};
   border-radius: 10px;
   padding: 10px 15px;
   margin-left: 10px;
   color: ${(props) => props.isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor};
   background-color: ${(props) => props.isDark ? DARK_COLORS.backgroundColor : LIGHT_COLORS.backgroundColor};
+  width: 180px;
 `;
 
 

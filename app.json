@@ -2,7 +2,7 @@
   "expo": {
     "name": "Energy Master",
     "slug": "EnergyMaster",
-    "version": "v0.4.0",
+    "version": "v0.4.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

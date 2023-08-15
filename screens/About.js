@@ -26,30 +26,31 @@ const About = () => {
   };
 
   return (
-    <Container
-      isDark={isDark}
-      contentContainerStyle={{ padding: 20 }}
-      overScrollMode="never"
-    >
-      <SectionText isDark={isDark} style={{ fontSize: 24 }}>{i18n.t('energyMaster')}</SectionText>
-      <SectionText style={{ marginBottom: 10 }} isDark={isDark}>{i18n.t('version')}: v0.4.0 alpha</SectionText>
-      <ItemSection isDark={isDark}>
-        <SectionText isDark={isDark}>{i18n.t('rateApp')}</SectionText>
-        <ButtonComponent title={i18n.t('rate')} onPress={handleRateApp} />
-      </ItemSection>
-      <ItemSection isDark={isDark}>
-        <SectionText isDark={isDark}>{i18n.t('contactDeveloper')}</SectionText>
-        <ButtonComponent title={i18n.t('contact')} onPress={handleContactDeveloper} />
-      </ItemSection>
-      <ItemSection isDark={isDark}>
-        <SectionText isDark={isDark}>{i18n.t('checkUpdates')}</SectionText>
-        <ButtonComponent title={i18n.t('check')} onPress={handleCheckUpdates} />
-      </ItemSection>
+    <>
+      <Container
+        isDark={isDark}
+        contentContainerStyle={{ padding: 20 }}
+        overScrollMode="never"
+      >
+        <SectionText isDark={isDark} style={{ fontSize: 24 }}>{i18n.t('energyMaster')}</SectionText>
+        <SectionText style={{ marginBottom: 10 }} isDark={isDark}>{i18n.t('version')}: v0.4.1 alpha</SectionText>
+        <ItemSection isDark={isDark}>
+          <SectionText isDark={isDark} style={{fontSize: 14}}>{i18n.t('rateApp')}</SectionText>
+          <ButtonComponent title={i18n.t('rate')} onPress={handleRateApp} style={{width: 110}}/>
+        </ItemSection>
+        <ItemSection isDark={isDark}>
+          <SectionText isDark={isDark} style={{fontSize: 14}}>{i18n.t('contactDeveloper')}</SectionText>
+          <ButtonComponent title={i18n.t('contact')} onPress={handleContactDeveloper} style={{width: 110}}/>
+        </ItemSection>
+        <ItemSection isDark={isDark}>
+          <SectionText isDark={isDark} style={{fontSize: 14}}>{i18n.t('checkUpdates')}</SectionText>
+          <ButtonComponent title={i18n.t('check')} onPress={handleCheckUpdates} style={{width: 110}}/>
+        </ItemSection>
+      </Container>
       <Copyright>
         <SectionText isDark={isDark}>{i18n.t('copyright')}</SectionText>
       </Copyright>
-      
-    </Container>
+    </>
   );
 };
 
@@ -61,7 +62,8 @@ const Container = styled.ScrollView`
 
 const Copyright = styled.View`
     align-items: center;
-    margin-top: auto;
+    padding: 5px;
+    /* margin: 0 auto; */
 `;
 
 export default About;
