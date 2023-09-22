@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Linking } from 'react-native';
 import styled from 'styled-components/native';
 
 import ButtonComponent from '../components/Button';
@@ -18,7 +19,7 @@ const About = () => {
   };
 
   const handleContactDeveloper = () => {
-    
+    Linking.openURL('mailto:shmldevelop@gmail.com')
   };
 
   const handleCheckUpdates = () => {
@@ -34,18 +35,18 @@ const About = () => {
       >
         <SectionText isDark={isDark} style={{ fontSize: 24 }}>{i18n.t('energyMaster')}</SectionText>
         <SectionText style={{ marginBottom: 10 }} isDark={isDark}>{i18n.t('version')}: v0.4.1 alpha</SectionText>
-        <ItemSection isDark={isDark}>
+        {/* <ItemSection isDark={isDark}>
           <SectionText isDark={isDark} style={{fontSize: 14}}>{i18n.t('rateApp')}</SectionText>
           <ButtonComponent title={i18n.t('rate')} onPress={handleRateApp} style={{width: 110}}/>
-        </ItemSection>
+        </ItemSection> */}
         <ItemSection isDark={isDark}>
           <SectionText isDark={isDark} style={{fontSize: 14}}>{i18n.t('contactDeveloper')}</SectionText>
           <ButtonComponent title={i18n.t('contact')} onPress={handleContactDeveloper} style={{width: 110}}/>
         </ItemSection>
-        <ItemSection isDark={isDark}>
+        {/* <ItemSection isDark={isDark}>
           <SectionText isDark={isDark} style={{fontSize: 14}}>{i18n.t('checkUpdates')}</SectionText>
           <ButtonComponent title={i18n.t('check')} onPress={handleCheckUpdates} style={{width: 110}}/>
-        </ItemSection>
+        </ItemSection> */}
       </Container>
       <Copyright>
         <SectionText isDark={isDark}>{i18n.t('copyright')}</SectionText>

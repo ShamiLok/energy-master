@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ToastAndroid, StatusBar, Appearance, ActivityIndicator, View} from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import {
-  SimpleLineIcons,
-  Ionicons,
-  Foundation 
-} from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { DrawerItemList, createDrawerNavigator } from "@react-navigation/drawer";
@@ -185,7 +181,7 @@ export default function App() {
                   drawerLabel: i18n.t('home'),
                   title: i18n.t('home'),
                   drawerIcon: () => (
-                    <SimpleLineIcons name="home" size={20} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
+                    <Ionicons name="home-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
                   )
                 }}
                 component={Home}
@@ -197,7 +193,7 @@ export default function App() {
                   drawerLabel: i18n.t('report'),
                   title: i18n.t('report'),
                   drawerIcon: () => (
-                    <Foundation name="results" size={22} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
+                    <Ionicons name="pie-chart-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
                   )
                 }}
                 component={Report}
@@ -209,7 +205,7 @@ export default function App() {
                   drawerLabel: i18n.t('settings'),
                   title: i18n.t('settings'),
                   drawerIcon: () => (
-                    <SimpleLineIcons name="settings" size={20} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
+                    <Ionicons name="settings-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
                   )
                 }}
                 component={Settings}

@@ -15,7 +15,7 @@ const ContainerComponent = ({ isDark, children, loadData }) => {
   return (
     <Container
       isDark={isDark}
-      contentContainerStyle={{ padding: 20 }}
+      contentContainerStyle={{ padding: 18 }}
       overScrollMode="never"
       refreshControl={
         <RefreshControl

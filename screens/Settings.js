@@ -110,6 +110,18 @@ function Settings() {
     refHook.current.focus();
   }
 
+  const handleFocusInput = (index) => {
+    if(price[index] == 0){
+      handlePriceChange('', index)
+    }
+  }
+
+  const handleBlurInput = (index) => {
+    if(price[index] == ''){
+      handlePriceChange(0, index)
+    }
+  }
+
   const showToast = (message) => {
     ToastAndroid.showWithGravity(
       message,
@@ -219,6 +231,8 @@ function Settings() {
               isDark={isDark}
               value={String(price[0])}
               onChangeText={(text) => handlePriceChange(validCheck(text))}
+              onFocus={() => handleFocusInput(0)}
+              onBlur={() => handleBlurInput(0)}
               ref={fixedTextInputRef}
               keyboardType="numeric"
               maxLength={15}
@@ -239,6 +253,8 @@ function Settings() {
                 isDark={isDark}
                 value={String(price[0])}
                 onChangeText={(text) => handlePriceChange(validCheck(text), '0')}
+                onFocus={() => handleFocusInput(0)}
+                onBlur={() => handleBlurInput(0)}
                 ref={dayTextInputRef}
                 keyboardType="numeric"
                 maxLength={15}
@@ -258,6 +274,8 @@ function Settings() {
                 isDark={isDark}
                 value={String(price[1])}
                 onChangeText={(text) => handlePriceChange(validCheck(text), '1')}
+                onFocus={() => handleFocusInput(1)}
+                onBlur={() => handleBlurInput(1)}
                 ref={nightTextInputRef}
                 keyboardType="numeric"
                 maxLength={15}
