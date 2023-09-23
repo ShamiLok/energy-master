@@ -156,9 +156,13 @@ function Settings() {
             onValueChange={handleLanguageChange}
             ref={pickerLanguageRef}
           >
-            <Picker.Item label={languages.en.label} value={languages.en.value} />
-            <Picker.Item label={languages.ru.label} value={languages.ru.value} />
-            <Picker.Item label={languages.de.label} value={languages.de.value} />
+            {Object.keys(languages).map((langKey) => (
+              <Picker.Item
+                key={languages[langKey].value}
+                label={languages[langKey].label}
+                value={languages[langKey].value}
+              />
+            ))}
           </Picker> 
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <SectionText isDark={isDark} style={{paddingRight: 20}}>{languages[language].label}</SectionText>
@@ -177,9 +181,16 @@ function Settings() {
             onValueChange={handleCurrencyChange}
             ref={pickerCurrencyRef}
           >
-            <Picker.Item label="EUR" value="EUR" />
-            <Picker.Item label="USD" value="USD" />
-            <Picker.Item label="RUB" value="RUB" />
+            <Picker.Item label="[元] CNY" value="CNY" />
+            <Picker.Item label="[€] EUR" value="EUR" />
+            <Picker.Item label="[£] GBP" value="GBP" />
+            <Picker.Item label="[₹] INR" value="INR" />
+            <Picker.Item label="[円] JPY" value="JPY" />
+            <Picker.Item label="[₩] KRW" value="KRW" />
+            <Picker.Item label="[$] USD" value="USD" />
+            <Picker.Item label="[₴] UAH" value="UAH" />
+            <Picker.Item label="[₽] RUB" value="RUB" />
+            <Picker.Item label="[₺] TRY" value="TRY" />
           </Picker> 
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <SectionText isDark={isDark} style={{paddingRight: 20}}>{currency}</SectionText>

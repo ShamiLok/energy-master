@@ -1,0 +1,71 @@
+const ms = {
+    //Global
+    watt: "Watt",
+    quantity: "Kuantiti",
+    deviceName: "Nama Peranti",
+    workingHours: "Jam Kerja",
+    peakHours: "Jam Puncak",
+    offPeakHours: "Jam Luar Puncak",
+    fillFields: "Sila isikan semua medan",
+    hour: "jam",
+    hours: "jam",
+    day: "siang",
+    night: "malam",
+    home: "Laman Utama",
+    settings: "Tetapan",
+    about: "Tentang",
+    yes: "Ya",
+    no: "Tidak",
+    lightThemeSet: "Tema terang ditetapkan",
+    darkThemeSet: "Tema gelap ditetapkan",
+    report: "Laporan",
+    perDay: "Sehari",
+    perWeek: "Seminggu",
+    perMonth: "Sebulan",
+    perYear: "Setahun",
+  
+    //Settings
+    main: "Utama",
+    ratePlan: "Rancangan Kadar",
+    language: "Bahasa",
+    currency: "Mata Wang",
+    darkTheme: "Tema Gelap",
+    choosePlan: "Pilih rancangan",
+    pricePerkWh: "Harga per kWh",
+    planPeak: "Harga puncak",
+    planOffPeak: "Harga luar puncak",
+    resetSettings: "Tetapan semula",
+    planFixed: "Tetap",
+    planPeakOffpeak: "Puncak/luar puncak",
+    changePlan: "Tukar Rancangan",
+    confirmDeviceDeletion: "Semua peranti yang ditambah akan dipadamkan.",
+    confirmReset: "Adakah anda pasti ingin menetap semula tetapan?",
+    settingsReset: "Tetapan telah ditetap semula.",
+  
+    //About
+    energyMaster: "Pengurus Tenaga",
+    version: "Versi",
+    rate: "Penilaian",
+    rateApp: "Penilaian Aplikasi",
+    contact: "Hubungi",
+    contactDeveloper: "Hubungi Pembangun",
+    check: "Semak",
+    checkUpdates: "Semak Kemas Kini",
+    copyright: "\u00A9 2023 Pengurus Tenaga",
+  
+    //Home
+    consumption: "Jumlah Penggunaan:",
+    deviceList: "Senarai Peranti:",
+    choosePrice: "Pilih harga per kWh dalam tetapan",
+    addDevice: "Tambah Peranti",
+    add: "Tambah",
+    deviceAdded: "Peranti telah ditambah",
+  
+    //listItems
+    deviceListEmpty: "Peranti belum ditambah lagi",
+    deviceDeleted: "Peranti telah dipadam",
+    watts: "Kuasa, Watt",
+    quantityUnit: "unit",
+  };
+  export default ms;
+  

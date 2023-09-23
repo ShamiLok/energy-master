@@ -1,0 +1,71 @@
+const ar = {
+    //Global
+    watt: "واط",
+    quantity: "الكمية",
+    deviceName: "اسم الجهاز",
+    workingHours: "ساعات العمل",
+    peakHours: "ساعات الذروة",
+    offPeakHours: "ساعات الخارج عن الذروة",
+    fillFields: "يرجى ملء جميع الحقول",
+    hour: "ساعة",
+    hours: "ساعات",
+    day: "نهارًا",
+    night: "ليلاً",
+    home: "الصفحة الرئيسية",
+    settings: "الإعدادات",
+    about: "حول",
+    yes: "نعم",
+    no: "لا",
+    lightThemeSet: "تم تعيين السمة الفاتحة",
+    darkThemeSet: "تم تعيين السمة الداكنة",
+    report: "تقرير",
+    perDay: "في اليوم",
+    perWeek: "في الأسبوع",
+    perMonth: "في الشهر",
+    perYear: "في العام",
+  
+    //Settings
+    main: "الرئيسية",
+    ratePlan: "خطة الأسعار",
+    language: "اللغة",
+    currency: "العملة",
+    darkTheme: "السمة الداكنة",
+    choosePlan: "اختيار خطة",
+    pricePerkWh: "السعر للكيلوواط-الساعة",
+    planPeak: "سعر الذروة",
+    planOffPeak: "سعر الخارج عن الذروة",
+    resetSettings: "إعادة تعيين الإعدادات",
+    planFixed: "ثابت",
+    planPeakOffpeak: "ذروة/خارج الذروة",
+    changePlan: "تغيير الخطة",
+    confirmDeviceDeletion: "سيتم حذف جميع الأجهزة المضافة.",
+    confirmReset: "هل أنت متأكد من رغبتك في إعادة تعيين الإعدادات؟",
+    settingsReset: "تمت إعادة تعيين الإعدادات.",
+  
+    //About
+    energyMaster: "ماجستير الطاقة",
+    version: "الإصدار",
+    rate: "تقييم",
+    rateApp: "تقييم التطبيق",
+    contact: "الاتصال",
+    contactDeveloper: "الاتصال بالمطور",
+    check: "فحص",
+    checkUpdates: "فحص التحديثات",
+    copyright: "\u00A9 2023 ماجستير الطاقة",
+  
+    //Home
+    consumption: "الاستهلاك الإجمالي:",
+    deviceList: "قائمة الأجهزة:",
+    choosePrice: "حدد السعر للكيلوواط-الساعة في الإعدادات",
+    addDevice: "إضافة جهاز",
+    add: "إضافة",
+    deviceAdded: "تمت إضافة الجهاز",
+  
+    //listItems
+    deviceListEmpty: "لم يتم إضافة أي أجهزة بعد",
+    deviceDeleted: "تم حذف الجهاز",
+    watts: "الطاقة، واط",
+    quantityUnit: "قطعة",
+  };
+  export default ar;
+  

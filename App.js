@@ -48,8 +48,57 @@ export default function App() {
     de: {
       label: "German",
       value: 'de'
+    },
+    ja: {
+      label: "Japanese",
+      value: 'ja'
+    },
+    uk: {
+      label: "Ukrainian",
+      value: 'uk'
+    },
+    tr: {
+      label: "Turkish",
+      value: 'tr'
+    },
+    ko: {
+      label: "Korean",
+      value: 'ko'
+    },
+    ms: {
+      label: "Malay",
+      value: 'ms'
+    },
+    fr: {
+      label: "French",
+      value: 'fr'
+    },
+    it: {
+      label: "Italian",
+      value: 'it'
+    },
+    // ar: {
+    //   label: "Arabic",
+    //   value: 'ar'
+    // },
+    es: {
+      label: "Spanish",
+      value: 'es'
+    },
+    hi: {
+      label: "Hindi",
+      value: 'hi'
+    },
+    pt: {
+      label: "Portuguese",
+      value: 'pt'
+    },
+    zh: {
+      label: "Chinese",
+      value: 'zh'
     }
-  }
+  };
+  
 
   useEffect(  () => {
     const wrapper = async () => {

@@ -1,0 +1,71 @@
+const tr = {
+    //Global
+    watt: "Watt",
+    quantity: "Miktar",
+    deviceName: "Cihaz Adı",
+    workingHours: "Çalışma Saatleri",
+    peakHours: "Pik Saatler",
+    offPeakHours: "Pik Saatleri Dışı",
+    fillFields: "Lütfen tüm alanları doldurun",
+    hour: "saat",
+    hours: "saatler",
+    day: "gün",
+    night: "gece",
+    home: "Ana Sayfa",
+    settings: "Ayarlar",
+    about: "Hakkında",
+    yes: "Evet",
+    no: "Hayır",
+    lightThemeSet: "Açık tema ayarlandı",
+    darkThemeSet: "Koyu tema ayarlandı",
+    report: "Rapor",
+    perDay: "Günlük",
+    perWeek: "Haftalık",
+    perMonth: "Aylık",
+    perYear: "Yıllık",
+  
+    //Settings
+    main: "Ana",
+    ratePlan: "Tarife Planı",
+    language: "Dil",
+    currency: "Para Birimi",
+    darkTheme: "Koyu tema",
+    choosePlan: "Bir plan seçin",
+    pricePerkWh: "kWh başına fiyat",
+    planPeak: "Pik fiyat",
+    planOffPeak: "Pik dışı fiyat",
+    resetSettings: "Ayarları sıfırla",
+    planFixed: "Sabit",
+    planPeakOffpeak: "Pik/pik dışı",
+    changePlan: "Planı Değiştir",
+    confirmDeviceDeletion: "Eklenen tüm cihazlar silinecektir.",
+    confirmReset: "Ayarları sıfırlamak istediğinizden emin misiniz?",
+    settingsReset: "Ayarlar sıfırlandı.",
+  
+    //About
+    energyMaster: "Enerji Ustası",
+    version: "Sürüm",
+    rate: "Değerlendir",
+    rateApp: "Uygulamayı değerlendir",
+    contact: "İletişim",
+    contactDeveloper: "Geliştirici ile iletişime geç",
+    check: "Kontrol Et",
+    checkUpdates: "Güncellemeleri kontrol et",
+    copyright: "\u00A9 2023 Enerji Ustası",
+  
+    //Home
+    consumption: "Toplam Tüketim:",
+    deviceList: "Cihaz Listesi:",
+    choosePrice: "Ayarlar'da kWh başına fiyatı seçin",
+    addDevice: "Cihaz Ekle",
+    add: "Ekle",
+    deviceAdded: "Cihaz eklendi",
+  
+    //listItems
+    deviceListEmpty: "Henüz cihaz eklenmedi",
+    deviceDeleted: "Cihaz silindi",
+    watts: "Güç, Watt",
+    quantityUnit: "adet",
+  };
+  export default tr;
+  

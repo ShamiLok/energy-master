@@ -1,0 +1,71 @@
+const ja = {
+    //Global
+    watt: "ワット",
+    quantity: "数量",
+    deviceName: "デバイス名",
+    workingHours: "稼働時間",
+    peakHours: "ピーク時間",
+    offPeakHours: "ピーク時間外",
+    fillFields: "すべてのフィールドを入力してください",
+    hour: "時間",
+    hours: "時間",
+    day: "昼間",
+    night: "夜間",
+    home: "ホーム",
+    settings: "設定",
+    about: "アプリ情報",
+    yes: "はい",
+    no: "いいえ",
+    lightThemeSet: "ライトテーマが設定されました",
+    darkThemeSet: "ダークテーマが設定されました",
+    report: "レポート",
+    perDay: "1日ごと",
+    perWeek: "週ごと",
+    perMonth: "月ごと",
+    perYear: "年ごと",
+  
+    //Settings
+    main: "メイン",
+    ratePlan: "料金プラン",
+    language: "言語",
+    currency: "通貨",
+    darkTheme: "ダークテーマ",
+    choosePlan: "プランを選択",
+    pricePerkWh: "kWh当たりの価格",
+    planPeak: "ピーク価格",
+    planOffPeak: "ピーク時間外価格",
+    resetSettings: "設定をリセット",
+    planFixed: "固定",
+    planPeakOffpeak: "ピーク/ピーク時間外",
+    changePlan: "プランを変更",
+    confirmDeviceDeletion: "追加したすべてのデバイスが削除されます。",
+    confirmReset: "設定をリセットしてもよろしいですか？",
+    settingsReset: "設定がリセットされました。",
+  
+    //About
+    energyMaster: "エネルギーマスター",
+    version: "バージョン",
+    rate: "評価",
+    rateApp: "アプリを評価",
+    contact: "お問い合わせ",
+    contactDeveloper: "開発者に連絡",
+    check: "確認",
+    checkUpdates: "アップデートの確認",
+    copyright: "\u00A9 2023 エネルギーマスター",
+  
+    //Home
+    consumption: "合計消費量：",
+    deviceList: "デバイスリスト：",
+    choosePrice: "設定でkWh当たりの価格を選択",
+    addDevice: "デバイスを追加",
+    add: "追加",
+    deviceAdded: "デバイスが追加されました",
+  
+    //listItems
+    deviceListEmpty: "デバイスはまだ追加されていません",
+    deviceDeleted: "デバイスが削除されました",
+    watts: "電力、ワット",
+    quantityUnit: "個",
+  };
+  export default ja;
+  

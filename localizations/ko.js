@@ -1,0 +1,71 @@
+const ko = {
+    //Global
+    watt: "와트",
+    quantity: "수량",
+    deviceName: "기기 이름",
+    workingHours: "작동 시간",
+    peakHours: "피크 시간",
+    offPeakHours: "피크 시간 외",
+    fillFields: "모든 필드를 입력하세요",
+    hour: "시간",
+    hours: "시간",
+    day: "주간",
+    night: "야간",
+    home: "홈",
+    settings: "설정",
+    about: "정보",
+    yes: "예",
+    no: "아니요",
+    lightThemeSet: "밝은 테마 설정됨",
+    darkThemeSet: "어두운 테마 설정됨",
+    report: "보고서",
+    perDay: "일일",
+    perWeek: "주간",
+    perMonth: "월별",
+    perYear: "연간",
+  
+    //Settings
+    main: "메인",
+    ratePlan: "요금제",
+    language: "언어",
+    currency: "통화",
+    darkTheme: "어두운 테마",
+    choosePlan: "요금제 선택",
+    pricePerkWh: "kWh 당 가격",
+    planPeak: "피크 가격",
+    planOffPeak: "피크 시간 외 가격",
+    resetSettings: "설정 초기화",
+    planFixed: "고정",
+    planPeakOffpeak: "피크/피크 시간 외",
+    changePlan: "요금제 변경",
+    confirmDeviceDeletion: "추가된 모든 기기가 삭제됩니다.",
+    confirmReset: "설정을 초기화 하시겠습니까?",
+    settingsReset: "설정이 초기화되었습니다.",
+  
+    //About
+    energyMaster: "에너지 마스터",
+    version: "버전",
+    rate: "평가",
+    rateApp: "앱 평가",
+    contact: "문의",
+    contactDeveloper: "개발자에게 문의",
+    check: "확인",
+    checkUpdates: "업데이트 확인",
+    copyright: "\u00A9 2023 에너지 마스터",
+  
+    //Home
+    consumption: "총 소비량:",
+    deviceList: "기기 목록:",
+    choosePrice: "설정에서 kWh 당 가격 선택",
+    addDevice: "기기 추가",
+    add: "추가",
+    deviceAdded: "기기가 추가되었습니다",
+  
+    //listItems
+    deviceListEmpty: "아직 기기가 추가되지 않았습니다",
+    deviceDeleted: "기기가 삭제되었습니다",
+    watts: "전력, 와트",
+    quantityUnit: "개",
+  };
+  export default ko;
+  

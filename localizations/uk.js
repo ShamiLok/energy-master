@@ -1,0 +1,71 @@
+const uk = {
+    //Global
+    watt: "Ват",
+    quantity: "Кількість",
+    deviceName: "Назва пристрою",
+    workingHours: "Робочі години",
+    peakHours: "Піковий час",
+    offPeakHours: "Час поза піком",
+    fillFields: "Будь ласка, заповніть всі поля",
+    hour: "година",
+    hours: "години",
+    day: "день",
+    night: "ночь",
+    home: "Головна",
+    settings: "Налаштування",
+    about: "Про додаток",
+    yes: "Так",
+    no: "Ні",
+    lightThemeSet: "Встановлено світлу тему",
+    darkThemeSet: "Встановлено темну тему",
+    report: "Звіт",
+    perDay: "За день",
+    perWeek: "За тиждень",
+    perMonth: "За місяць",
+    perYear: "За рік",
+  
+    //Settings
+    main: "Основні",
+    ratePlan: "Тарифний план",
+    language: "Мова",
+    currency: "Валюта",
+    darkTheme: "Темна тема",
+    choosePlan: "Обрати план",
+    pricePerkWh: "Ціна за кВт·год",
+    planPeak: "Пікова ціна",
+    planOffPeak: "Ціна поза піком",
+    resetSettings: "Скинути налаштування",
+    planFixed: "Фіксований",
+    planPeakOffpeak: "Пік/поза пік",
+    changePlan: "Змінити план",
+    confirmDeviceDeletion: "Всі додані пристрої будуть видалені.",
+    confirmReset: "Ви впевнені, що хочете скинути налаштування?",
+    settingsReset: "Налаштування скинуті.",
+  
+    //About
+    energyMaster: "Майстер Енергії",
+    version: "Версія",
+    rate: "Оцінити",
+    rateApp: "Оцінити додаток",
+    contact: "Зв'язок",
+    contactDeveloper: "Зв'язатися з розробником",
+    check: "Перевірка",
+    checkUpdates: "Перевірити оновлення",
+    copyright: "\u00A9 2023 Майстер Енергії",
+  
+    //Home
+    consumption: "Загальний споживання:",
+    deviceList: "Список пристроїв:",
+    choosePrice: "Оберіть ціну за кВт·год у налаштуваннях",
+    addDevice: "Додати пристрій",
+    add: "Додати",
+    deviceAdded: "Пристрій додано",
+  
+    //listItems
+    deviceListEmpty: "Пристрої ще не були додані",
+    deviceDeleted: "Пристрій видалено",
+    watts: "Потужність, Ват",
+    quantityUnit: "шт.",
+  };
+  export default uk;
+  

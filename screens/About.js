@@ -33,7 +33,7 @@ const About = () => {
         contentContainerStyle={{ padding: 20 }}
         overScrollMode="never"
       >
-        <SectionText isDark={isDark} style={{ fontSize: 24 }}>{i18n.t('energyMaster')}</SectionText>
+        <SectionText isDark={isDark} style={{ fontSize: 24 }}>Energy Master</SectionText>
         <SectionText style={{ marginBottom: 10 }} isDark={isDark}>{i18n.t('version')}: v0.4.1 alpha</SectionText>
         {/* <ItemSection isDark={isDark}>
           <SectionText isDark={isDark} style={{fontSize: 14}}>{i18n.t('rateApp')}</SectionText>
@@ -48,8 +48,8 @@ const About = () => {
           <ButtonComponent title={i18n.t('check')} onPress={handleCheckUpdates} style={{width: 110}}/>
         </ItemSection> */}
       </Container>
-      <Copyright>
-        <SectionText isDark={isDark}>{i18n.t('copyright')}</SectionText>
+      <Copyright isDark={isDark}>
+        <SectionText isDark={isDark}>© 2023 Energy Master</SectionText>
       </Copyright>
     </>
   );
@@ -62,9 +62,10 @@ const Container = styled.ScrollView`
 `;
 
 const Copyright = styled.View`
-    align-items: center;
-    padding: 5px;
-    /* margin: 0 auto; */
+  align-items: center;
+  padding: 5px;
+  background-color: ${(props) => props.isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor};
+
 `;
 
 export default About;
