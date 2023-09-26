@@ -10,6 +10,7 @@ import About from "./screens/About";
 import Home from "./screens/Home";
 import Settings from "./screens/Settings";
 import Report from "./screens/Report";
+import InitialScreen from "./screens/InitialScreen";
 
 import { LIGHT_COLORS, DARK_COLORS } from './constants/colors';
 import { ThemeContext } from "./contexts/themes";
@@ -30,6 +31,7 @@ export default function App() {
   const [devices, setDevices] = useState([]);
 
   const [loading, setLoading ] = useState(false);
+  const [showInitialScreen, setShowInitialScreen ] = useState(false);
 
   const [{ currencyCode, languageCode }] = getLocales();
 
@@ -153,6 +155,7 @@ export default function App() {
         setPrice(JSON.parse(savedPrice));
       } else {
         setPrice(plan === 'fixed' ? ['0'] : ['0', '0']);
+        setShowInitialScreen(true);
       }
       
       if(savedTheme !== null){
@@ -195,84 +198,90 @@ export default function App() {
           languages
         }}>
           <StatusBar backgroundColor="#f4511e" />
-          <NavigationContainer>
-            <Drawer.Navigator
-              drawerContent={
-                (props) => {
-                  return (
-                    <SafeAreaView>
-                      <DrawerItemList {...props} />
-                    </SafeAreaView>
-                  )
-                }
-              }
-              screenOptions={{
-                drawerStyle: {
-                  backgroundColor: isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor,
-                  width: 250
-                },
-                headerStyle: {
-                  backgroundColor: "#f4511e",
-                },
-                headerTintColor: "#fff",
-                headerTitleStyle: {
-                  fontWeight: "bold"
-                },
-                drawerLabelStyle: {
-                  color: isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor
-                },
-                drawerActiveBackgroundColor: isDark ? DARK_COLORS.activeBackgroundColor : LIGHT_COLORS.activeBackgroundColor
-              }}
-            >
-              <Drawer.Screen
-                name="Home"
-                options={{
-                  drawerLabel: i18n.t('home'),
-                  title: i18n.t('home'),
-                  drawerIcon: () => (
-                    <Ionicons name="home-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
-                  )
-                }}
-                component={Home}
-              />
-    
-              <Drawer.Screen
-                name="Report"
-                options={{
-                  drawerLabel: i18n.t('report'),
-                  title: i18n.t('report'),
-                  drawerIcon: () => (
-                    <Ionicons name="pie-chart-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
-                  )
-                }}
-                component={Report}
-              />
-    
-              <Drawer.Screen
-                name="Settings"
-                options={{
-                  drawerLabel: i18n.t('settings'),
-                  title: i18n.t('settings'),
-                  drawerIcon: () => (
-                    <Ionicons name="settings-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
-                  )
-                }}
-                component={Settings}
-              />
-    
-              <Drawer.Screen
-                name="About"
-                options={{
-                  drawerLabel: i18n.t('about'),
-                  title: i18n.t('about'),
-                  drawerIcon: () => (
-                    <Ionicons name="information-circle-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
-                  )
-                }}
-                component={About}
-              />
-            </Drawer.Navigator>
-          </NavigationContainer>
+          {showInitialScreen ? (
+            <>
+              <InitialScreen setShowInitialScreen={setShowInitialScreen}/>
+            </>
+          ) : (
+              <NavigationContainer>
+                <Drawer.Navigator
+                  drawerContent={
+                    (props) => {
+                      return (
+                        <SafeAreaView>
+                          <DrawerItemList {...props} />
+                        </SafeAreaView>
+                      )
+                    }
+                  }
+                  screenOptions={{
+                    drawerStyle: {
+                      backgroundColor: isDark ? DARK_COLORS.blockColor : LIGHT_COLORS.blockColor,
+                      width: 250
+                    },
+                    headerStyle: {
+                      backgroundColor: "#f4511e",
+                    },
+                    headerTintColor: "#fff",
+                    headerTitleStyle: {
+                      fontWeight: "bold"
+                    },
+                    drawerLabelStyle: {
+                      color: isDark ? DARK_COLORS.textColor : LIGHT_COLORS.textColor
+                    },
+                    drawerActiveBackgroundColor: isDark ? DARK_COLORS.activeBackgroundColor : LIGHT_COLORS.activeBackgroundColor
+                  }}
+                >
+                  <Drawer.Screen
+                    name="Home"
+                    options={{
+                      drawerLabel: i18n.t('home'),
+                      title: i18n.t('home'),
+                      drawerIcon: () => (
+                        <Ionicons name="home-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
+                      )
+                    }}
+                    component={Home}
+                  />
+        
+                  <Drawer.Screen
+                    name="Report"
+                    options={{
+                      drawerLabel: i18n.t('report'),
+                      title: i18n.t('report'),
+                      drawerIcon: () => (
+                        <Ionicons name="pie-chart-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
+                      )
+                    }}
+                    component={Report}
+                  />
+        
+                  <Drawer.Screen
+                    name="Settings"
+                    options={{
+                      drawerLabel: i18n.t('settings'),
+                      title: i18n.t('settings'),
+                      drawerIcon: () => (
+                        <Ionicons name="settings-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
+                      )
+                    }}
+                    component={Settings}
+                  />
+        
+                  <Drawer.Screen
+                    name="About"
+                    options={{
+                      drawerLabel: i18n.t('about'),
+                      title: i18n.t('about'),
+                      drawerIcon: () => (
+                        <Ionicons name="information-circle-outline" size={24} color={isDark ? DARK_COLORS.screenIconColor : LIGHT_COLORS.screenIconColor} />
+                      )
+                    }}
+                    component={About}
+                  />
+                </Drawer.Navigator>
+              </NavigationContainer>
+          )}
         </ThemeContext.Provider>
         
       )}

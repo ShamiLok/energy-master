@@ -1,9 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { ToastAndroid, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Entypo } from '@expo/vector-icons'; 
 import styled from 'styled-components/native';
-import Animated, { useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
 import { LIGHT_COLORS, DARK_COLORS } from '../constants/colors';
 import { ThemeContext } from '../contexts/themes';
@@ -15,7 +14,7 @@ import ListItems from '../components/ListItems';
 
 import { i18n } from '../localizations/i18n';
 
-import { FontAwesome5, MaterialCommunityIcons  } from '@expo/vector-icons'; 
+import { FontAwesome5, MaterialCommunityIcons, Entypo } from '@expo/vector-icons'; 
 
 const Home = () => {
   const { 
@@ -306,19 +305,32 @@ const Home = () => {
           </AnimatedContainer>
         </Animated.View>
       </AddDevice>
-
-      <ListItems
-        devices={devices}
-        plan={plan}
-        isDark={isDark}
-        setDevices={setDevices}
-        editIndex={editIndex}
-        setEditIndex={setEditIndex}
-      />
+      
+      {devices.length === 0 ? (
+        <DeviceListEmpty>
+          <MaterialCommunityIcons name="text-search" size={34} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} style={{paddingBottom: 8}}/> 
+          <SectionText isDark={isDark}>{i18n.t('deviceListEmpty')}</SectionText>
+        </DeviceListEmpty>
+      ) : (
+        <ListItems
+          devices={devices}
+          plan={plan}
+          isDark={isDark}
+          setDevices={setDevices}
+          editIndex={editIndex}
+          setEditIndex={setEditIndex}
+        />
+      )}
 
     </ContainerComponent>
   );
 };
+
+const DeviceListEmpty = styled.View`
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+`;
 
 const AnimatedContainer = styled.View`
 position: absolute;

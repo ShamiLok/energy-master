@@ -98,7 +98,7 @@ function Settings() {
 
   const handleResetConfirmation = async () => {
     await AsyncStorage.clear();
-    loadData();
+    await loadData();
     showToast(i18n.t('settingsReset'))
   };
 
@@ -206,6 +206,8 @@ function Settings() {
           <Switch
             value={isDark}
             onValueChange={handleChangeColorTheme}
+            trackColor={{true: '#4ed164', false: '#dcdedc'}}
+            thumbColor='#fff'
           />
         </ItemSection>
       </SettingSection>
