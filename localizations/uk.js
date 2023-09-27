@@ -23,6 +23,9 @@ const uk = {
     perWeek: "За тиждень",
     perMonth: "За місяць",
     perYear: "За рік",
+    welcome: "Ласкаво просимо",
+    selectCurrencyAndRatePlan: "Виберіть валюту та тарифний план",
+    continue: "Продовжити",
   
     //Settings
     main: "Основні",

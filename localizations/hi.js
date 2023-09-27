@@ -23,6 +23,9 @@ const hi = {
     perWeek: "प्रति सप्ताह",
     perMonth: "प्रति माह",
     perYear: "प्रति वर्ष",
+    welcome: "स्वागत हे",
+    selectCurrencyAndRatePlan: "मुद्रा और दर प्लान का चयन करें",
+    continue: "जारी रखें",
   
     //Settings
     main: "मुख्य",

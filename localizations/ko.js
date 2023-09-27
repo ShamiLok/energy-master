@@ -23,6 +23,9 @@ const ko = {
     perWeek: "주간",
     perMonth: "월별",
     perYear: "연간",
+    welcome: "환영합니다",
+    selectCurrencyAndRatePlan: "통화 및 요금제 선택",
+    continue: "계속",
   
     //Settings
     main: "메인",

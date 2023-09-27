@@ -23,7 +23,10 @@ const it = {
     perWeek: "Alla settimana",
     perMonth: "Al mese",
     perYear: "All'anno",
-  
+    welcome: "Benvenuti",
+    selectCurrencyAndRatePlan: "Seleziona la valuta e il piano tariffario",
+    continue: "Continua",
+    
     //Settings
     main: "Principale",
     ratePlan: "Piano tariffario",

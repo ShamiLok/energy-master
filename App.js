@@ -130,7 +130,7 @@ export default function App() {
       if (savedLanguage) {
         setLanguage(savedLanguage);
       } else {
-        if(languages.languageCode){
+        if(languageCode in languages){
           setLanguage(languageCode);
           await AsyncStorage.setItem('language', languageCode);
         } else {

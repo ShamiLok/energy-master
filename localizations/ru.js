@@ -23,6 +23,9 @@ const ru = {
   perWeek: "В неделю",
   perMonth: "В месяц",
   perYear: "В год",
+  welcome: "Добро пожаловать",
+  selectCurrencyAndRatePlan: "Выберите валюту и тарифный план",
+  continue: "Продолжить",
 
   //Settings
   main: "Основные",

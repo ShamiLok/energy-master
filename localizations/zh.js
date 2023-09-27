@@ -23,6 +23,9 @@ const zh = {
     perWeek: "每周",
     perMonth: "每月",
     perYear: "每年",
+    welcome: "欢迎",
+    selectCurrencyAndRatePlan: "选择货币和费率计划",
+    continue: "继续",
   
     //Settings
     main: "主要",

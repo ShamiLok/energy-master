@@ -23,6 +23,9 @@ const ms = {
     perWeek: "Seminggu",
     perMonth: "Sebulan",
     perYear: "Setahun",
+    welcome: "Selamat datang",
+    selectCurrencyAndRatePlan: "Pilih mata wang dan rancangan kadar",
+    continue: "Teruskan",
   
     //Settings
     main: "Utama",

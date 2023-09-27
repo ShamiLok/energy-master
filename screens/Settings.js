@@ -228,7 +228,7 @@ function Settings() {
             <Picker.Item label={i18n.t('planFixed')} value="fixed" />
             <Picker.Item label={i18n.t('planPeakOffpeak')} value="dual" />
           </Picker>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', maxWidth: 200, paddingLeft: 15}}>
             <SectionText isDark={isDark} style={{paddingRight: 20}}>{plan === 'fixed' ? i18n.t('planFixed') : i18n.t('planPeakOffpeak')}</SectionText>
             <AntDesign name="caretdown" size={9} color={isDark ? DARK_COLORS.boolColor : LIGHT_COLORS.boolColor} />
           </View>

@@ -96,10 +96,10 @@ const InitialScreen = ({setShowInitialScreen}) => {
     <>
       <Container>
       <SectionText style={{fontSize: 22, fontWeight: 700}}>
-          Добро Пожаловать
+        {i18n.t('welcome')}
       </SectionText>
       <SectionText style={{paddingBottom: 20}}>
-          Выберете валюту и тарифный план
+        {i18n.t('selectCurrencyAndRatePlan')}
       </SectionText>
       <ItemSection 
         isDark={isDark} 
@@ -214,7 +214,7 @@ const InitialScreen = ({setShowInitialScreen}) => {
       )}
       </Container>
       <ButtonContainer>
-        <ButtonComponent title="Продолжить" onPress={() => setShowInitialScreen(false)} />
+        <ButtonComponent title={i18n.t('continue')} onPress={() => setShowInitialScreen(false)} />
       </ButtonContainer>
       
     </>

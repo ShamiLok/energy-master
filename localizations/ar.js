@@ -23,6 +23,9 @@ const ar = {
     perWeek: "في الأسبوع",
     perMonth: "في الشهر",
     perYear: "في العام",
+    welcome: "أهلاً وسهلاً",
+    selectCurrencyAndRatePlan: "اختر العملة وخطة الأسعار",
+    continue: "متابعة",
   
     //Settings
     main: "الرئيسية",

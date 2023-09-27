@@ -23,6 +23,9 @@ const ja = {
     perWeek: "週ごと",
     perMonth: "月ごと",
     perYear: "年ごと",
+    welcome: "ようこそ",
+    selectCurrencyAndRatePlan: "通貨と料金プランを選択してください",
+    continue: "続行",
   
     //Settings
     main: "メイン",

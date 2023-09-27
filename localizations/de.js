@@ -23,6 +23,9 @@ const de = {
   perWeek: "Pro Woche",
   perMonth: "Pro Monat",
   perYear: "Pro Jahr",
+  welcome: "Willkommen",
+  selectCurrencyAndRatePlan: "Wählen Sie Währung und Tarifplan",
+  continue: "Weiter",
 
   //Settings
   main: "Haupt",

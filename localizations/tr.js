@@ -23,6 +23,9 @@ const tr = {
     perWeek: "Haftalık",
     perMonth: "Aylık",
     perYear: "Yıllık",
+    welcome: "Hoş geldiniz",
+    selectCurrencyAndRatePlan: "Para birimi ve tarife planını seçin",
+    continue: "Devam et",
   
     //Settings
     main: "Ana",
