@@ -32,7 +32,7 @@
     "victory-native": "^36.6.11"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.23.2"
   },
   "private": true
 }

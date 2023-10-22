@@ -34,7 +34,7 @@ const About = () => {
         overScrollMode="never"
       >
         <SectionText isDark={isDark} style={{ fontSize: 24 }}>Energy Master</SectionText>
-        <SectionText style={{ marginBottom: 10 }} isDark={isDark}>{i18n.t('version')}: v1.0.0</SectionText>
+        <SectionText style={{ marginBottom: 10 }} isDark={isDark}>{i18n.t('version')}: v1.0.1</SectionText>
         {/* <ItemSection isDark={isDark}>
           <SectionText isDark={isDark} style={{fontSize: 14}}>{i18n.t('rateApp')}</SectionText>
           <ButtonComponent title={i18n.t('rate')} onPress={handleRateApp} style={{width: 110}}/>
